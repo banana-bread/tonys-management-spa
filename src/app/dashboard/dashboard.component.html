@@ -1,0 +1,55 @@
+<mat-sidenav-container class="sidenav-container" autosize>
+  <mat-sidenav #drawer class="sidenav" fixedInViewport
+      [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+      mode="side"
+      disableClose="true" 
+      opened="true"
+      fxLayout="column">
+      <!-- [mode]="(isHandset$ | async) ? 'over' : 'side'" -->
+      <!-- [opened]="(isHandset$ | async) === false" -->
+
+    <!-- <mat-toolbar>Menu</mat-toolbar> -->
+    <mat-nav-list fxLayout="column" fxFlex>
+      <button mat-mini-fab style="margin: 10px;">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <mat-list-item routerLink="/home" matTooltip="Home" matTooltipPosition="after">
+        <mat-icon mat-list-icon>person</mat-icon>
+        <!-- <h4 mat-line *ngIf="isExpanded">Home</h4> -->
+      </mat-list-item>
+      <mat-list-item [routerLink]="['services']" matTooltip="Services" matTooltipPosition="after">
+        <mat-icon mat-list-icon>build</mat-icon>
+        <!-- <h4 mat-line *ngIf="isExpanded">Services</h4> -->
+      </mat-list-item>
+      <mat-list-item [routerLink]="['staff']" matTooltip="Staff" matTooltipPosition="after">
+        <mat-icon mat-list-icon>groups</mat-icon>
+        <!-- <h4 mat-line *ngIf="isExpanded">Staff</h4> -->
+      </mat-list-item>
+      <mat-list-item [routerLink]="['shop']" matTooltip="Shop" matTooltipPosition="after">
+        <mat-icon mat-list-icon>business</mat-icon>
+        <!-- <h4 mat-line *ngIf="isExpanded">Shop</h4> -->
+      </mat-list-item>
+      
+      <span fxFlex></span>
+
+      <mat-list-item  matTooltip="Logout" matTooltipPosition="after">
+        <mat-icon mat-list-icon>logout</mat-icon>
+        <!-- <h4 mat-line *ngIf="isExpanded">Logout</h4> -->
+      </mat-list-item>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <mat-toolbar color="primary">
+      <!-- <button
+        type="button"
+        aria-label="Toggle sidenav"
+        mat-icon-button
+        (click)="drawer.toggle()"
+        *ngIf="isHandset$ | async">
+        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+      </button> -->
+      <span>management-spa</span>
+    </mat-toolbar>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>
