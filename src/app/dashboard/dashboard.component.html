@@ -11,30 +11,30 @@
     <!-- <mat-toolbar>Menu</mat-toolbar> -->
     <mat-nav-list fxLayout="column" fxFlex>
       <button mat-icon-button style="margin: 10px;" (click)="isExpanded = !isExpanded">
-        <mat-icon [fxShow]="isExpanded">first_page</mat-icon>
-        <mat-icon [fxShow]="!isExpanded">last_page</mat-icon>
+        <mat-icon fontSet="material-icons-round" [fxShow]="isExpanded" mat-list-icon>first_page</mat-icon>
+        <mat-icon fontSet="material-icons-round" [fxShow]="!isExpanded" mat-list-icon>last_page</mat-icon>
       </button>
       <mat-list-item routerLink="/home" matTooltip="Home" matTooltipPosition="after" [matTooltipDisabled]="isExpanded" matTooltipClass="tbs-tooltip">
-        <mat-icon mat-list-icon>home</mat-icon>
+        <mat-icon fontSet="material-icons-round" mat-list-icon>home</mat-icon>
         <h4 mat-line *ngIf="isExpanded">Home</h4>
       </mat-list-item>
       <mat-list-item [routerLink]="['services']" matTooltip="Services" matTooltipPosition="after" [matTooltipDisabled]="isExpanded" matTooltipClass="tbs-tooltip">
-        <mat-icon mat-list-icon>build</mat-icon>
+        <mat-icon fontSet="material-icons-round" mat-list-icon>build</mat-icon>
         <h4 mat-line *ngIf="isExpanded">Services</h4>
       </mat-list-item>
       <mat-list-item [routerLink]="['staff']" matTooltip="Staff" matTooltipPosition="after" [matTooltipDisabled]="isExpanded" matTooltipClass="tbs-tooltip">
-        <mat-icon mat-list-icon>groups</mat-icon>
+        <mat-icon fontSet="material-icons-round" mat-list-icon>groups</mat-icon>
         <h4 mat-line *ngIf="isExpanded">Staff</h4>
       </mat-list-item>
       <mat-list-item [routerLink]="['shop']" matTooltip="Shop" matTooltipPosition="after" [matTooltipDisabled]="isExpanded" matTooltipClass="tbs-tooltip">
-        <mat-icon mat-list-icon>business</mat-icon>
+        <mat-icon fontSet="material-icons-round" mat-list-icon>business</mat-icon>
         <h4 mat-line *ngIf="isExpanded">Shop</h4>
       </mat-list-item>
       
       <span fxFlex></span>
 
       <mat-list-item  matTooltip="Logout" matTooltipPosition="after" [matTooltipDisabled]="isExpanded" matTooltipClass="tbs-tooltip">
-        <mat-icon mat-list-icon>logout</mat-icon>
+        <mat-icon fontSet="material-icons-round" mat-list-icon>logout</mat-icon>
         <h4 mat-line *ngIf="isExpanded">Logout</h4>
       </mat-list-item>
     </mat-nav-list>

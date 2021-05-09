@@ -19,6 +19,7 @@ import { StaffViewComponent } from './dashboard/staff-view/staff-view.component'
 import { ShopViewComponent } from './dashboard/shop-view/shop-view.component';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './services/auth-interceptor.service';
+import { MatDividerModule } from '@angular/material/divider';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { AuthInterceptor } from './services/auth-interceptor.service';
     MatIconModule,
     MatListModule,
     MatTooltipModule,
-    
+    MatDividerModule,
+  
     TonysSharedModule.forRoot(),
   ],
   providers: [

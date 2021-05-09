@@ -12,5 +12,8 @@ $color-accent: mat-color($app-accent);
 $color-warn :mat-color($app-warn);
 
 $color-white: lighten($color-primary, 50%);
+$color-light-gray: rgb(235, 235, 235);
+$color-dark-gray: gray;
 $color-background: #fafafa;
+
 

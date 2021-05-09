@@ -1,5 +1,14 @@
-<div fxLayout="column">
-    <div *ngFor="let service of services">
-        {{ service.name }}
+<div class="tbs-view-padding" fxLayout="row">
+    <div class="service-list mat-elevation-z2" fxLayout="column">
+        <div class="service" 
+            fxLayout="row" 
+            fxLayoutAlign="space-between center"
+            *ngFor="let service of services">
+            <div fxLayout="column">
+                <span class="name">{{ service.name }}</span>
+                <span class="duration">{{ service.duration | appDuration }}</span>
+            </div>
+            <span class="price">{{ service.price | appCurrency }}</span>
+        </div>
     </div>
 </div>
