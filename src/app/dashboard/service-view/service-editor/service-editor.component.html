@@ -1,63 +1,69 @@
 <div class="app-editor-view">
-    <mat-toolbar class="app-editor-toolbar" fxLayout="row" fxLayoutGap="10px">
-        <button mat-icon-button 
-            class="close-button" 
-            aria-label="Close edit services button."
-            routerLink="..">
-            <mat-icon>close</mat-icon>
-        </button>
-        <span class="app-editor-title" *ngIf="!loading">{{ !!original.id ? 'Edit' : 'New' }} Service</span>
-        <span fxFlex></span>
-        <button class="delete-button" mat-raised-button [disabled]="saving || loading">
-            Delete
-        </button>
-        <button mat-raised-button color="primary" [disabled]="saving || loading">
-            Save
-        </button>
-    </mat-toolbar>
-    <div class="app-view-padding" 
-        fxLayout="column" 
-        fxLayoutAlign=" center" 
-        *ngIf="!loading">
-        <mat-card class="app-editor-card">
-            <mat-card-title class="app-editor-card-title">Basic</mat-card-title>
-            <div fxLayout="column">
-                <mat-form-field fxFlex hideRequiredMarker>
-                    <mat-label>Name</mat-label>
-                    <input type="text"
-                        [(ngModel)]="service.name"
-                        name="serviceName"
-                        #serviceName="ngModel"
-                        required
-                        matInput>
-                    <mat-error *ngIf="serviceName.hasError('required')">Name is required</mat-error>
-                </mat-form-field>
+    <form #editorForm="ngForm" (ngSubmit)="onSave()">
+        <mat-toolbar class="app-editor-toolbar" fxLayout="row" fxLayoutGap="10px">
+            <button mat-icon-button 
+                class="close-button" 
+                aria-label="Close edit services button."
+                routerLink="..">
+                <mat-icon>close</mat-icon>
+            </button>
+            <span class="app-editor-title" *ngIf="!loading">{{ !!original.id ? 'Edit' : 'New' }} Service</span>
+            <span fxFlex></span>
+            <button class="delete-button" mat-raised-button [disabled]="saving || loading">
+                Delete
+            </button>
+            <button mat-raised-button color="primary" [disabled]="saving || loading">
+                Save
+            </button>
+        </mat-toolbar>
 
-                <mat-form-field fxFlex hideRequiredMarker>
-                    <mat-label>Price</mat-label>
-                    <input type="text"
-                        [(ngModel)]="service.price"
-                        name="servicePrice"
-                        #servicePrice="ngModel"
-                        required
-                        matInput>
-                    <mat-error *ngIf="servicePrice.hasError('required')">Price is required</mat-error>
-                </mat-form-field>
+        <div class="app-view-padding" 
+            fxLayout="column" 
+            fxLayoutAlign=" center" 
+            *ngIf="!loading">
+            <mat-card class="app-editor-card">
+                <mat-card-title class="app-editor-card-title">Basic</mat-card-title>
+                <div fxLayout="column">
+                    <mat-form-field fxFlex hideRequiredMarker>
+                        <mat-label>Name</mat-label>
+                        <input type="text"
+                            [(ngModel)]="service.name"
+                            name="serviceName"
+                            #serviceName="ngModel"
+                            required
+                            [disabled]="saving"
+                            matInput>
+                        <mat-error *ngIf="serviceName.hasError('required')">Name is required</mat-error>
+                    </mat-form-field>
 
-                <mat-form-field fxFlex>
-                    <mat-label>Duration</mat-label>
-                    <mat-select>
-                        <mat-option value="test">test</mat-option>
-                    </mat-select>
-                    <!-- 
-                        TODO: create durations with loop in controller
-                        value will be time in seconds, label will be fed to
-                        appDuration pipe
-                    -->
-                    <mat-error *ngIf="serviceName.hasError('required')">Name is required</mat-error>
-                </mat-form-field>
-            </div>
-        </mat-card>
-    </div>
+                    <mat-form-field fxFlex hideRequiredMarker>
+                        <mat-label>Price</mat-label>
+                        <input type="text"
+                            class="price-field"
+                            [(ngModel)]="service.price"
+                            name="servicePrice"
+                            #servicePrice="ngModel"
+                            currencyInput
+                            required
+                            [disabled]="saving"
+                            matInput>
+                        <mat-error *ngIf="servicePrice.hasError('required')">Price is required</mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field fxFlex>
+                        <mat-label>Duration</mat-label>
+                        <mat-select [(ngModel)]="service.duration"
+                            name="serviceDuration"
+                            [disabled]="saving">
+                            <mat-option *ngFor="let duration of durationOptions" [value]="duration">
+                                {{ duration | appDuration }}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="serviceName.hasError('required')">Name is required</mat-error>
+                    </mat-form-field>
+                </div>
+            </mat-card>
+        </div>
+    </form>
     <mat-progress-spinner class="app-page-loading" mode="indeterminate" *ngIf="loading"></mat-progress-spinner>
 </div>

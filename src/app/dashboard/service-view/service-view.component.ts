@@ -10,6 +10,8 @@ import { ServiceDefinitionService } from 'src/app/models/service-definition/serv
 })
 export class ServiceViewComponent implements OnInit {
 
+  loading = false;
+
   services: ServiceDefinition[];
 
   constructor(
@@ -20,12 +22,18 @@ export class ServiceViewComponent implements OnInit {
   async ngOnInit(): Promise<void> 
   {
     this.services = await this.serviceDefinitionService.getAll();
+
+    this.loading = false;
+  }
+
+  onAdd()
+  {
+    this.router.navigate(['/dashboard/services', 'new']);
   }
 
   onEdit(service: ServiceDefinition)
   {
-    // this.router.navigate('')
-    this.router.navigate(['/dashboard/services', service.id])
+    this.router.navigate(['/dashboard/services', service.id]);
   }
 
 }

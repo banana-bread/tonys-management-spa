@@ -27,6 +27,8 @@ import { MatFormFieldModule, MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/mat
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
+import { CurrencyInputDirective } from './directives/currency-input.directive';
+import { CurrencyPipe } from '@angular/common';
 
 
 @NgModule({
@@ -37,6 +39,7 @@ import { MatSelectModule } from '@angular/material/select';
     StaffViewComponent,
     ShopViewComponent,
     ServiceEditorComponent,
+    CurrencyInputDirective,
   ],
   imports: [
     BrowserModule,
@@ -57,13 +60,13 @@ import { MatSelectModule } from '@angular/material/select';
     MatInputModule,
     FormsModule,
     MatSelectModule,
-
   
     TonysSharedModule.forRoot(),
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'outline' } },
+    CurrencyPipe,
   ],
   bootstrap: [AppComponent]
 })

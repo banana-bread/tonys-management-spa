@@ -23,4 +23,13 @@ export class ServiceDefinitionService {
 
     return new ServiceDefinition(response.data.service_definition);
   }
+
+  async save(service: ServiceDefinition): Promise<ServiceDefinition>
+  {
+    const response = !!service.id
+      ? await this.api.updateServiceDefinition(service, service.id)
+      : await this.api.createServiceDefinition(service);
+    
+    return new ServiceDefinition(response.data.service_definition);
+  }
 }
