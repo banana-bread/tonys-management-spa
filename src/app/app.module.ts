@@ -20,6 +20,7 @@ import { ShopViewComponent } from './dashboard/shop-view/shop-view.component';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './services/auth-interceptor.service';
 import { MatDividerModule } from '@angular/material/divider';
+import { ServiceEditorComponent } from './dashboard/service-view/service-editor/service-editor.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { MatDividerModule } from '@angular/material/divider';
     ServiceViewComponent,
     StaffViewComponent,
     ShopViewComponent,
+    ServiceEditorComponent,
   ],
   imports: [
     BrowserModule,

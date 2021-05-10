@@ -21,4 +21,12 @@ export class ApiService {
       .path('/service-definitions')
       .get();
   }
+
+  getServiceDefinition(id: string): Promise<any> 
+  {
+    return this.http
+      .path('/service-definitions/{id}')
+      .param('id', id)
+      .get();
+  }
 }

@@ -3,7 +3,8 @@
         <div class="service" 
             fxLayout="row" 
             fxLayoutAlign="space-between center"
-            *ngFor="let service of services">
+            *ngFor="let service of services"
+            (click)="onEdit(service)">
             <div fxLayout="column">
                 <span class="name">{{ service.name }}</span>
                 <span class="duration">{{ service.duration | appDuration }}</span>

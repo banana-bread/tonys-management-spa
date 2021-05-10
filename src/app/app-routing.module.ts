@@ -1,10 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { ServiceEditorComponent } from './dashboard/service-view/service-editor/service-editor.component';
 import { ServiceViewComponent } from './dashboard/service-view/service-view.component';
 import { ShopViewComponent } from './dashboard/shop-view/shop-view.component';
 import { StaffViewComponent } from './dashboard/staff-view/staff-view.component';
 
+// TODO: create 
 const routes: Routes = [
   { path: '',   redirectTo: '/dashboard', pathMatch: 'full' },
   { path: 'dashboard', component: DashboardComponent,
@@ -14,6 +16,7 @@ const routes: Routes = [
       { path: 'shop', component: ShopViewComponent },
     ] 
   },
+  { path: 'dashboard/services/:id', component: ServiceEditorComponent },
   // { path: '**', component: PageNotFoundComponent }
 ];
 

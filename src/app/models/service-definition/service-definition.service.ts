@@ -16,4 +16,11 @@ export class ServiceDefinitionService {
     return response.data.service_definitions
       .map((service: any) => new ServiceDefinition(service));
   }
+
+  async get(id: string): Promise<ServiceDefinition>
+  {
+    const response = await this.api.getServiceDefinition(id);
+
+    return new ServiceDefinition(response.data.service_definition);
+  }
 }

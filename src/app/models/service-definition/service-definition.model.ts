@@ -6,7 +6,6 @@ export class ServiceDefinition extends BaseModel {
     name?: string = '';
     price?: number = 0;
     duration?: number = 0;
-    selected?: boolean = false;
 
     constructor(data: any = {}) 
     {
