@@ -11,7 +11,10 @@ import { ServiceDefinitionService } from 'src/app/models/service-definition/serv
 export class ServiceEditorComponent implements OnInit {
 
   loading = false;
-  service: ServiceDefinition;
+  saving = false;
+  
+  original = new ServiceDefinition();
+  service = new ServiceDefinition();
 
   constructor(
     private route: ActivatedRoute,
@@ -27,22 +30,29 @@ export class ServiceEditorComponent implements OnInit {
 
   private async loadService()
   {
-    try
+    this.loading = true;
+
+    const id = this.route.snapshot.paramMap.get('id')
+
+    if (id !== 'new')
     {
-      this.loading = true;
+      try
+      {  
+        this.original = await this.serviceDefinitionService.get(id);
   
-      this.service = await this.serviceDefinitionService.get(
-        this.route.snapshot.paramMap.get('id')
-      );
+        this.service = this.original.copy();
+      }
+      catch
+      { 
+        this.router.navigate(['dashboard/services']);
+        this.notifications.error('Trouble loading service.')
+      }
+      finally
+      {
+        this.loading = false;
+      }
     }
-    catch
-    { 
-      this.router.navigate(['dashboard/services']);
-      this.notifications.error('Trouble loading service.')
-    }
-    finally
-    {
-      this.loading = false;
-    }
+
+    this.loading = false;
   }
 }

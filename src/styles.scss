@@ -63,7 +63,47 @@ body {
 }
 
 // LAYOUT
-.tbs-view-padding {
+.app-view-padding {
   padding: 32px 16px;
+}
+
+// EDITORS
+
+mat-toolbar.app-editor-toolbar {
+  background-color: #fff;
+
+  button {
+    font-size: 16px;
+  }
+
+  .delete-button {
+    color: $color-warn;
+  }
+}
+
+.app-editor-title {
+  font-size: 30px;
+  margin-left: 10px;
+}
+
+.app-editor-card {
+  width: 100%;
+  max-width: 500px;
+}
+
+.app-editor-view {
+  height: 100%;
+  background-color: $color-background;
+}
+
+mat-card-title.app-editor-card-title {
+  margin-bottom: 20px;
+}
+
+// STATE
+.app-page-loading {
+  position: absolute; 
+  top: 30%; 
+  left: 50%;
 }
 
