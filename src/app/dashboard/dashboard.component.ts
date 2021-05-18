@@ -30,8 +30,10 @@ export class DashboardComponent implements OnInit {
 
   async ngOnInit(): Promise<void>
   {
-    this.appState.setCompany(
-      await this.companyService.get('7662f5f0-81a2-442d-9e67-facc712e95ff')
-    )
+    // this.appState.setCompany(
+    //   await this.companyService.get('7662f5f0-81a2-442d-9e67-facc712e95ff')
+    // )
+
+    // this.appState.company.subscribe(company => console.log(company))
   }
 }
