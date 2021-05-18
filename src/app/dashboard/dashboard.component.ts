@@ -1,7 +1,9 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
+import { AppStateService } from '../services/app-state.service';
+import { CompanyService } from '../models/company/company.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -9,7 +11,7 @@ import { map, shareReplay } from 'rxjs/operators';
   styleUrls: ['./dashboard.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
 
   isExpanded = false;
   
@@ -19,5 +21,17 @@ export class DashboardComponent {
       shareReplay()
     );
 
-  constructor(private breakpointObserver: BreakpointObserver) {}
+  // TODO: move company getting into login spot.
+  constructor(
+    private breakpointObserver: BreakpointObserver,
+    private appState: AppStateService,
+    private companyService: CompanyService,
+  ) {}
+
+  async ngOnInit(): Promise<void>
+  {
+    this.appState.setCompany(
+      await this.companyService.get('7662f5f0-81a2-442d-9e67-facc712e95ff')
+    )
+  }
 }
