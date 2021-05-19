@@ -31,6 +31,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { CurrencyInputDirective } from './directives/currency-input.directive';
 import { CurrencyPipe } from '@angular/common';
 import { LoginComponent } from './login/login.component';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 
 @NgModule({
@@ -63,7 +64,8 @@ import { LoginComponent } from './login/login.component';
     MatInputModule,
     FormsModule,
     MatSelectModule,
-  
+    MatProgressBarModule,
+
     TonysSharedModule.forRoot(),
   ],
   providers: [

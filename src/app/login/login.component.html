@@ -1,1 +1,59 @@
-<p>login works!</p>
+<mat-progress-bar *ngIf="this.loading" mode="indeterminate"></mat-progress-bar>
+<div fxLayout="row" fxLayoutAlign="center center" fxFlexFill>
+<mat-card [class.mat-elevation-z0]="this.isHandset | async" [class.mat-elevation-z4]="!this.isHandset | async">
+    <div fxLayout="row" fxLayoutAlign="center">
+        <h2 class="mat-display-1 login-title">Sign in</h2>
+    </div>
+    
+    <form #authForm="ngForm" (ngSubmit)="this.onSubmit()" novalidate>
+        <div fxLayout="column">
+            <mat-form-field fxFlex hideRequiredMarker>
+                <mat-label>Email</mat-label>
+                <input type="email" 
+                    [(ngModel)]="email"
+                    name="emailField"
+                    #emailField="ngModel" 
+                    email
+                    required
+                    matInput>
+                <mat-icon class="input-icon" matPrefix>email</mat-icon>
+                <mat-error *ngIf="emailField.hasError('email')">Invalid email format.</mat-error>
+                <mat-error *ngIf="emailField.hasError('required')">Email is required.</mat-error>
+            </mat-form-field>
+    
+    
+            <mat-form-field class="password-field" fxFlex hideRequiredMarker>
+                <mat-label>Password</mat-label>
+                <input type="password" 
+                    [(ngModel)]="this.password"
+                    name="passwordField"
+                    #passwordField="ngModel" 
+                    required
+                    matInput>
+                <mat-icon class="input-icon" matPrefix>lock</mat-icon>
+                <mat-error *ngIf="passwordField.hasError('required')">Password is required.</mat-error>
+            </mat-form-field>
+    
+            <div class="forgot-password" fxLayout="row" fxLayoutAlign="end">
+                <span class="fake-link">Forgot your password?</span>
+            </div>
+        </div>
+    
+        <div class="mt-16" fxLayout="column" fxLayoutGap="12px">
+    
+            <button mat-flat-button 
+                type="submit" 
+                color="primary"
+                [disabled]="this.loading">
+                Sign in 
+            </button>
+    
+            <div  fxLayout="row" fxLayoutAlign="center">
+                <span>Don't have an account?&nbsp;</span>
+                <span class="fake-link">Register</span>
+            </div>
+        </div>  
+    </form>
+</mat-card>
+</div>
+    

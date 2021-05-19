@@ -1,0 +1,19 @@
+mat-card {
+    width: 100%;
+    max-width: 400px;
+    margin-top: -150px;
+}
+
+span.fake-link {
+    font-weight: 500; 
+    cursor: pointer; 
+    text-decoration: underline;
+}
+
+div.forgot-password {
+    margin-bottom: 16px;
+}
+
+mat-progress-bar {
+    position: absolute;
+}
