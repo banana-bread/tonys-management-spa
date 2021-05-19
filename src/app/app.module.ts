@@ -18,7 +18,8 @@ import { ServiceViewComponent } from './dashboard/service-view/service-view.comp
 import { StaffViewComponent } from './dashboard/staff-view/staff-view.component';
 import { ShopViewComponent } from './dashboard/shop-view/shop-view.component';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { AuthInterceptor } from './services/auth-interceptor.service';
+// import { AuthInterceptor } from './services/auth-interceptor.service';
+import { AuthInterceptor } from '@tonys/shared';
 import { MatDividerModule } from '@angular/material/divider';
 import { ServiceEditorComponent } from './dashboard/service-view/service-editor/service-editor.component';
 import { MatCardModule } from '@angular/material/card';
@@ -29,6 +30,7 @@ import { FormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { CurrencyInputDirective } from './directives/currency-input.directive';
 import { CurrencyPipe } from '@angular/common';
+import { LoginComponent } from './login/login.component';
 
 
 @NgModule({
@@ -40,6 +42,7 @@ import { CurrencyPipe } from '@angular/common';
     ShopViewComponent,
     ServiceEditorComponent,
     CurrencyInputDirective,
+    LoginComponent,
   ],
   imports: [
     BrowserModule,

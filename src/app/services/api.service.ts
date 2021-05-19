@@ -1,12 +1,19 @@
 import { Injectable } from '@angular/core';
 import { HttpAdapter } from '@tonys/shared';
+import { Subscription } from 'rxjs';
 import { ServiceDefinition } from '../models/service-definition/service-definition.model';
 import { AppStateService } from './app-state.service';
+import { LoginData } from './interfaces/login-data.interface';
+import { RegisterData } from './interfaces/register-data.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
+
+  // TODO: don't love this.
+  subscription: Subscription = this.appState.company.subscribe(c => this.company_id = c.id);
+  company_id: string;
 
   constructor(
     private http: HttpAdapter,
@@ -65,9 +72,19 @@ export class ApiService {
       .put();
   }
 
-  // TODO: figure out a cleaner better way.
-  private get company_id()
+  login(data: LoginData): Promise<any>
   {
-    return '7662f5f0-81a2-442d-9e67-facc712e95ff';
+    return this.http
+      .path('/login')
+      .data(data)
+      .post();
+  }
+
+  register(data: RegisterData)
+  {
+    return this.http
+      .path('/locations')
+      .data(data)
+      .post();
   }
 }

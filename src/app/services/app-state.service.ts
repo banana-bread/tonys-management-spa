@@ -6,13 +6,6 @@ import { Company } from "../models/company/company.model";
     providedIn: 'root'
 })
 export class AppStateService {
-    // loading: Subject<boolean> = new Subject<boolean>()
-
-    // setLoading(isLoading: boolean): void
-    // {
-    //     this.loading.next(isLoading);
-    // }
-
     company: Subject<Company> = new Subject();
 
     setCompany(company: Company)
