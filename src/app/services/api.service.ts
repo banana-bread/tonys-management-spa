@@ -11,13 +11,11 @@ import { RegisterData } from './interfaces/register-data.interface';
 })
 export class ApiService {
 
-  // TODO: don't love this.
-  subscription: Subscription = this.appState.company.subscribe(c => this.company_id = c.id);
-  company_id: string;
+  private company_id: string = this.state.company?.id;
 
   constructor(
     private http: HttpAdapter,
-    private appState: AppStateService,
+    private state: AppStateService,
   ) { }
 
   getCompany(id: string): Promise<any>
@@ -33,6 +31,13 @@ export class ApiService {
     return this.http
       .path('/employees')
       .withCompany(this.company_id)
+      .get();
+  }
+
+  getAuthedEmployee(): Promise<any>
+  {
+    return this.http
+      .path('/employee/authed')
       .get();
   }
 
@@ -80,11 +85,18 @@ export class ApiService {
       .post();
   }
 
-  register(data: RegisterData)
+  register(data: RegisterData): Promise<any>
   {
     return this.http
       .path('/locations')
       .data(data)
       .post();
+  }
+
+  logout(): Promise<any>
+  {
+    return this.http
+      .path('/logout')
+      .delete();
   }
 }

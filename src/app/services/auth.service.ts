@@ -19,6 +19,12 @@ export class AuthService {
     this.jwt.setToken(response.data);
   }
 
+  async logout(): Promise<void>
+  {
+    await this.api.logout();
+    this.jwt.removeToken();
+  }
+
 
   // TODO: implement
   async register(name: string, email: string, password: string, phone?: string): Promise<any> 

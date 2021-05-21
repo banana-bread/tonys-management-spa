@@ -4,6 +4,9 @@ import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { AppStateService } from '../services/app-state.service';
 import { CompanyService } from '../models/company/company.service';
+import { AuthService } from '../services/auth.service';
+import { SnackbarNotificationService } from '@tonys/shared';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -24,9 +27,26 @@ export class DashboardComponent implements OnInit {
   // TODO: move company getting into login spot.
   constructor(
     private breakpointObserver: BreakpointObserver,
-    private appState: AppStateService,
+    private state: AppStateService,
     private companyService: CompanyService,
+    private auth: AuthService,
+    private router: Router,
+    private notification: SnackbarNotificationService,
   ) {}
 
   ngOnInit(): void {}
+
+  async logout(): Promise<void>
+  {
+    try
+    {
+      await this.auth.logout();
+      this.router.navigate(['login'])
+      this.notification.success('Logged out')
+    }
+    catch
+    {
+      this.notification.error('Couldn\'t log out');
+    }
+  }
 }

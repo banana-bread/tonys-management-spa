@@ -117,3 +117,13 @@ mat-card-title.app-editor-card-title {
   left: 50%;
 }
 
+mat-card.app-card {
+  // .mat-elevation-z0
+  box-shadow: 0px 0px 0px 0px rgb(0 0 0 / 20%), 0px 0px 0px 0px rgb(0 0 0 / 14%), 0px 0px 0px 0px rgb(0 0 0 / 12%) !important;
+
+  @media(min-width: 600px) {
+    // .mat-elevation-z4
+    box-shadow: 0px 2px 4px -1px rgb(0 0 0 / 20%), 0px 4px 5px 0px rgb(0 0 0 / 14%), 0px 1px 10px 0px rgb(0 0 0 / 12%) !important;
+  }
+}
+

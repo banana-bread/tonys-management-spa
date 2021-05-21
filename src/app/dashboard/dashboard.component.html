@@ -33,7 +33,7 @@
       
       <span fxFlex></span>
 
-      <mat-list-item  matTooltip="Logout" matTooltipPosition="after" [matTooltipDisabled]="isExpanded" matTooltipClass="app-tooltip">
+      <mat-list-item (click)="this.logout()" matTooltip="Logout" matTooltipPosition="after" [matTooltipDisabled]="isExpanded" matTooltipClass="app-tooltip">
         <mat-icon fontSet="material-icons-round" mat-list-icon>logout</mat-icon>
         <h4 mat-line *ngIf="isExpanded">Logout</h4>
       </mat-list-item>

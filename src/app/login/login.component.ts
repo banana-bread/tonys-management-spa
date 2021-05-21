@@ -6,6 +6,9 @@ import { AuthService } from '../services/auth.service';
 import { NgForm } from '@angular/forms';
 import { SnackbarNotificationService } from '@tonys/shared';
 import { Router } from '@angular/router';
+import { EmployeeService } from '../models/employee/employee.service';
+import { CompanyService } from '../models/company/company.service';
+import { AppStateService } from '../services/app-state.service';
 
 @Component({
   selector: 'app-login',
@@ -23,36 +26,38 @@ export class LoginComponent implements OnInit {
   phone: string;
   password: string;
 
-  isHandset: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
-  .pipe(
-    map(result => result.matches),
-    shareReplay()
-  );
-
   constructor(
-    private breakpointObserver: BreakpointObserver,
     private auth: AuthService,
     private router: Router,
+    private state: AppStateService,
     private notifications: SnackbarNotificationService,
+    private employeeService: EmployeeService,
+    private companyService: CompanyService,
   ) { }
 
   ngOnInit(): void {}
 
   /* 
   TODO:
-    - Get user
-    - Get company id
-    - Set company id in appstate, doesn't need to be an observable
+
+    - Set company and user in appstate, doesn't need to be an observable
   */
   async onSubmit()
   {
     if (this.authForm.invalid) return;
+    
+    this.loading = true;
 
+    // TODO: should probably refine this to get company and employee in one shot
+    //       Will do, first need to figure out model relations
     try
     {
-      this.loading = true;
       await this.auth.login(this.email, this.password);
-      this.router.navigate(['123', 'dashboard'])
+
+      this.state.employee = await this.employeeService.getAuthed()
+      this.state.company = await this.companyService.get(this.state.employee.company_id);
+
+      this.router.navigate([this.state.company.id, 'dashboard'])
       this.notifications.success('Signed in')
     }
     catch
