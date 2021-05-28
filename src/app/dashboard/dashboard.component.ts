@@ -42,7 +42,7 @@ export class DashboardComponent implements OnInit {
     {
       await this.auth.logout();
       this.router.navigate(['login'])
-      this.notification.success('Logged out')
+      this.notification.success('Signed out')
     }
     catch
     {

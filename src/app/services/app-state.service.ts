@@ -1,32 +1,54 @@
 import { Injectable } from "@angular/core";
-import { Subject } from "rxjs";
+import { BehaviorSubject, Subject } from "rxjs";
 import { Company } from "../models/company/company.model";
 import { Employee } from "../models/employee/employee.model";
 
-@Injectable({
-    providedIn: 'root'
-})
+// https://dev.to/avatsaev/simple-state-management-in-angular-with-only-services-and-rxjs-41p8
+@Injectable({providedIn: 'root'})
 export class AppStateService {
-    private _company: Company;
-    private _employee: Employee;
+    private readonly _employee = new BehaviorSubject<Employee>(new Employee());
+    private readonly _company = new BehaviorSubject<Company>(new Company());
 
-    set company(company: Company)
+    readonly employee$ = this._employee.asObservable();
+    readonly company$ = this._company.asObservable();
+
+    get employee(): Employee
     {
-        this._company = company;
+        return this._employee.getValue();
     }
 
     get company(): Company
     {
-        return this._company;
+        return this._company.getValue();
     }
 
-    set employee(employee: Employee)
+    set employee(val: Employee)
     {
-        this._employee = employee;
+        this._employee.next(val);
     }
 
-    get employee(): Employee
+    set company(val: Company)
     {
-        return this._employee;
+        this._company.next(val);
     }
+
+    setEmployee(employee: Employee)
+    {
+        this.employee = employee;
+    }
+
+    // removeEmployee()
+    // {
+    //     this.employee = null;
+    // }
+    
+    setCompany(company: Company)
+    {
+        this.company = company;
+    }
+
+    // removeCompany()
+    // {
+    //     this.company = null;
+    // }
 }

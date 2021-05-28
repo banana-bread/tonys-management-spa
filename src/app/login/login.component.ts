@@ -37,11 +37,6 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  /* 
-  TODO:
-
-    - Set company and user in appstate, doesn't need to be an observable
-  */
   async onSubmit()
   {
     if (this.authForm.invalid) return;
@@ -54,10 +49,13 @@ export class LoginComponent implements OnInit {
     {
       await this.auth.login(this.email, this.password);
 
-      this.state.employee = await this.employeeService.getAuthed()
-      this.state.company = await this.companyService.get(this.state.employee.company_id);
+      const employee = await this.employeeService.getAuthed();
+      const company = await this.companyService.get(employee.company_id);
 
-      this.router.navigate([this.state.company.id, 'dashboard'])
+      this.state.setEmployee(employee);
+      this.state.setCompany(company);
+
+      this.router.navigate([company.id, 'dashboard'])
       this.notifications.success('Signed in')
     }
     catch

@@ -11,7 +11,11 @@ import { RegisterData } from './interfaces/register-data.interface';
 })
 export class ApiService {
 
-  private company_id: string = this.state.company?.id;
+  // TODO: this is not working properly.
+  //  It does send company id on path after login, but if refreshed does not
+  // private company_id: string = this.state.company?.id;
+  // subscription: Subscription = this.state.company.subscribe(c => this.company_id = c.id);
+  // company_id: string;
 
   constructor(
     private http: HttpAdapter,
@@ -30,7 +34,7 @@ export class ApiService {
   {
     return this.http
       .path('/employees')
-      .withCompany(this.company_id)
+      .withCompany(this.state.company.id)
       .get();
   }
 
@@ -45,7 +49,7 @@ export class ApiService {
   {
     return this.http
       .path('/service-definitions')
-      .withCompany(this.company_id)
+      .withCompany(this.state.company.id)
       .get();
   }
 
@@ -54,7 +58,7 @@ export class ApiService {
     return this.http
       .path('/service-definitions/{id}')
       .param('id', id)
-      .withCompany(this.company_id)
+      .withCompany(this.state.company.id)
       .get();
   }
 
@@ -63,7 +67,7 @@ export class ApiService {
     return this.http
       .path('/service-definitions')
       .data(service)
-      .withCompany(this.company_id)
+      .withCompany(this.state.company.id)
       .post();
   }
 
@@ -73,7 +77,7 @@ export class ApiService {
       .path('/service-definitions/{id}')
       .data(data)
       .param('id', id)
-      .withCompany(this.company_id)
+      .withCompany(this.state.company.id)
       .put();
   }
 
