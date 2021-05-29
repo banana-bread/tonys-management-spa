@@ -111,10 +111,14 @@ mat-card-title.app-editor-card-title {
 }
 
 // STATE
-.app-page-loading {
+mat-progress-spinner.app-page-loading {
   position: absolute; 
   top: 30%; 
   left: 50%;
+}
+
+mat-progress-bar.app-loading-bar {
+  position: absolute;
 }
 
 mat-card.app-card {
@@ -126,4 +130,43 @@ mat-card.app-card {
     box-shadow: 0px 2px 4px -1px rgb(0 0 0 / 20%), 0px 4px 5px 0px rgb(0 0 0 / 14%), 0px 1px 10px 0px rgb(0 0 0 / 12%) !important;
   }
 }
+
+// ITEMS
+.item-list {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  min-height: 60px;
+  background: white;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%), 0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
+}
+
+.item-list > div:not(:last-of-type) {
+  border-bottom: solid 1px #ccc;
+} 
+
+.item-list .item {
+  padding: 20px 10px;
+  color: rgba(0, 0, 0, 0.87);
+  display: flex;
+  box-sizing: border-box;
+  background: white;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: 500;
+
+  &:hover {
+      background: $color-light-gray;
+  }
+}
+
+.item-list .item-caption {
+  font-size: 14px;
+  font-weight: 400;
+  color: $color-dark-gray;
+}
+
+
 

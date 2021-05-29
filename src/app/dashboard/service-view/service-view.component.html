@@ -1,13 +1,13 @@
 <div class="app-view-padding" fxLayout="row">
-    <div class="service-list mat-elevation-z2" fxLayout="column" *ngIf="!loading">
-        <div class="service" 
+    <div class="item-list" fxLayout="column" *ngIf="!loading">
+        <div class="item" 
             fxLayout="row" 
             fxLayoutAlign="space-between center"
             *ngFor="let service of services"
-            (click)="onEdit(service)">
+            [routerLink]="service.id">
             <div fxLayout="column">
                 <span class="name">{{ service.name }}</span>
-                <span class="duration">{{ service.duration | appDuration }}</span>
+                <span class="item-caption">{{ service.duration | appDuration }}</span>
             </div>
             <span class="price">{{ service.price | appCurrency }}</span>
         </div>
@@ -22,7 +22,7 @@
     matTooltip="New service"
     matTooltipPosition="before"
     matTooltipClass="app-tooltip"
-    [disabled]="loading"
-    (click)="onAdd()">
+    routerLink="new"
+    [disabled]="loading">
     <mat-icon fontSet="material-icons-round">add</mat-icon>
 </button>

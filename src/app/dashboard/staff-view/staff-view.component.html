@@ -1,5 +1,20 @@
-<div fxLayout="column">
-    <div *ngFor="let employee of employees">
-        {{ employee.name }}
+<div class="app-view-padding" fxLayout="row">
+    <div class="item-list" fxLayout="column" *ngIf="!loading">
+        <div class="item" *ngFor="let employee of employees">
+            {{ employee.name }}
+        </div>
     </div>
 </div>
+
+<mat-progress-spinner class="app-page-loading" mode="indeterminate" *ngIf="loading"></mat-progress-spinner>
+<button class="app-fab-new" 
+    mat-fab
+    color="primary" 
+    aria-label="Create new employee button." 
+    matTooltip="New employee"
+    matTooltipPosition="before"
+    matTooltipClass="app-tooltip"
+    [disabled]="loading"
+    (click)="onAdd()">
+    <mat-icon fontSet="material-icons-round">add</mat-icon>
+</button>

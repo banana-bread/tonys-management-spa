@@ -1,13 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Observable } from 'rxjs';
-import { map, shareReplay } from 'rxjs/operators';
 import { AuthService } from '../services/auth.service';
 import { NgForm } from '@angular/forms';
 import { SnackbarNotificationService } from '@tonys/shared';
 import { Router } from '@angular/router';
-import { EmployeeService } from '../models/employee/employee.service';
-import { CompanyService } from '../models/company/company.service';
 import { AppStateService } from '../services/app-state.service';
 
 @Component({
@@ -29,10 +24,8 @@ export class LoginComponent implements OnInit {
   constructor(
     private auth: AuthService,
     private router: Router,
-    private state: AppStateService,
     private notifications: SnackbarNotificationService,
-    private employeeService: EmployeeService,
-    private companyService: CompanyService,
+    private state: AppStateService,
   ) { }
 
   ngOnInit(): void {}
@@ -49,13 +42,7 @@ export class LoginComponent implements OnInit {
     {
       await this.auth.login(this.email, this.password);
 
-      const employee = await this.employeeService.getAuthed();
-      const company = await this.companyService.get(employee.company_id);
-
-      this.state.setEmployee(employee);
-      this.state.setCompany(company);
-
-      this.router.navigate([company.id, 'dashboard'])
+      this.router.navigate(['/', this.state.company.id]);
       this.notifications.success('Signed in')
     }
     catch

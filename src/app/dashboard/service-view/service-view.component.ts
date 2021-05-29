@@ -17,25 +17,20 @@ export class ServiceViewComponent implements OnInit {
 
   constructor(
     private serviceDefinitionService: ServiceDefinitionService,
-    private router: Router,
-    private state: AppStateService,
   ) { }
 
   async ngOnInit(): Promise<void> 
   {
-    this.services = await this.serviceDefinitionService.getAll();
-    console.log(this.services)
-    this.loading = false;
+    this.loading = true;
+    
+    try
+    {
+      this.services = await this.serviceDefinitionService.getAll();   
+    }
+    finally
+    {
+      this.loading = false;
+    }
+    
   }
-
-  onAdd()
-  {
-    this.router.navigate(['/dashboard/services', 'new']);
-  }
-
-  onEdit(service: ServiceDefinition)
-  {
-    this.router.navigate(['/dashboard/services', service.id]);
-  }
-
 }

@@ -2,20 +2,22 @@
     <form #editorForm="ngForm" (ngSubmit)="onSave()">
         <mat-toolbar class="app-editor-toolbar" fxLayout="row" fxLayoutGap="10px">
             <button mat-icon-button 
+                type="button"
                 class="close-button" 
                 aria-label="Close edit services button."
-                routerLink="..">
+                (click)="onClose()">
                 <mat-icon>close</mat-icon>
             </button>
             <span class="app-editor-title" *ngIf="!loading">{{ !!original.id ? 'Edit' : 'New' }} Service</span>
             <span fxFlex></span>
-            <button class="delete-button" mat-raised-button [disabled]="saving || loading">
+            <button type="button" (click)="onDelete()" class="delete-button" mat-raised-button [disabled]="saving || loading || !original.id">
                 Delete
             </button>
-            <button mat-raised-button color="primary" [disabled]="saving || loading">
+            <button type="submit" mat-raised-button color="primary" [disabled]="saving || loading">
                 Save
             </button>
         </mat-toolbar>
+        <mat-progress-bar class="app-loading-bar" *ngIf="saving" mode="indeterminate"></mat-progress-bar>
 
         <div class="app-view-padding" 
             fxLayout="column" 

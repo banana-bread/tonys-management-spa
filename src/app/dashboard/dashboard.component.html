@@ -14,7 +14,7 @@
         <mat-icon fontSet="material-icons-round" [fxShow]="isExpanded" mat-list-icon>first_page</mat-icon>
         <mat-icon fontSet="material-icons-round" [fxShow]="!isExpanded" mat-list-icon>last_page</mat-icon>
       </button>
-      <mat-list-item routerLink="/home" matTooltip="Home" matTooltipPosition="after" [matTooltipDisabled]="isExpanded" matTooltipClass="app-tooltip">
+      <mat-list-item matTooltip="Home" matTooltipPosition="after" [matTooltipDisabled]="isExpanded" matTooltipClass="app-tooltip">
         <mat-icon fontSet="material-icons-round" mat-list-icon>home</mat-icon>
         <h4 mat-line *ngIf="isExpanded">Home</h4>
       </mat-list-item>

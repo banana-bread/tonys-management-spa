@@ -13,12 +13,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { TonysSharedModule } from '@tonys/shared';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatDialogModule } from '@angular/material/dialog';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ServiceViewComponent } from './dashboard/service-view/service-view.component';
 import { StaffViewComponent } from './dashboard/staff-view/staff-view.component';
 import { ShopViewComponent } from './dashboard/shop-view/shop-view.component';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-// import { AuthInterceptor } from './services/auth-interceptor.service';
 import { AuthInterceptor } from '@tonys/shared';
 import { MatDividerModule } from '@angular/material/divider';
 import { ServiceEditorComponent } from './dashboard/service-view/service-editor/service-editor.component';
@@ -32,6 +32,7 @@ import { CurrencyInputDirective } from './directives/currency-input.directive';
 import { CurrencyPipe } from '@angular/common';
 import { LoginComponent } from './login/login.component';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 
 
 @NgModule({
@@ -44,6 +45,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     ServiceEditorComponent,
     CurrencyInputDirective,
     LoginComponent,
+    ConfirmDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -65,6 +67,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     FormsModule,
     MatSelectModule,
     MatProgressBarModule,
+    MatDialogModule,
 
     TonysSharedModule.forRoot(),
   ],

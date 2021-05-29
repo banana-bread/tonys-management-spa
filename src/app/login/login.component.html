@@ -1,4 +1,4 @@
-<mat-progress-bar *ngIf="this.loading" mode="indeterminate"></mat-progress-bar>
+<mat-progress-bar class="app-loading-bar" *ngIf="this.loading" mode="indeterminate"></mat-progress-bar>
 <div fxLayout="row" fxLayoutAlign="center center" fxFlexFill>
 <mat-card class="app-card">
     <div fxLayout="row" fxLayoutAlign="center">
@@ -8,11 +8,10 @@
     <form #authForm="ngForm" (ngSubmit)="this.onSubmit()" novalidate>
         <div fxLayout="column">
             <mat-form-field fxFlex hideRequiredMarker>
-                <!-- <mat-label>Email</mat-label> -->
+                <mat-label>Email</mat-label>
                 <input type="email" 
                     [(ngModel)]="email"
                     name="emailField"
-                    placeholder="Email"
                     #emailField="ngModel" 
                     email
                     required
@@ -24,9 +23,8 @@
     
     
             <mat-form-field class="password-field" fxFlex hideRequiredMarker>
-                <!-- <mat-label>Password</mat-label> -->
+                <mat-label>Password</mat-label>
                 <input type="password" 
-                    placeholder="Password"
                     [(ngModel)]="this.password"
                     name="passwordField"
                     #passwordField="ngModel" 
@@ -50,7 +48,8 @@
                 Sign in 
             </button>
     
-            <div  fxLayout="row" fxLayoutAlign="center">
+            <!-- TODO: deleting until I figure out how this should be done -->
+            <div *ngIf="false" fxLayout="row" fxLayoutAlign="center">
                 <span>Don't have an account?&nbsp;</span>
                 <span class="fake-link">Register</span>
             </div>

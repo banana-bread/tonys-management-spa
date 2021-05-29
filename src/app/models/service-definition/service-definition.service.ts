@@ -32,4 +32,9 @@ export class ServiceDefinitionService {
     
     return new ServiceDefinition(response.data.service_definition);
   }
+
+  async delete(service: ServiceDefinition): Promise<void> 
+  {
+    await this.api.deleteServiceDefinition(service);
+  }
 }

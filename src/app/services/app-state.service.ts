@@ -22,6 +22,11 @@ export class AppStateService {
         return this._company.getValue();
     }
 
+    get company_id(): string 
+    {
+        return localStorage.getItem('company_id');
+    }
+
     set employee(val: Employee)
     {
         this._employee.next(val);
@@ -30,6 +35,7 @@ export class AppStateService {
     set company(val: Company)
     {
         this._company.next(val);
+        localStorage.setItem('company_id', val.id)
     }
 
     setEmployee(employee: Employee)
@@ -37,18 +43,19 @@ export class AppStateService {
         this.employee = employee;
     }
 
-    // removeEmployee()
-    // {
-    //     this.employee = null;
-    // }
+    removeEmployee()
+    {
+        this.employee = null;
+    }
     
     setCompany(company: Company)
     {
         this.company = company;
     }
 
-    // removeCompany()
-    // {
-    //     this.company = null;
-    // }
+    removeCompany()
+    {
+        this._company.next(null);
+        localStorage.removeItem('company_id');
+    }
 }
