@@ -63,7 +63,10 @@ export class ServiceEditorComponent implements OnInit {
   {
     this.saving = true;
 
-    const shouldDelete: boolean = await this.confirmDialog.open();
+    const shouldDelete: boolean = await this.confirmDialog.open({
+      title: 'Confirm service deletion',
+      message: 'Are you sure you want to delete this service?'
+    });
 
     try
     {
