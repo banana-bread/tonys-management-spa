@@ -33,6 +33,7 @@ import { CurrencyPipe } from '@angular/common';
 import { LoginComponent } from './login/login.component';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
+import { StaffEditorComponent } from './dashboard/staff-view/staff-editor/staff-editor.component';
 
 
 @NgModule({
@@ -46,6 +47,7 @@ import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.componen
     CurrencyInputDirective,
     LoginComponent,
     ConfirmDialogComponent,
+    StaffEditorComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SnackbarNotificationService } from '@tonys/shared';
 import { ConfirmDialogService } from 'src/app/confirm-dialog/confirm-dialog.service';
 import { Employee } from 'src/app/models/employee/employee.model';
@@ -21,6 +21,7 @@ export class StaffViewComponent implements OnInit {
     private router: Router,
     private notifications: SnackbarNotificationService,
     private confirmDialog: ConfirmDialogService,
+    private route: ActivatedRoute,
   ) { }
 
   async ngOnInit(): Promise<void> 
@@ -42,6 +43,14 @@ export class StaffViewComponent implements OnInit {
       this.loading = false
     }
 
+  }
+
+  onEdit(employee: Employee)
+  {
+    // TODO: implement employee editor servive
+    // this.employeeEditorService.employee = employee;
+    
+    this.router.navigate([employee.id], {relativeTo: this.route});
   }
 
   onAdd()

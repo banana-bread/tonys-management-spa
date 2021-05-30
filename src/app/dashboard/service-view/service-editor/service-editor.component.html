@@ -1,3 +1,4 @@
+<!-- <div class="app-editor-view" [@slideInOut]> -->
 <div class="app-editor-view">
     <form #editorForm="ngForm" (ngSubmit)="onSave()">
         <mat-toolbar class="app-editor-toolbar" fxLayout="row" fxLayoutGap="10px">
@@ -24,7 +25,7 @@
             fxLayoutAlign=" center" 
             *ngIf="!loading">
             <mat-card class="app-editor-card">
-                <mat-card-title class="app-editor-card-title">Basic</mat-card-title>
+                <mat-card-title class="app-editor-card-title">{{ service.name || 'New' }}</mat-card-title>
                 <div fxLayout="column">
                     <mat-form-field fxFlex hideRequiredMarker>
                         <mat-label>Name</mat-label>

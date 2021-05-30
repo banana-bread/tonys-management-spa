@@ -1,8 +1,11 @@
-<div class="app-view-padding" fxLayout="row">
-    <div class="item-list" fxLayout="column" *ngIf="!loading">
-        <div class="item" *ngFor="let employee of employees">
-            {{ employee.name }}
-        </div>
+<div class="app-view-padding" fxLayout="row" fxLayoutAlign="center">
+    <div fxLayout="column" *ngIf="!loading" fxLayoutGap="15px">
+        <mat-card class="app-selectable-card app-medium-card" 
+            *ngFor="let employee of employees" 
+            (click)="onEdit(employee)">
+            <mat-card-title>{{ employee.name }}</mat-card-title>
+            <mat-card-subtitle>{{ employee.type }}</mat-card-subtitle>
+        </mat-card>
     </div>
 </div>
 

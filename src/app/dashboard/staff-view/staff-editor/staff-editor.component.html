@@ -1,0 +1,22 @@
+<div class="app-editor view">
+    <form #editorForm="ngForm" (ngSubmit)="onSave()">
+        <mat-toolbar class="app-editor-toolbar" fxLayout="row" fxLayoutGap="10px">
+            <button mat-icon-button 
+                type="button"
+                class="close-button" 
+                aria-label="Close edit employee button."
+                (click)="onClose()">
+                <mat-icon>close</mat-icon>
+            </button>
+            <span class="app-editor-title" *ngIf="!loading">{{ !!original.id ? 'Edit' : 'New' }} Staff</span>
+            <span fxFlex></span>
+            <button type="button" (click)="onDelete()" class="delete-button" mat-raised-button [disabled]="saving || loading || !original.id">
+                Delete
+            </button>
+            <button type="submit" mat-raised-button color="primary" [disabled]="saving || loading">
+                Save
+            </button>
+        </mat-toolbar>
+        <mat-progress-bar class="app-loading-bar" *ngIf="saving" mode="indeterminate"></mat-progress-bar>
+    </form>
+</div>

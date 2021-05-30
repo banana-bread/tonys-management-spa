@@ -16,8 +16,6 @@ export class ConfirmDialogService {
             disableClose: true,
             hasBackdrop: true,
             autoFocus: true,
-            // width: '100%',
-            // maxWidth: 700,
             data
           }
 

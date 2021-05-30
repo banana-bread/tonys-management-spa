@@ -1,3 +1,4 @@
+import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router'; 
@@ -6,10 +7,22 @@ import { ConfirmDialogService } from 'src/app/confirm-dialog/confirm-dialog.serv
 import { ServiceDefinition } from 'src/app/models/service-definition/service-definition.model';
 import { ServiceDefinitionService } from 'src/app/models/service-definition/service-definition.service';
 import { AppStateService } from 'src/app/services/app-state.service';
+import { ServiceEditorService } from './service-editor.service';
 @Component({
   selector: 'app-service-editor',
   templateUrl: './service-editor.component.html',
-  styleUrls: ['./service-editor.component.scss']
+  styleUrls: ['./service-editor.component.scss'],
+  // animations: [
+  //   trigger('slideInOut', [
+  //     transition(':enter', [
+  //       style({transform: 'translateY(100%)'}),
+  //       animate('100ms ease-in', style({transform: 'translateY(0%)'}))
+  //     ]),
+  //     transition(':leave', [
+  //       animate('2000ms ease-in', style({transform: 'translateY(100%)'}))
+  //     ])
+  //   ])
+  // ]
 })
 export class ServiceEditorComponent implements OnInit {
 
@@ -21,9 +34,10 @@ export class ServiceEditorComponent implements OnInit {
   original = new ServiceDefinition();
   service = new ServiceDefinition();
   durationOptions: number[] = this.generateDurationOptions();
-  serviceId: string;
+  serviceId: string = this.route.snapshot.paramMap.get('id');
 
   constructor(
+    private serviceEditorService: ServiceEditorService,
     private route: ActivatedRoute,
     private router: Router,
     private state: AppStateService,
@@ -34,7 +48,32 @@ export class ServiceEditorComponent implements OnInit {
 
   async ngOnInit(): Promise<void> 
   {
-    this.loadService();
+    if (this.serviceId === 'new') return;
+
+    if (!! this.serviceEditorService.service)
+    {
+      this.original = this.serviceEditorService.service;
+      this.service = this.original.copy();
+    } 
+    else
+    {
+      this.loading = true;
+
+      try
+      {  
+        this.original = await this.serviceDefinitionService.get(this.serviceId);
+        this.service = this.original.copy();
+      }
+      catch
+      { 
+        this.onClose();
+        this.notifications.error('Error loading service.')
+      }
+      finally
+      {
+        this.loading = false;
+      }
+    }
   }
 
   async onSave()
@@ -65,7 +104,8 @@ export class ServiceEditorComponent implements OnInit {
 
     const shouldDelete: boolean = await this.confirmDialog.open({
       title: 'Confirm service deletion',
-      message: 'Are you sure you want to delete this service?'
+      message: 'Are you sure you want to delete this service?',
+      okLabel: 'Yes'
     });
 
     try
@@ -91,34 +131,6 @@ export class ServiceEditorComponent implements OnInit {
   onClose()
   {
     this.router.navigate([`/${this.state.company_id}/services`]);
-  }
-
-  private async loadService()
-  {
-    this.loading = true;
-
-    this.serviceId = this.route.snapshot.paramMap.get('id')
-
-    if (this.serviceId !== 'new')
-    {
-      try
-      {  
-        this.original = await this.serviceDefinitionService.get(this.serviceId);
-  
-        this.service = this.original.copy();
-      }
-      catch
-      { 
-        this.onClose();
-        this.notifications.error('Error loading service.')
-      }
-      finally
-      {
-        this.loading = false;
-      }
-    }
-
-    this.loading = false;
   }
 
   private generateDurationOptions(): number[]
