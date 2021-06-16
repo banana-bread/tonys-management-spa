@@ -7,6 +7,7 @@ import { ShopViewComponent } from '../dashboard/shop-view/shop-view.component';
 import { StaffEditorComponent } from '../dashboard/staff-view/staff-editor/staff-editor.component';
 import { StaffViewComponent } from '../dashboard/staff-view/staff-view.component';
 import { LoginComponent } from '../login/login.component';
+import { PageNotFoundComponent } from '../page-not-found/page-not-found.component';
 import { AuthGuardService as AuthGuard } from './auth-guard.service';
 import { LoginPageGuard } from './login-page-guard.service';
 
@@ -22,10 +23,12 @@ const routes: Routes = [
       { path: 'shop', component: ShopViewComponent },
     ] 
   },
-  { path: ':companyId/services/:id', component: ServiceEditorComponent },
+  { path: ':companyId/services/:id', component: ServiceEditorComponent, canActivate: [AuthGuard]},
+  // TODO: set up guard for this which checks for existence of query param if new, or token if id
   { path: ':companyId/staff/:id', component: StaffEditorComponent },
   // TODO: implement a 404
-  // { path: '**', component: PageNotFoundComponent }
+  { path: '404', component: PageNotFoundComponent },
+  { path: '**', redirectTo: '/404' },
 ];
 
 @NgModule({

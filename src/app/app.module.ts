@@ -34,6 +34,7 @@ import { LoginComponent } from './login/login.component';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 import { StaffEditorComponent } from './dashboard/staff-view/staff-editor/staff-editor.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 
 @NgModule({
@@ -48,6 +49,7 @@ import { StaffEditorComponent } from './dashboard/staff-view/staff-editor/staff-
     LoginComponent,
     ConfirmDialogComponent,
     StaffEditorComponent,
+    PageNotFoundComponent,
   ],
   imports: [
     BrowserModule,

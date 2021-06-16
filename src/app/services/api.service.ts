@@ -23,6 +23,15 @@ export class ApiService {
       .get();
   }
 
+  getEmployee(id: string): Promise<any>
+  {
+    return this.http
+      .path('/employees/{id}')
+      .param('id', id)
+      .withCompany(this.state.company_id)
+      .get();
+  }
+
   getEmployees(): Promise<any>
   {
     return this.http
@@ -36,6 +45,17 @@ export class ApiService {
     return this.http
       .path('/employee/authed')
       .get();
+  }
+
+  createEmployee(companyId: string, expires: string, signature: string, data: any): Promise<any>
+  {
+    return this.http
+      .path('/locations/{companyId}/employees')
+      .param('companyId', companyId)
+      .query('expires', expires)
+      .query('signature', signature)
+      .data(data)
+      .post();
   }
 
   getServiceDefinitions(): Promise<any> 

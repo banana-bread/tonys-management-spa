@@ -10,6 +10,20 @@ export class EmployeeService {
   
   constructor(private api: ApiService) {}
 
+  async get(id: string): Promise<Employee>
+  {
+    const response = await this.api.getEmployee(id);
+
+    return new Employee(response.data.employee);
+  }
+
+  async create(companyId: string, expires: string, signature: string, data: any): Promise<Employee>
+  {
+    const response = await this.api.createEmployee(companyId, expires, signature, data);
+
+    return new Employee(response.data.employee);
+  }
+
   async getAll(): Promise<Employee[]> 
   {
     const response = await this.api.getEmployees();

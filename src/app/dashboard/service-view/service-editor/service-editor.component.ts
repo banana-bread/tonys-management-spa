@@ -67,7 +67,7 @@ export class ServiceEditorComponent implements OnInit {
       catch
       { 
         this.onClose();
-        this.notifications.error('Error loading service.')
+        this.notifications.error('Error loading service')
       }
       finally
       {

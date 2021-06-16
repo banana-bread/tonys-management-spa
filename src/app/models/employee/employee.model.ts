@@ -6,6 +6,7 @@ export class Employee extends BaseModel {
     company_id?: string = '';
     name?: string = '';
     email?: string = '';
+    phone?: string = '';
     admin?: boolean = false;
     owner?: boolean = false;
     settings?: any = null;
