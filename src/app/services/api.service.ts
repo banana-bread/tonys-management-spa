@@ -58,6 +58,15 @@ export class ApiService {
       .post();
   }
 
+  inviteEmployees(data: any): Promise<any>
+  {
+    return this.http  
+      .path('/employees/invitation')
+      .data(data)
+      .withCompany(this.state.company_id)
+      .post();
+  }
+
   getServiceDefinitions(): Promise<any> 
   {
     return this.http

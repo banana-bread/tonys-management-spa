@@ -58,4 +58,11 @@ export class AppStateService {
         this._company.next(null);
         localStorage.removeItem('company_id');
     }
+
+    loading: Subject<boolean> = new Subject<boolean>()
+
+    setLoading(isLoading: boolean): void
+    {
+        this.loading.next(isLoading);
+    }
 }

@@ -38,4 +38,9 @@ export class EmployeeService {
 
     return new Employee(response.data.employee);
   }
+
+  async invite(emails: string[]): Promise<any>
+  {
+    await this.api.inviteEmployees({ emails });
+  }
 }

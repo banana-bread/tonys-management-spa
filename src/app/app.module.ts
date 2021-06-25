@@ -25,8 +25,9 @@ import { ServiceEditorComponent } from './dashboard/service-view/service-editor/
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatFormFieldModule, MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
+import { MatChipsModule, MAT_CHIPS_DEFAULT_OPTIONS } from '@angular/material/chips';
 import { MatInputModule } from '@angular/material/input';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { CurrencyInputDirective } from './directives/currency-input.directive';
 import { CurrencyPipe } from '@angular/common';
@@ -35,7 +36,8 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 import { StaffEditorComponent } from './dashboard/staff-view/staff-editor/staff-editor.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
-
+import { StaffInvitationDialogComponent } from './dashboard/staff-view/staff-invitation-dialog/staff-invitation-dialog.component';
+import { COMMA, ENTER, TAB } from '@angular/cdk/keycodes';
 
 @NgModule({
   declarations: [
@@ -50,6 +52,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
     ConfirmDialogComponent,
     StaffEditorComponent,
     PageNotFoundComponent,
+    StaffInvitationDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -69,15 +72,19 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
     MatFormFieldModule,
     MatInputModule,
     FormsModule,
+    ReactiveFormsModule,
+
     MatSelectModule,
     MatProgressBarModule,
     MatDialogModule,
+    MatChipsModule,
 
     TonysSharedModule.forRoot(),
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'outline' } },
+    { provide: MAT_CHIPS_DEFAULT_OPTIONS, useValue: { separatorKeyCodes: [ENTER, COMMA] } },
     CurrencyPipe,
   ],
   bootstrap: [AppComponent]

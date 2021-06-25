@@ -1,0 +1,34 @@
+<form (ngSubmit)="onSend" #dialogForm="ngForm" novalidate>
+    <h1 mat-dialog-title>Invite Staff</h1>
+    
+    <div mat-dialog-content>
+        <div fxLayout="column">
+            <p>Invite your team members to make an account.</p> 
+            <ng-container *ngFor="let email of emails; let i = index">
+                <mat-form-field>
+                    <input #emailControl
+                        #emailModel="ngModel"
+                        type="text"
+                        name="email_{{ email.id }}"
+                        [(ngModel)]="email.address"
+                        matInput>
+                        <button mat-icon-button matSuffix (click)="onRemove(i)" *ngIf="email.address">
+                            <mat-icon>close</mat-icon>
+                        </button>
+                        <!-- <mat-error *ngIf="emailModel.hasError('required')">Email is required.</mat-error> -->
+                        <!-- <mat-error *ngIf="emailModel.hasError('email')">Email is invalid.</mat-error> -->
+                </mat-form-field>
+            </ng-container>
+            <div class="button-container" fxLayout="row" fxLayoutAlign="end" >
+                <button mat-mini-fab color="primary" (click)="onAdd()" [disabled]="sending">
+                    <mat-icon>add</mat-icon>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div mat-dialog-actions align="end">
+        <mat-progress-spinner mode="indeterminate" diameter="36" *ngIf="sending"></mat-progress-spinner>
+        <button type="button" mat-button mat-dialog-close>Cancel</button>
+        <button (click)="onSend()" mat-button [disabled]="sending">Send</button>
+    </div>
+</form>

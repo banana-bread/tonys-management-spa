@@ -5,11 +5,11 @@ import { ConfirmDialogService } from 'src/app/confirm-dialog/confirm-dialog.serv
 import { Employee } from 'src/app/models/employee/employee.model';
 import { EmployeeService } from 'src/app/models/employee/employee.service';
 import { StaffEditorService } from './staff-editor/staff-editor.service';
+import { StaffInvitationDialogService } from './staff-invitation-dialog/staff-invitation-dialog-service';
 
 @Component({
   selector: 'app-staff-view',
   templateUrl: './staff-view.component.html',
-  styleUrls: ['./staff-view.component.scss']
 })
 export class StaffViewComponent implements OnInit {
 
@@ -24,6 +24,7 @@ export class StaffViewComponent implements OnInit {
     private confirmDialog: ConfirmDialogService,
     private route: ActivatedRoute,
     private staffEditorService: StaffEditorService,
+    private staffInvitationDialog: StaffInvitationDialogService,
   ) { }
 
   async ngOnInit(): Promise<void> 
@@ -54,6 +55,6 @@ export class StaffViewComponent implements OnInit {
 
   onNew()
   {
-    // TODO: Add modal editor to send email or emails to new employees.
+    this.staffInvitationDialog.open()
   }
 }
