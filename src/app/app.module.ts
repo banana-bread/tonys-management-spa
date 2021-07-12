@@ -38,6 +38,10 @@ import { StaffEditorComponent } from './dashboard/staff-view/staff-editor/staff-
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { StaffInvitationDialogComponent } from './dashboard/staff-view/staff-invitation-dialog/staff-invitation-dialog.component';
 import { COMMA, ENTER, TAB } from '@angular/cdk/keycodes';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { AppTimeOfDayPipe } from './pipes/time-of-day.pipe';
+import { BaseScheduleEditorComponent } from './base-schedule-editor/base-schedule-editor.component';
+
 
 @NgModule({
   declarations: [
@@ -53,6 +57,8 @@ import { COMMA, ENTER, TAB } from '@angular/cdk/keycodes';
     StaffEditorComponent,
     PageNotFoundComponent,
     StaffInvitationDialogComponent,
+    AppTimeOfDayPipe,
+    BaseScheduleEditorComponent,
   ],
   imports: [
     BrowserModule,
@@ -78,6 +84,7 @@ import { COMMA, ENTER, TAB } from '@angular/cdk/keycodes';
     MatProgressBarModule,
     MatDialogModule,
     MatChipsModule,
+    MatSlideToggleModule,
 
     TonysSharedModule.forRoot(),
   ],

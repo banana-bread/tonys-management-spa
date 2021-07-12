@@ -35,7 +35,7 @@ export class ApiService {
   getEmployees(): Promise<any>
   {
     return this.http
-      .path('/employees')
+      .path('/company/employees')
       .withCompany(this.state.company_id)
       .get();
   }
@@ -65,6 +65,16 @@ export class ApiService {
       .data(data)
       .withCompany(this.state.company_id)
       .post();
+  }
+
+  updateEmployeeActive(id: string, data: {bookings_enabled: boolean}): Promise<any>
+  {
+    return this.http
+      .path('/employees/{id}/active')
+      .param('id', id)
+      .data(data)
+      .withCompany(this.state.company_id)
+      .put();
   }
 
   getServiceDefinitions(): Promise<any> 
@@ -115,7 +125,7 @@ export class ApiService {
   login(data: LoginData): Promise<any>
   {
     return this.http
-      .path('/login')
+      .path('/employee/login')
       .data(data)
       .post();
   }

@@ -43,4 +43,9 @@ export class EmployeeService {
   {
     await this.api.inviteEmployees({ emails });
   }
+
+  async updateActive(employee: Employee)
+  {
+    await this.api.updateEmployeeActive(employee.id, {bookings_enabled: employee.active});
+  }
 }

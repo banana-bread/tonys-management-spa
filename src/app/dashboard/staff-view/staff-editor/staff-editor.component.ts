@@ -1,9 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SnackbarNotificationService } from '@tonys/shared';
 import { ConfirmDialogService } from 'src/app/confirm-dialog/confirm-dialog.service';
-import { getQueryParam, getUuid } from 'src/app/helpers/regex.helpers';
+import { getQueryParam, getUuid } from 'src/app/helpers/regex.helper';
+import { Company } from 'src/app/models/company/company.model';
+import { CompanyService } from 'src/app/models/company/company.service';
 import { Employee } from 'src/app/models/employee/employee.model';
 import { EmployeeService } from 'src/app/models/employee/employee.service';
 import { ApiService } from 'src/app/services/api.service';
@@ -42,6 +45,7 @@ export class StaffEditorComponent implements OnInit {
     private confirmDialog: ConfirmDialogService,
     private staffEditorService: StaffEditorService,
     private employeeService: EmployeeService,
+    private companyService: CompanyService,
   ) { }
 
   async ngOnInit(): Promise<void> 
@@ -79,6 +83,11 @@ export class StaffEditorComponent implements OnInit {
         }
       }
     }
+  }
+
+  toggleActiveDay(event: MatSlideToggleChange, day: {day: string, start: number, end: number, active: boolean})
+  {
+    day.active = event.checked;
   }
 
   onClose()
@@ -134,6 +143,11 @@ export class StaffEditorComponent implements OnInit {
       this.saving = false;
     }
     
+  }
+
+  onBaseScheduleChanged()
+  {
+    console.log('observing base schedule change...')
   }
 
 

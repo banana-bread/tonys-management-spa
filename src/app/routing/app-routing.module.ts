@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes, CanActivate } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from '../dashboard/dashboard.component';
 import { ServiceEditorComponent } from '../dashboard/service-view/service-editor/service-editor.component';
 import { ServiceViewComponent } from '../dashboard/service-view/service-view.component';

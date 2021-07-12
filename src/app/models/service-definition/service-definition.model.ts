@@ -7,6 +7,8 @@ export class ServiceDefinition extends BaseModel {
     price?: number = 0;
     duration?: number = 0;
 
+    relations = {};
+
     constructor(data: any = {}) 
     {
         super();

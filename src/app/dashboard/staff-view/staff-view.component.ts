@@ -10,6 +10,7 @@ import { StaffInvitationDialogService } from './staff-invitation-dialog/staff-in
 @Component({
   selector: 'app-staff-view',
   templateUrl: './staff-view.component.html',
+  styleUrls: ['./staff-view.component.scss'],
 })
 export class StaffViewComponent implements OnInit {
 
@@ -56,5 +57,24 @@ export class StaffViewComponent implements OnInit {
   onNew()
   {
     this.staffInvitationDialog.open()
+  }
+
+  async onToggleActive(employee: Employee): Promise<void>
+  {
+    /*
+     - [ ] Create route for updating employee bookings enabled (EmployeeBookingsEnabledController)
+     - [ ] 
+    */
+
+   try
+   {
+    //  console.log(employee)
+      await this.employeeService.updateActive(employee);
+      this.notifications.success(`Employee bookings ${employee.active ? 'enabled' : 'disabled'}`)
+   }
+   catch
+   {
+      this.notifications.error('Error updating employee')
+   }
   }
 }

@@ -40,7 +40,8 @@ body {
     height: 100%;
 }
 
-body {
+body,
+.mat-subheading-2 {
   margin: 0;
 }
 
@@ -107,7 +108,7 @@ mat-toolbar.app-editor-toolbar {
 }
 
 mat-card-title.app-editor-card-title {
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 }
 
 // STATE
@@ -131,6 +132,37 @@ mat-card.app-card {
   }
 }
 
+.input-icon {
+  margin-right: 8px;
+  color: gray;
+}
+
+mat-form-field.no-padding-bottom > div.mat-form-field-wrapper {
+  padding-bottom: 0;
+}
+
+.capitalize {
+  text-transform: capitalize;
+}
+
+$color-light-blue: rgb(198, 198, 228);
+
+.employee-avatar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    color: darken($color-light-blue, 60%);
+    background: rgb(198, 198, 228);
+
+    font-size: 18px;
+    width: 40px;
+    height: 40px;
+}
+
+mat-form-field.inline-input .mat-form-field-infix {
+  padding: 8px 0;
+}
 // ITEMS
 // .item-list {
 //   width: 100%;
@@ -179,7 +211,8 @@ mat-card.app-selectable-card {
 }
 
 mat-card.app-medium-card {
-  width: 450px;
+  max-width: 450px;
+  width: 100%;
 }
 
 

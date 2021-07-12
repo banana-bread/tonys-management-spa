@@ -1,10 +1,25 @@
 <div class="app-view-padding" fxLayout="row" fxLayoutAlign="center">
-    <div fxLayout="column" *ngIf="!loading" fxLayoutGap="15px">
+    <div fxFlex fxLayoutAlign=" center" fxLayout="column" *ngIf="!loading" fxLayoutGap="15px">
         <mat-card class="app-selectable-card app-medium-card" 
             *ngFor="let employee of employees" 
             (click)="onEdit(employee)">
-            <mat-card-title>{{ employee.name }}</mat-card-title>
-            <mat-card-subtitle>{{ employee.type }}</mat-card-subtitle>
+            <div fxLayout="row" fxLayoutGap="20px">
+                <!-- <div> -->
+                <div class="employee-avatar">{{ employee.initials }}</div>
+                <!-- </div> -->
+                <div fxFlex fxLayout="column">
+                    <div fxFlex fxLayout="row">
+                        <mat-card-title>{{ employee.name }}</mat-card-title>
+                        <span fxFlex></span>
+                        <!-- <span class="mat-caption">Active</span> -->
+                        <mat-slide-toggle [(ngModel)]="employee.active" 
+                            (ngModelChange)="onToggleActive(employee)"
+                            (click)="$event.stopPropagation();">
+                        </mat-slide-toggle>
+                    </div>
+                    <mat-card-subtitle>{{ employee.type }}</mat-card-subtitle>
+                </div>
+            </div>
         </mat-card>
     </div>
 </div>

@@ -30,8 +30,16 @@
             fxLayoutAlign=" center"
             fxLayoutGap="40px"
             *ngIf="!loading">
+
+            <app-base-schedule-editor
+                [schedule]="employee.base_schedule"
+                [scheduleParent]="employee.company.base_schedule"
+                (change)="onBaseScheduleChanged()">
+
+            </app-base-schedule-editor>
+
             <mat-card class="app-editor-card">
-                <mat-card-title class="app-editor-card-title">Basic</mat-card-title>
+                <mat-card-title class="app-editor-card-title">Profile</mat-card-title>
                 <div fxLayout="column">
                     <mat-form-field fxFlex hideRequiredMarker>
                         <mat-label>Name</mat-label>
@@ -46,20 +54,6 @@
                     </mat-form-field>
 
                     <mat-form-field fxFlex hideRequiredMarker>
-                        <mat-label>Email</mat-label>
-                        <input type="email"
-                            [(ngModel)]="employee.email"
-                            name="employeeEmail"
-                            #employeeEmail="ngModel"
-                            required
-                            email
-                            [disabled]="saving"
-                            matInput>
-                        <mat-error *ngIf="employeeEmail.hasError('required')">Email is required</mat-error>
-                        <mat-error *ngIf="employeeEmail.hasError('email')">Email is invalid.</mat-error>
-                    </mat-form-field>
-
-                    <mat-form-field fxFlex hideRequiredMarker>
                         <mat-label>Phone</mat-label>
                         <input type="phone"
                             [(ngModel)]="employee.phone"
@@ -70,26 +64,16 @@
                             matInput>
                         <mat-error *ngIf="employeePhone.hasError('required')">Phone is required</mat-error>
                     </mat-form-field>
-
-                    <mat-form-field fxFlex hideRequiredMarker>
-                        <mat-label>Password</mat-label>
-                        <input type="password"
-                            [(ngModel)]="password"
-                            name="employeePassword"
-                            #employeePassword="ngModel"
-                            required
-                            [disabled]="saving"
-                            matInput>
-                        <mat-error *ngIf="employeePassword.hasError('required')">Password is required</mat-error>
-                    </mat-form-field>
                 </div>
             </mat-card>
 
             <mat-card class="app-editor-card">
-                <mat-card-title class="app-editor-card-title">Schedule</mat-card-title>
-                <div fxLayout="column">
-     
-                
+                <mat-card-title class="app-editor-card-title">Account</mat-card-title>
+                <div fxLayout="column" fxLayoutGap="16px">
+                    <div fxFlex fxLayout="row">
+                        <mat-slide-toggle></mat-slide-toggle>
+
+                    </div>
                 </div>
             </mat-card>
         </div>

@@ -1,6 +1,7 @@
 import { BaseModel } from "../base.model";
-
-export class Employee extends BaseModel {
+import { Company } from "../company/company.model";
+import { Schedulable } from "../contracts/schedulable.interface";
+export class Employee extends BaseModel implements Schedulable {
 
     id?: string = '';
     company_id?: string = '';
@@ -9,14 +10,32 @@ export class Employee extends BaseModel {
     phone?: string = '';
     admin?: boolean = false;
     owner?: boolean = false;
+    bookings_enabled?: boolean = false;
     settings?: any = null;
+    base_schedule?: any = null;
+
+    company: Company = null;
+
+    relations = {
+        company: Company,
+    };
 
     constructor(data: any = {}) 
     {
         super();
         this.map(data);
     }
-    
+
+    get active(): boolean
+    {
+        return this.bookings_enabled;
+    }  
+
+    set active(isActive: boolean)
+    {
+        this.bookings_enabled = isActive;
+    }   
+
     get initials(): string
     {
         return this.name[0].toUpperCase();

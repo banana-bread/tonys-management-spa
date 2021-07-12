@@ -1,0 +1,39 @@
+<mat-card class="app-editor-card">
+    <mat-card-title class="app-editor-card-title">Schedule</mat-card-title>
+    <div fxLayout="column">
+        <div fxLayout="row" 
+            fxLayoutGap="20px"  
+            fxLayoutAlign=" center"
+            *ngFor="let day of schedule.days">
+
+            <mat-slide-toggle  [(ngModel)]="day.active"
+                [disabled]="isToggleDisabled(day)"
+                (change)="onChanged()">
+            </mat-slide-toggle>
+            <span class="mat-subheading-2 capitalize" fxFlex>{{ day.day }}</span> 
+
+            <mat-form-field class="no-padding-bottom inline-input" fxFlex="25" fxFlex.xs="20">    
+                <mat-select [(ngModel)]="day.start"
+                    (selectionChange)="onChanged()" 
+                    [disabled]="isSelectDisabled(day)">
+                    <mat-option *ngFor="let time of scheduleParent.get(day.day).times" 
+                        
+                        [value]="time">
+                        {{ time | appTimeOfDay}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field class="no-padding-bottom inline-input" fxFlex="25" fxFlex.xs="20">    
+                <mat-select [disabled]="isSelectDisabled(day)" 
+                    (selectionChange)="onChanged()"
+                    [(ngModel)]="day.end">
+                    <mat-option *ngFor="let time of scheduleParent.get(day.day).times" 
+                    (change)="onChanged()"
+                    [value]="time">
+                        {{ time | appTimeOfDay}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+    </div>
+</mat-card>

@@ -19,9 +19,9 @@ export class AppComponent implements OnInit {
     private companyService: CompanyService,
   ) {}
 
-  ngOnInit(): void 
+  async ngOnInit(): Promise<void> 
   {
-    this.onAddState();
+    await this.onAddState();
   }
 
   // TODO: should probably refine this to get company and employee in one shot
