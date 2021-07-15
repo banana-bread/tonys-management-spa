@@ -1,50 +1,51 @@
-<div class="app-editor view">
-    <form #editorForm="ngForm" (ngSubmit)="onSave()">
-        <mat-toolbar class="app-editor-toolbar" fxLayout="row" fxLayoutGap="10px">
-            <button mat-icon-button 
-                *ngIf="original"
-                type="button"
-                class="close-button" 
-                aria-label="Close edit employee button."
-                (click)="onClose()">
-                <mat-icon>close</mat-icon>
-            </button>
-            <span class="app-editor-title" *ngIf="!loading">{{ !!original ? 'Edit' : 'New' }} Staff</span>
-            <span fxFlex></span>
-            <button type="button" 
-                *ngIf="original"
-                class="delete-button" 
-                mat-raised-button 
-                [disabled]="saving || loading || !original"
-                (click)="onDelete()"> 
-                Delete
-            </button>
-            <button type="submit" mat-raised-button color="primary" [disabled]="saving || loading">
-                {{ !!original ? 'Save' : 'Submit' }}
-            </button>
-        </mat-toolbar>
-        <mat-progress-bar class="app-loading-bar" *ngIf="saving" mode="indeterminate"></mat-progress-bar>
+<div class="app-editor-view">
+    <mat-toolbar class="app-editor-toolbar" fxLayout="row" fxLayoutGap="10px">
+        <button mat-icon-button 
+            *ngIf="original"
+            type="button"
+            class="close-button" 
+            aria-label="Close edit employee button."
+            (click)="onClose()">
+            <mat-icon>close</mat-icon>
+        </button>
+        <span class="app-editor-title" *ngIf="!loading">{{ !!original ? 'Edit' : 'New' }} Staff</span>
+        <span fxFlex></span>
+        <button type="button" 
+            *ngIf="original"
+            class="delete-button" 
+            mat-raised-button 
+            [disabled]="saving || loading || !original"
+            (click)="onDelete()"> 
+            Delete
+        </button>
+        <button (click)="onSave()" mat-raised-button color="primary" [disabled]="saving || loading || !this.updates.size">
+            {{ !!original ? 'Save' : 'Submit' }}
+        </button>
+    </mat-toolbar>
+    <mat-progress-bar class="app-loading-bar" *ngIf="saving" mode="indeterminate"></mat-progress-bar>
 
-        <div class="app-view-padding"
-            fxLayout="column"
-            fxLayoutAlign=" center"
-            fxLayoutGap="40px"
-            *ngIf="!loading">
+    <div class="app-view-padding"
+        fxLayout="column"
+        fxLayoutAlign=" center"
+        fxLayoutGap="40px"
+        *ngIf="!loading">
 
-            <app-base-schedule-editor
-                [schedule]="employee.base_schedule"
-                [scheduleParent]="employee.company.base_schedule"
-                (change)="onBaseScheduleChanged()">
+        <app-base-schedule-editor
+            [schedule]="employee.base_schedule"
+            [scheduleParent]="employee.company.base_schedule"
+            (change)="onBaseScheduleChanged()"
+            (errorChange)="onBaseScheduleErrorChange($event)">
+        </app-base-schedule-editor>
 
-            </app-base-schedule-editor>
-
-            <mat-card class="app-editor-card">
+        <mat-card class="app-editor-card">
+            <form #profileForm="ngForm">
                 <mat-card-title class="app-editor-card-title">Profile</mat-card-title>
                 <div fxLayout="column">
                     <mat-form-field fxFlex hideRequiredMarker>
                         <mat-label>Name</mat-label>
                         <input type="text"
                             [(ngModel)]="employee.name"
+                            (ngModelChange)="onProfileChanged()"
                             name="employeeName"
                             #employeeName="ngModel"
                             required
@@ -52,11 +53,12 @@
                             matInput>
                     <mat-error *ngIf="employeeName.hasError('required')">Name is required</mat-error>
                     </mat-form-field>
-
+    
                     <mat-form-field fxFlex hideRequiredMarker>
                         <mat-label>Phone</mat-label>
                         <input type="phone"
                             [(ngModel)]="employee.phone"
+                            (ngModelChange)="onProfileChanged()"
                             name="employeePhone"
                             #employeePhone="ngModel"
                             required
@@ -65,18 +67,36 @@
                         <mat-error *ngIf="employeePhone.hasError('required')">Phone is required</mat-error>
                     </mat-form-field>
                 </div>
-            </mat-card>
+            </form>
+        </mat-card>
 
-            <mat-card class="app-editor-card">
-                <mat-card-title class="app-editor-card-title">Account</mat-card-title>
-                <div fxLayout="column" fxLayoutGap="16px">
-                    <div fxFlex fxLayout="row">
-                        <mat-slide-toggle></mat-slide-toggle>
+        <mat-card class="app-editor-card">
+            <mat-card-title class="app-editor-card-title">Account</mat-card-title>
 
-                    </div>
+            <div fxLayout="column" fxLayoutGap="16px">
+                <div fxFlex fxLayout="row" fxLayoutGap="20px">
+                    <mat-slide-toggle name="active" 
+                        [(ngModel)]="employee.active" 
+                        (change)="onActiveChanged()">
+                    </mat-slide-toggle>
+                    <span class="mat-subheading-2 capitalize" fxFlex>Online bookings enabled</span> 
                 </div>
-            </mat-card>
-        </div>
-    </form>
+                <div fxFlex fxLayout="row" fxLayoutGap="20px">
+                    <mat-slide-toggle name="admin"
+                        [(ngModel)]="employee.admin"
+                        (change)="onAdminChanged()">
+                    </mat-slide-toggle>
+                    <span class="mat-subheading-2 capitalize" fxFlex>Admin</span> 
+                </div>
+                <div fxFlex fxLayout="row" fxLayoutGap="20px">
+                    <mat-slide-toggle name="owner" 
+                        [(ngModel)]="employee.owner"
+                        (change)="onOwnerChanged()">
+                    </mat-slide-toggle>
+                    <span class="mat-subheading-2 capitalize" fxFlex>Owner</span> 
+                </div>
+            </div>
+        </mat-card>
+    </div>
     <mat-progress-spinner class="app-page-loading" mode="indeterminate" *ngIf="loading"></mat-progress-spinner>
 </div>

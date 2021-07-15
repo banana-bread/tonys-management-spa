@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { AppRoutingModule } from './routing/app-routing.module';
 import { AppComponent } from './app.component';
@@ -41,7 +42,21 @@ import { COMMA, ENTER, TAB } from '@angular/cdk/keycodes';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { AppTimeOfDayPipe } from './pipes/time-of-day.pipe';
 import { BaseScheduleEditorComponent } from './base-schedule-editor/base-schedule-editor.component';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+// import { MatNativeDateModule, MAT_NATIVE_DATE_FORMATS, MAT_DATE_FORMATS, MatDateFormats } from '@angular/material/core'
 
+
+// const GRI_DATE_FORMATS: MatDateFormats = {
+//   ...MAT_NATIVE_DATE_FORMATS,
+//   display: {
+//     ...MAT_NATIVE_DATE_FORMATS.display,
+//     dateInput: {
+//       year: 'numeric',
+//       month: 'short',
+//       day: 'numeric',
+//     } as Intl.DateTimeFormatOptions,
+//   }
+// };
 
 @NgModule({
   declarations: [
@@ -86,12 +101,16 @@ import { BaseScheduleEditorComponent } from './base-schedule-editor/base-schedul
     MatChipsModule,
     MatSlideToggleModule,
 
+    MatDatepickerModule,
+    // MatNativeDateModule,
+
     TonysSharedModule.forRoot(),
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'outline' } },
     { provide: MAT_CHIPS_DEFAULT_OPTIONS, useValue: { separatorKeyCodes: [ENTER, COMMA] } },
+    // { provide: MAT_DATE_FORMATS, useValue: GRI_DATE_FORMATS },
     CurrencyPipe,
   ],
   bootstrap: [AppComponent]

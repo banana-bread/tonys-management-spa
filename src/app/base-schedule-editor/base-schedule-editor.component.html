@@ -1,12 +1,14 @@
 <mat-card class="app-editor-card">
     <mat-card-title class="app-editor-card-title">Schedule</mat-card-title>
     <div fxLayout="column">
-        <div fxLayout="row" 
+        <form #scheduleForm="ngForm"
+            fxLayout="row" 
             fxLayoutGap="20px"  
             fxLayoutAlign=" center"
             *ngFor="let day of schedule.days">
-
-            <mat-slide-toggle  [(ngModel)]="day.active"
+            
+            <mat-slide-toggle [(ngModel)]="day.active"
+                name="active"
                 [disabled]="isToggleDisabled(day)"
                 (change)="onChanged()">
             </mat-slide-toggle>
@@ -14,11 +16,16 @@
 
             <mat-form-field class="no-padding-bottom inline-input" fxFlex="25" fxFlex.xs="20">    
                 <mat-select [(ngModel)]="day.start"
+                    name="startTime"
+                    #startTime="ngModel"
                     (selectionChange)="onChanged()" 
-                    [disabled]="isSelectDisabled(day)">
+                    [disabled]="isSelectDisabled(day)"
+                    [required]="day.active"
+                    [min]="endTime"
+                    [errorStateMatcher]="errorStateMatcher">
                     <mat-option *ngFor="let time of scheduleParent.get(day.day).times" 
-                        
-                        [value]="time">
+                        [value]="time"
+                        [disabled]="time >= day.end && !time">
                         {{ time | appTimeOfDay}}
                     </mat-option>
                 </mat-select>
@@ -26,14 +33,18 @@
             <mat-form-field class="no-padding-bottom inline-input" fxFlex="25" fxFlex.xs="20">    
                 <mat-select [disabled]="isSelectDisabled(day)" 
                     (selectionChange)="onChanged()"
-                    [(ngModel)]="day.end">
+                    name="endTime"
+                    #endTime="ngModel"
+                    [(ngModel)]="day.end"
+                    [required]="day.active"
+                    [errorStateMatcher]="errorStateMatcher">
                     <mat-option *ngFor="let time of scheduleParent.get(day.day).times" 
-                    (change)="onChanged()"
-                    [value]="time">
+                    [value]="time"
+                    [disabled]="time <= day.start">
                         {{ time | appTimeOfDay}}
                     </mat-option>
                 </mat-select>
             </mat-form-field>
-        </div>
+        </form>
     </div>
 </mat-card>

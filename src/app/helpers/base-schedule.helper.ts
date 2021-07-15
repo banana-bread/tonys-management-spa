@@ -30,7 +30,14 @@ export class BaseSchedule {
         const result = {};
 
         this._days.forEach((day: BaseScheduleDay) => {
-            result[day.day] = {start: day.start, end: day.end}
+            if (day.active)
+            {
+                result[day.day] = {start: day.start, end: day.end}
+            }
+            else
+            {
+                result[day.day] = {start: null, end: null}
+            }
         }) ;
 
         return result;

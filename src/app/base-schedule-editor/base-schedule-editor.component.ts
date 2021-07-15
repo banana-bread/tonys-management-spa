@@ -1,15 +1,22 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { NgForm } from '@angular/forms';
+import { BaseScheduleErrorState } from '../helpers/base-schedule-error-state.matcher';
 import { BaseSchedule, BaseScheduleDay } from '../helpers/base-schedule.helper';
 
 @Component({
   selector: 'app-base-schedule-editor',
   templateUrl: './base-schedule-editor.component.html',
 })
-export class BaseScheduleEditorComponent implements OnInit {
+export class BaseScheduleEditorComponent implements OnInit, AfterViewInit {
+
+  @ViewChild('scheduleForm') scheduleForm: NgForm;
 
   @Input() schedule: BaseSchedule;
   @Input() scheduleParent: BaseSchedule;
   @Output() change = new EventEmitter<void>();
+  @Output() errorChange = new EventEmitter<boolean>();
+
+  errorStateMatcher = new BaseScheduleErrorState();
 
   constructor() { }
 
@@ -21,9 +28,15 @@ export class BaseScheduleEditorComponent implements OnInit {
     }    
   }
 
+  ngAfterViewInit()
+  {
+    this.scheduleForm.statusChanges.subscribe(
+      result => this.errorChange.emit(this._hasError(result))
+    );
+  }
+
   onChanged()
   {
-    console.log(this.schedule)
     this.change.emit();
   }
 
@@ -35,6 +48,11 @@ export class BaseScheduleEditorComponent implements OnInit {
   isToggleDisabled(day: BaseScheduleDay): boolean
   {
     return !this.scheduleParent.get(day.day).active;
+  }
+
+  private _hasError(status: string): boolean
+  { 
+    return status === 'INVALID';
   }
 
 }

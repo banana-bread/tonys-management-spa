@@ -1,5 +1,5 @@
 <div class="app-view-padding" fxLayout="row" fxLayoutAlign="center">
-    <div fxLayout="column" *ngIf="!loading" fxLayoutGap="15px">
+    <div fxFlex fxLayoutAlign=" center" fxLayout="column" *ngIf="!loading" fxLayoutGap="15px">
         <mat-card class="app-selectable-card app-medium-card" 
             *ngFor="let service of services" 
             (click)="onEdit(service)">

@@ -122,6 +122,16 @@ export class ApiService {
       .delete();
   }
 
+  updateEmployeeBaseSchedule(data: any, id: string): Promise<any>
+  {
+    return this.http
+      .path('/employees/{id}/base-schedule')
+      .data(data)
+      .param('id', id)
+      .withCompany(this.state.company_id)
+      .put();
+  }
+
   login(data: LoginData): Promise<any>
   {
     return this.http

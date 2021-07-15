@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -13,6 +13,13 @@ import { ApiService } from 'src/app/services/api.service';
 import { AppStateService } from 'src/app/services/app-state.service';
 import { StaffEditorService } from './staff-editor.service';
 
+/*
+ * TODO:
+    - [ ] Save Profile route
+    - [ ] Save Account route
+    - [ ] Figure out what to do for updating admin/owner (true === create new employee admin and vice versa on api.)
+    - [ ] Add tooltups to admin, owner, online bookings for more info.
+ */
 @Component({
   selector: 'app-staff-editor',
   templateUrl: './staff-editor.component.html',
@@ -20,7 +27,8 @@ import { StaffEditorService } from './staff-editor.service';
 })
 export class StaffEditorComponent implements OnInit {
 
-  @ViewChild('editorForm') editorForm: NgForm;
+  @ViewChild('profileForm') profileForm: NgForm;
+  @ViewChild('accountForm') accountForm: NgForm;
 
   loading = false;
   saving = false;
@@ -36,11 +44,14 @@ export class StaffEditorComponent implements OnInit {
   urlExpires: string;
   urlSignature: string;
 
+  updates = new Map();
+  baseScheduleInvalid = false;
+
   constructor(
     private route: ActivatedRoute,
     private api: ApiService,
     private router: Router,
-    private state: AppStateService,
+    public state: AppStateService,
     private notifications: SnackbarNotificationService,
     private confirmDialog: ConfirmDialogService,
     private staffEditorService: StaffEditorService,
@@ -99,15 +110,72 @@ export class StaffEditorComponent implements OnInit {
 
   onSave()
   {
-    if (this.editorForm.invalid) return;
-
     !!this.original ? this.update() : this.create();
   }
 
   // When editing employee
-  protected update()
+  protected async update()
   {
-    console.log('updating.....')
+    if (this.baseScheduleInvalid || this.profileForm.invalid)
+    {
+      this.notifications.error('Please resolve existing errors')
+      return;
+    }
+
+    this.saving = true;
+
+    try
+    {
+      await Promise.all([...this.updates.values()].map(callback => callback()))
+
+      this.router.navigate([`/${this.state.company_id}/staff`]);
+      this.notifications.success('Employee updated');
+    }
+    catch
+    {
+      this.notifications.error('Error updating employee');
+    }
+    finally
+    {
+      this.saving = false;
+    }
+  }
+
+  onBaseScheduleChanged()
+  {
+    this.updates.set('base_schedule', () => this.employeeService.updateBaseSchedule(this.employee))
+  }
+
+  onBaseScheduleErrorChange(isError: boolean)
+  {
+    this.baseScheduleInvalid = isError;
+  }
+
+  onProfileChanged()
+  {
+    console.log('Profile changed...')
+    // TODO: profile update callback
+    // this.updates.set('profile_update', () => );
+  }
+
+  onAdminChanged()
+  {
+    console.log('Admin changed...')
+    // TODO: create route for account updates
+    // this.updates.set('account_update', () => );
+  }
+
+  onOwnerChanged()
+  {
+    console.log('Owner changed...')
+    // TODO: create route for account updates
+    // this.updates.set('account_update', () => );
+  }
+
+  onActiveChanged()
+  {
+    this.updates.set('active', () => this.employeeService.updateActive(this.employee))
+    console.log('Active changed...')
   }
 
   // When creating new emplyee from invite url
@@ -144,12 +212,6 @@ export class StaffEditorComponent implements OnInit {
     }
     
   }
-
-  onBaseScheduleChanged()
-  {
-    console.log('observing base schedule change...')
-  }
-
 
   onDelete(){}
 

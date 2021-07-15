@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Employee } from './employee.model';
 import { ApiService } from '../../services/api.service';
-import { AppStateService } from 'src/app/services/app-state.service';
 
 @Injectable({
   providedIn: 'root'
@@ -47,5 +46,10 @@ export class EmployeeService {
   async updateActive(employee: Employee)
   {
     await this.api.updateEmployeeActive(employee.id, {bookings_enabled: employee.active});
+  }
+
+  async updateBaseSchedule(employee: Employee): Promise<any>
+  {
+    await this.api.updateEmployeeBaseSchedule({base_schedule: employee.base_schedule.parse()}, employee.id);
   }
 }
