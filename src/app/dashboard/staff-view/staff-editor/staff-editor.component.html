@@ -70,7 +70,7 @@
             </form>
         </mat-card>
 
-        <mat-card class="app-editor-card">
+        <mat-card class="app-editor-card" *ngIf="state.employee.owner || state.employee.id === employee.id">
             <mat-card-title class="app-editor-card-title">Account</mat-card-title>
 
             <div fxLayout="column" fxLayoutGap="16px">

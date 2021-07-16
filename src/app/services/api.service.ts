@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpAdapter } from '@tonys/shared';
+import { Employee } from '../models/employee/employee.model';
 import { ServiceDefinition } from '../models/service-definition/service-definition.model';
 import { AppStateService } from './app-state.service';
 import { LoginData } from './interfaces/login-data.interface';
@@ -67,6 +68,16 @@ export class ApiService {
       .post();
   }
 
+  updateEmployeeProfile(data: Employee, id: string)
+  {
+    return this.http
+      .path('/employees/{id}')
+      .param('id', id)
+      .data(data)
+      .withCompany(this.state.company_id)
+      .put();
+  }
+
   updateEmployeeActive(id: string, data: {bookings_enabled: boolean}): Promise<any>
   {
     return this.http
@@ -130,6 +141,42 @@ export class ApiService {
       .param('id', id)
       .withCompany(this.state.company_id)
       .put();
+  }
+
+  createEmployeeAdmin(id: string): Promise<any>
+  {
+    return this.http
+      .path('/employees/{id}/admin')
+      .param('id', id)
+      .withCompany(this.state.company_id)
+      .post();
+  }
+
+  deleteEmployeeAdmin(id: string): Promise<any>
+  {
+    return this.http
+      .path('/employees/{id}/admin')
+      .param('id', id)
+      .withCompany(this.state.company_id)
+      .delete();
+  }
+
+  createEmployeeOwner(id: string): Promise<any>
+  {
+    return this.http
+      .path('/employees/{id}/owner')
+      .param('id', id)
+      .withCompany(this.state.company_id)
+      .post();
+  }
+
+  deleteEmployeeOwner(id: string): Promise<any>
+  {
+    return this.http
+      .path('/employees/{id}/owner')
+      .param('id', id)
+      .withCompany(this.state.company_id)
+      .delete();
   }
 
   login(data: LoginData): Promise<any>

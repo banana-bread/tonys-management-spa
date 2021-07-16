@@ -11,6 +11,7 @@ import { Employee } from 'src/app/models/employee/employee.model';
 import { EmployeeService } from 'src/app/models/employee/employee.service';
 import { ApiService } from 'src/app/services/api.service';
 import { AppStateService } from 'src/app/services/app-state.service';
+import { UnsavedChangesService } from 'src/app/unsaved-changes/unsaved-changes.service';
 import { StaffEditorService } from './staff-editor.service';
 
 /*
@@ -19,6 +20,7 @@ import { StaffEditorService } from './staff-editor.service';
     - [ ] Save Account route
     - [ ] Figure out what to do for updating admin/owner (true === create new employee admin and vice versa on api.)
     - [ ] Add tooltups to admin, owner, online bookings for more info.
+    - [ ] Probably move the new employee stuff to a different component.
  */
 @Component({
   selector: 'app-staff-editor',
@@ -32,9 +34,11 @@ export class StaffEditorComponent implements OnInit {
 
   loading = false;
   saving = false;
+  submitted = false;
 
   original: Employee;
   employee: Employee = new Employee();
+  authedEmployee: Employee = new Employee();
   employeeName: string;
   employeeId: string = this.route.snapshot.paramMap.get('id');
   employeeRegistrationUrl = this.route.snapshot.queryParams['signed-url'];
@@ -57,6 +61,7 @@ export class StaffEditorComponent implements OnInit {
     private staffEditorService: StaffEditorService,
     private employeeService: EmployeeService,
     private companyService: CompanyService,
+    private unsavedChanges: UnsavedChangesService,
   ) { }
 
   async ngOnInit(): Promise<void> 
@@ -94,6 +99,8 @@ export class StaffEditorComponent implements OnInit {
         }
       }
     }
+
+    this.unsavedChanges.setGuard(() => !!this.updates.size && !this.submitted);
   }
 
   toggleActiveDay(event: MatSlideToggleChange, day: {day: string, start: number, end: number, active: boolean})
@@ -110,6 +117,7 @@ export class StaffEditorComponent implements OnInit {
 
   onSave()
   {
+    this.submitted = true;
     !!this.original ? this.update() : this.create();
   }
 
@@ -153,29 +161,22 @@ export class StaffEditorComponent implements OnInit {
 
   onProfileChanged()
   {
-    console.log('Profile changed...')
-    // TODO: profile update callback
-    // this.updates.set('profile_update', () => );
+    this.updates.set('profile_update', () => this.employeeService.updateProfile(this.employee));
   }
 
   onAdminChanged()
   {
-    console.log('Admin changed...')
-    // TODO: create route for account updates
-    // this.updates.set('account_update', () => );
+    this.updates.set('admin_update', () => this.employeeService.updateAdmin(this.employee));
   }
 
   onOwnerChanged()
   {
-    console.log('Owner changed...')
-    // TODO: create route for account updates
-    // this.updates.set('account_update', () => );
+    this.updates.set('owner_update', () => this.employeeService.updateOwner(this.employee));
   }
 
   onActiveChanged()
   {
     this.updates.set('active', () => this.employeeService.updateActive(this.employee))
-    console.log('Active changed...')
   }
 
   // When creating new emplyee from invite url

@@ -43,6 +43,11 @@ export class EmployeeService {
     await this.api.inviteEmployees({ emails });
   }
 
+  async updateProfile(employee: Employee): Promise<any>
+  {
+    await this.api.updateEmployeeProfile(employee, employee.id);
+  }
+
   async updateActive(employee: Employee)
   {
     await this.api.updateEmployeeActive(employee.id, {bookings_enabled: employee.active});
@@ -51,5 +56,19 @@ export class EmployeeService {
   async updateBaseSchedule(employee: Employee): Promise<any>
   {
     await this.api.updateEmployeeBaseSchedule({base_schedule: employee.base_schedule.parse()}, employee.id);
+  }
+
+  async updateAdmin(employee: Employee): Promise<any>
+  {
+    employee.admin
+      ? await this.api.createEmployeeAdmin(employee.id)
+      : await this.api.deleteEmployeeAdmin(employee.id);  
+  }
+
+  async updateOwner(employee: Employee): Promise<any>
+  {
+    employee.owner
+      ? await this.api.createEmployeeOwner(employee.id)
+      : await this.api.deleteEmployeeOwner(employee.id);  
   }
 }
