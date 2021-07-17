@@ -13,9 +13,7 @@
     z-index: 1;
   }
 
-  h4,
-  mat-icon {
-    color: $color-white;
+  h4 {
     font-weight: 500;
   }
 
@@ -27,6 +25,11 @@
     background-color: $color-primary;
   }
 
+}
+
+mat-nav-list mat-icon {
+  color: $color-white;
+  // font-weight: 500;
 }
 
 .mat-drawer-container {

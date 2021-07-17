@@ -11,7 +11,7 @@ import { Employee } from 'src/app/models/employee/employee.model';
 import { EmployeeService } from 'src/app/models/employee/employee.service';
 import { ApiService } from 'src/app/services/api.service';
 import { AppStateService } from 'src/app/services/app-state.service';
-import { UnsavedChangesService } from 'src/app/unsaved-changes/unsaved-changes.service';
+import { UnsavedChangesRouterService } from 'src/app/unsaved-changes/unsaved-changes-router.service';
 import { StaffEditorService } from './staff-editor.service';
 
 /*
@@ -61,7 +61,7 @@ export class StaffEditorComponent implements OnInit {
     private staffEditorService: StaffEditorService,
     private employeeService: EmployeeService,
     private companyService: CompanyService,
-    private unsavedChanges: UnsavedChangesService,
+    private unsavedChangesRouter: UnsavedChangesRouterService,
   ) { }
 
   async ngOnInit(): Promise<void> 
@@ -99,8 +99,6 @@ export class StaffEditorComponent implements OnInit {
         }
       }
     }
-
-    this.unsavedChanges.setGuard(() => !!this.updates.size && !this.submitted);
   }
 
   toggleActiveDay(event: MatSlideToggleChange, day: {day: string, start: number, end: number, active: boolean})
@@ -112,7 +110,7 @@ export class StaffEditorComponent implements OnInit {
   {
     if (! this.original) return;
 
-    this.router.navigate([`/${this.state.company_id}/staff`]);
+    this.unsavedChangesRouter.tryNavigate(`/${this.state.company_id}/staff`, () => !this.updates.size);
   }
 
   onSave()
@@ -137,6 +135,7 @@ export class StaffEditorComponent implements OnInit {
       await Promise.all([...this.updates.values()].map(callback => callback()))
 
       this.router.navigate([`/${this.state.company_id}/staff`]);
+      
       this.notifications.success('Employee updated');
     }
     catch

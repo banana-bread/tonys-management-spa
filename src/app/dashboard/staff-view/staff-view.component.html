@@ -8,17 +8,19 @@
                 <div class="employee-avatar">{{ employee.initials }}</div>
                 <!-- </div> -->
                 <div fxFlex fxLayout="column">
-                    <div fxFlex fxLayout="row">
-                        <mat-card-title>{{ employee.name }}</mat-card-title>
-                        <span fxFlex></span>
+                    <mat-card-title>{{ employee.name }}</mat-card-title>
+                    <!-- <div fxFlex fxLayout="row"> -->
+                        <!-- <span fxFlex></span> -->
                         <!-- <span class="mat-caption">Active</span> -->
-                        <mat-slide-toggle [(ngModel)]="employee.active" 
+                        <!-- <mat-slide-toggle [(ngModel)]="employee.active" 
                             (ngModelChange)="onToggleActive(employee)"
                             (click)="$event.stopPropagation();">
-                        </mat-slide-toggle>
-                    </div>
+                        </mat-slide-toggle> -->
+                    <!-- </div> -->
                     <mat-card-subtitle>{{ employee.type }}</mat-card-subtitle>
                 </div>
+                <span fxFlex></span>
+                <mat-icon fxFlexAlign="center">arrow_forward_ios</mat-icon>
             </div>
         </mat-card>
     </div>
