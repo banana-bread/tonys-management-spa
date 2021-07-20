@@ -32,8 +32,8 @@
 
         <app-base-schedule-editor
             [schedule]="employee.base_schedule"
-            [scheduleParent]="employee.company.base_schedule"
-            (change)="onBaseScheduleChanged()"
+            [(ngModel)]="employee.base_schedule"
+            (ngModelChange)="onBaseScheduleChanged()"
             (errorChange)="onBaseScheduleErrorChange($event)">
         </app-base-schedule-editor>
 

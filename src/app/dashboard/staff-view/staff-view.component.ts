@@ -4,6 +4,7 @@ import { SnackbarNotificationService } from '@tonys/shared';
 import { ConfirmDialogService } from 'src/app/confirm-dialog/confirm-dialog.service';
 import { Employee } from 'src/app/models/employee/employee.model';
 import { EmployeeService } from 'src/app/models/employee/employee.service';
+import { AppStateService } from 'src/app/services/app-state.service';
 import { StaffEditorService } from './staff-editor/staff-editor.service';
 import { StaffInvitationDialogService } from './staff-invitation-dialog/staff-invitation-dialog-service';
 
@@ -26,6 +27,7 @@ export class StaffViewComponent implements OnInit {
     private route: ActivatedRoute,
     private staffEditorService: StaffEditorService,
     private staffInvitationDialog: StaffInvitationDialogService,
+    private state: AppStateService,
   ) { }
 
   async ngOnInit(): Promise<void> 
@@ -39,7 +41,7 @@ export class StaffViewComponent implements OnInit {
     }
     catch
     {
-      this.router.navigate(['dashboard/services']);
+      this.router.navigate([`${this.state.short_company_id}/services`]);
       this.notifications.error('Error loading services')
     }
     finally
@@ -51,7 +53,7 @@ export class StaffViewComponent implements OnInit {
   onEdit(employee: Employee)
   {
     this.staffEditorService.staff = employee; 
-    this.router.navigate([employee.id], {relativeTo: this.route});
+    this.router.navigate([employee.short_id], {relativeTo: this.route});
   }
 
   onNew()

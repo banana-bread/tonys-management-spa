@@ -44,6 +44,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { AppTimeOfDayPipe } from './pipes/time-of-day.pipe';
 import { BaseScheduleEditorComponent } from './base-schedule-editor/base-schedule-editor.component';
 import {MatDatepickerModule} from '@angular/material/datepicker';
+import { ShopSettingsEditorComponent } from './dashboard/shop-view/shop-settings-editor/shop-settings-editor.component';
 // import { MatNativeDateModule, MAT_NATIVE_DATE_FORMATS, MAT_DATE_FORMATS, MatDateFormats } from '@angular/material/core'
 
 
@@ -76,6 +77,7 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
     StaffInvitationDialogComponent,
     AppTimeOfDayPipe,
     BaseScheduleEditorComponent,
+    ShopSettingsEditorComponent,
   ],
   imports: [
     BrowserModule,

@@ -48,4 +48,9 @@ export class Employee extends BaseModel implements Schedulable {
 
         return 'Employee'
     }
+
+    get short_id(): string
+    {
+        return this.id.slice(0, 8);
+    }
 }

@@ -1,58 +1,110 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { ChangeDetectorRef, QueryList, ViewChildren } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild, forwardRef } from '@angular/core';
+import { NG_VALUE_ACCESSOR, ControlValueAccessor, NgForm, NgModel } from '@angular/forms';
 import { BaseScheduleErrorState } from '../helpers/base-schedule-error-state.matcher';
 import { BaseSchedule, BaseScheduleDay } from '../helpers/base-schedule.helper';
 
+// TODO: Make sure end time is greater than start time
 @Component({
   selector: 'app-base-schedule-editor',
   templateUrl: './base-schedule-editor.component.html',
+  providers: [
+    { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => BaseScheduleEditorComponent), multi: true }
+  ]
 })
-export class BaseScheduleEditorComponent implements OnInit, AfterViewInit {
+export class BaseScheduleEditorComponent implements OnInit, AfterViewInit, ControlValueAccessor {
 
-  @ViewChild('scheduleForm') scheduleForm: NgForm;
+  @ViewChildren('startTimes') startTimes: QueryList<NgModel>;
+  @ViewChildren('endTimes') endTimes: QueryList<NgModel>;
 
-  @Input() schedule: BaseSchedule;
-  @Input() scheduleParent: BaseSchedule;
-  @Output() change = new EventEmitter<void>();
   @Output() errorChange = new EventEmitter<boolean>();
 
   errorStateMatcher = new BaseScheduleErrorState();
+  value: BaseSchedule;
+  onChange: (schedule: BaseSchedule) => void;
+  onTouched: () => void;
 
-  constructor() { }
+  constructor(private changeDetection: ChangeDetectorRef) { }
 
-  ngOnInit(): void 
+  writeValue(obj: BaseSchedule): void 
   {
-    if (! this.scheduleParent)
-    {
-      this.scheduleParent = this.schedule;
-    }    
+    // Phantom null val being passed in on init. Messing up error watcher.
+    // https://github.com/angular/angular/issues/14988
+    this.value = obj;
   }
+
+  registerOnChange(fn: any): void 
+  {
+    this.onChange = fn;
+  }
+  registerOnTouched(fn: any): void 
+  {
+    this.onTouched = fn;
+  }
+
+  setDisabledState?(isDisabled: boolean): void 
+  {
+    throw new Error('Method not implemented.');
+  }
+
+  ngOnInit(): void {}
 
   ngAfterViewInit()
   {
-    this.scheduleForm.statusChanges.subscribe(
-      result => this.errorChange.emit(this._hasError(result))
-    );
+    // Phantom null val being passed in on init. Messing up error watcher.
+    // https://github.com/angular/angular/issues/14988
+    setTimeout(() => {
+      this._registerErrorHandling(this.startTimes)
+      this._registerErrorHandling(this.endTimes)
+    })
   }
 
   onChanged()
   {
-    this.change.emit();
+    this.onChange(this.value);
   }
 
   isSelectDisabled(day: BaseScheduleDay): boolean
   {
-    return !day.active || !this.scheduleParent.get(day.day).active;
+    return !day.active
   }
 
-  isToggleDisabled(day: BaseScheduleDay): boolean
+  times(): number[]
   {
-    return !this.scheduleParent.get(day.day).active;
+    const result: number[] = [];
+    const secondsInDay = 86400;
+
+    // TODO: hardcoded to increase start time by 30 minutes from start - end.
+    for (let i = 0; i < secondsInDay; i += 1800)
+    {
+      result.push(i);
+    }
+
+    return result;
+  }
+
+  private _registerErrorHandling(list: QueryList<NgModel>): void
+  {
+    list.forEach(model => 
+      model.statusChanges.subscribe(
+        result => this.errorChange.emit(this._hasError(result))));
   }
 
   private _hasError(status: string): boolean
   { 
     return status === 'INVALID';
   }
-
 }
+
+
+  // isStartTimeDisabled(time: number = 0, endTime: number = 0): boolean
+  // {
+  //   return (time === 0 && endTime === 0)
+  //     ? false
+  //     : time <= endTime;
+  // }
+
+  // isEndTimeDisabled(time: number, day: BaseScheduleDay): boolean
+  // {
+  //   return !!day.start ? time <= day.start : false;
+  // }

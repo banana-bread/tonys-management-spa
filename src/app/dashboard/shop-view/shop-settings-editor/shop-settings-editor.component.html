@@ -1,0 +1,27 @@
+<div class="app-editor-view">
+    <!-- <form #editorForm="ngForm" (ngSubmit)="onSave()"> -->
+        <mat-toolbar class="app-editor-toolbar" fxLayout="row" fxLayoutGap="10px">
+            <button mat-icon-button 
+                type="button"
+                class="close-button" 
+                aria-label="Close edit services button."
+                (click)="onClose()">
+                <mat-icon>close</mat-icon>
+            </button>
+            <span class="app-editor-title" *ngIf="!loading">Shop Settings</span>
+            <span fxFlex></span>
+            <button type="submit" mat-raised-button color="primary" [disabled]="saving || loading">
+                Save
+            </button>
+        </mat-toolbar>
+        <mat-progress-bar class="app-loading-bar" *ngIf="saving" mode="indeterminate"></mat-progress-bar>
+
+        <div class="app-view-padding" 
+            fxLayout="column" 
+            fxLayoutAlign=" center" 
+            *ngIf="!loading">
+
+        </div>
+    <!-- </form> -->
+    <mat-progress-spinner class="app-page-loading" mode="indeterminate" *ngIf="loading"></mat-progress-spinner>
+</div>   

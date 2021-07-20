@@ -41,7 +41,7 @@ export class ServiceViewComponent implements OnInit {
   onEdit(service: ServiceDefinition)
   {
     this.serviceEditorService.service = service;
-    this.router.navigate([service.id], {relativeTo: this.route});
+    this.router.navigate([service.short_id], {relativeTo: this.route});
   }
 
   onNew()

@@ -1,8 +1,9 @@
-export type RawBaseSchedule = {[key: string]: {start: number, end: number}};
+const NullRawBaseSchedule: RawBaseSchedule = {monday:{start:null,end:null},tuesday:{start:null,end:null},wednesday:{start:null,end:null},thursday:{start:null,end:null},friday:{start:null,end:null},saturday:{start:null,end:null},sunday:{start:null,end:null},} 
+export type RawBaseSchedule = {[key: string]: {start: number|null, end: number|null}};
 
 export class BaseSchedule {
 
-    private _days: BaseScheduleDay[];
+    private _days: BaseScheduleDay[] = [];
     private readonly _weekdays = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
 
     constructor(schedule: RawBaseSchedule) 

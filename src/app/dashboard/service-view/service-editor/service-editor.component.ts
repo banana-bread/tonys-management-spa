@@ -7,6 +7,7 @@ import { ConfirmDialogService } from 'src/app/confirm-dialog/confirm-dialog.serv
 import { ServiceDefinition } from 'src/app/models/service-definition/service-definition.model';
 import { ServiceDefinitionService } from 'src/app/models/service-definition/service-definition.service';
 import { AppStateService } from 'src/app/services/app-state.service';
+import { UnsavedChangesRouterService } from 'src/app/unsaved-changes/unsaved-changes-router.service';
 import { ServiceEditorService } from './service-editor.service';
 @Component({
   selector: 'app-service-editor',
@@ -44,6 +45,7 @@ export class ServiceEditorComponent implements OnInit {
     private serviceDefinitionService: ServiceDefinitionService,
     private notifications: SnackbarNotificationService,
     private confirmDialog: ConfirmDialogService,
+    private unsavedChangesRouter: UnsavedChangesRouterService,
   ) { }
 
   async ngOnInit(): Promise<void> 
@@ -130,7 +132,11 @@ export class ServiceEditorComponent implements OnInit {
 
   onClose()
   {
-    this.router.navigate([`/${this.state.company_id}/services`]);
+    this.unsavedChangesRouter.tryNavigate(
+      `/${this.state.short_company_id}/services`, 
+      () => this.editorForm.pristine
+    );
+    // this.router.navigate([`/${this.state.short_company_id}/services`]);
   }
 
   private generateDurationOptions(): number[]

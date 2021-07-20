@@ -27,4 +27,9 @@ export class Company extends BaseModel implements Schedulable {
         super();
         this.map(data);
     }
+
+    get short_id(): string
+    {
+        return this.id.slice(0, 7);
+    }
 }
