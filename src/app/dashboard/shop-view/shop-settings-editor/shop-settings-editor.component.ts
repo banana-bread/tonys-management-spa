@@ -34,7 +34,7 @@ export class ShopSettingsEditorComponent implements OnInit {
 
     try
     {
-      this.company = await this.companyService.get(this.state.short_company_id);
+      this.company = await this.companyService.get(this.state.company_id);
     }
     catch
     {

@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from '../dashboard/dashboard.component';
+import { ScheduleViewComponent } from '../dashboard/schedule-view/schedule-view.component';
 import { ServiceEditorComponent } from '../dashboard/service-view/service-editor/service-editor.component';
 import { ServiceViewComponent } from '../dashboard/service-view/service-view.component';
 import { ShopSettingsEditorComponent } from '../dashboard/shop-view/shop-settings-editor/shop-settings-editor.component';
@@ -19,15 +20,16 @@ const routes: Routes = [
   { 
     path: ':companyId', component: DashboardComponent, canActivate: [AuthGuard], 
     children: [
-      { path: 'services', component: ServiceViewComponent },
+      { path: 'schedule', component: ScheduleViewComponent },
       { path: 'staff', component: StaffViewComponent },
+      { path: 'services', component: ServiceViewComponent },
       // { path: 'shop', component: ShopViewComponent },
     ] 
   },
   { path: ':companyId/services/:id', component: ServiceEditorComponent, canActivate: [AuthGuard]},
-  // TODO: set up guard for this which checks for existence of query param if new, or token if id
   { path: ':companyId/staff/:id', component: StaffEditorComponent, canActivate: [AuthGuard] },
-  { path: ':companyId/shop', component: ShopSettingsEditorComponent },
+  { path: ':companyId/shop', component: ShopSettingsEditorComponent, canActivate: [AuthGuard] },
+
   // TODO: implement a 404
   { path: '404', component: PageNotFoundComponent },
   { path: '**', redirectTo: '/404' },
