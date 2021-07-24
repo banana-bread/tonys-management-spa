@@ -1,3 +1,5 @@
+import * as moment from "moment";
+import { BaseScheduleDay } from "src/app/helpers/base-schedule.helper";
 import { BaseModel } from "../base.model";
 import { Company } from "../company/company.model";
 import { Schedulable } from "../contracts/schedulable.interface";
@@ -52,5 +54,19 @@ export class Employee extends BaseModel implements Schedulable {
     get short_id(): string
     {
         return this.id.slice(0, 8);
+    }
+
+    isWorkingNow(): boolean
+    {
+        const today: BaseScheduleDay = this.base_schedule.today();
+        // now in seconds
+        const now: number = moment().diff(moment().startOf('day'), 'seconds');
+
+        return now >= today.start && now <= today.end;
+    }
+
+    isWorkingToday(): boolean
+    {
+        return this.base_schedule.today().active; 
     }
 }

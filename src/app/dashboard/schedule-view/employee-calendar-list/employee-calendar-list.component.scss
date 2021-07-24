@@ -1,0 +1,26 @@
+// TODO: these styles really belongs in an <app-employee-calendar-list> component
+
+app-employee-calendar:not(:first-of-type) div.cal-time  {
+    display: none;
+}
+
+app-employee-calendar:not(:first-of-type) .cal-day-view .cal-current-time-marker {
+    margin-left: 0;
+    width: 100%;
+}
+
+app-employee-calendar:not(:first-of-type) .cal-week-view .cal-ends-within-day .cal-event {
+    margin-left: -70px;
+    width: calc(100% + 70px);
+}
+
+// app-employee-calendar:first-of-type div.cal-hour-start.cal-hour-segment, 
+// app-employee-calendar:first-of-type div.cal-after-hour-start.cal-hour-segment {
+//     // background: rgb(117, 119, 227);
+//     // width: calc(100% + 70px);
+//     // margin-right: 70px;
+// }
+
+app-employee-calendar:first-of-type {
+    flex-basis: 70px !important;
+}

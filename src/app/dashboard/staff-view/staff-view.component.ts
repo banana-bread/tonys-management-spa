@@ -36,7 +36,6 @@ export class StaffViewComponent implements OnInit {
 
     try
     {
-
       this.employees = await this.employeeService.getAll();
     }
     catch

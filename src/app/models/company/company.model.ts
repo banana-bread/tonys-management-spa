@@ -13,7 +13,7 @@ export class Company extends BaseModel implements Schedulable {
     settings?: any = null;
     base_schedule?: any = null;
 
-    employees: Employee[] = null;
+    employees: Employee[] = [];
 
     // owner: Employee = null;
 
@@ -31,5 +31,15 @@ export class Company extends BaseModel implements Schedulable {
     get short_id(): string
     {
         return this.id.slice(0, 7);
+    }
+
+    get employees_working_now(): Employee[]
+    {
+        return this.employees.filter(employee => employee.isWorkingNow());
+    }
+
+    get employees_working_today(): Employee[]
+    {
+        return this.employees.filter(employee => employee.isWorkingToday());
     }
 }

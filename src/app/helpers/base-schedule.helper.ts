@@ -1,3 +1,5 @@
+import * as moment from "moment";
+
 const NullRawBaseSchedule: RawBaseSchedule = {monday:{start:null,end:null},tuesday:{start:null,end:null},wednesday:{start:null,end:null},thursday:{start:null,end:null},friday:{start:null,end:null},saturday:{start:null,end:null},sunday:{start:null,end:null},} 
 export type RawBaseSchedule = {[key: string]: {start: number|null, end: number|null}};
 
@@ -20,6 +22,11 @@ export class BaseSchedule {
     get(day: string): BaseScheduleDay
     {
         return this.days.find(scheduleDay => scheduleDay.day === day);
+    }
+
+    today(): BaseScheduleDay
+    {
+        return this._days.find(day => day.day === moment().format('dddd').toLocaleLowerCase())
     }
 
     /**
