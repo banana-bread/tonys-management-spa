@@ -29,6 +29,16 @@ export class BaseSchedule {
         return this._days.find(day => day.day === moment().format('dddd').toLocaleLowerCase())
     }
 
+    startOfToday(): number
+    {
+        return this.today().start;
+    }
+
+    endOfToday(): number
+    {
+        return this.today().end;
+    }
+
     /**
      * parses current base schedule into api payload format
      * 

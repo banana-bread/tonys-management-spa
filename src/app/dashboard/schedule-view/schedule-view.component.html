@@ -1,3 +1,6 @@
 
-<app-employee-calendar-list [employees]="working_employees">
-</app-employee-calendar-list>
+<div fxLayout="row" *ngIf="!loading" >
+    <app-employee-calendar-list fxFlex
+        [employees]="filteredEmployees">
+    </app-employee-calendar-list>
+</div>

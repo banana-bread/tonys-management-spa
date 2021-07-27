@@ -8,6 +8,7 @@ export class ServiceDefinition extends BaseModel {
     duration?: number = 0;
 
     relations = {};
+    dates = {}
 
     constructor(data: any = {}) 
     {

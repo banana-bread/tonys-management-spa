@@ -1,7 +1,27 @@
-
-<div fxLayout="row">
-    <app-employee-calendar 
-        *ngFor="let employee of employees" 
-        fxFlex>
-    </app-employee-calendar>
-</div> 
+<!-- 
+    TODO: 
+        - [ ] first employee calendar (the times one) should be non-selectable.
+ -->
+<div class="calendar__container" fxLayout="row">
+    <div class="calendar__times" fxLayout="column">
+        <div class="employee-avatar-container" fxLayout="column" fxLayoutGap="4px" fxLayoutAlign=" center" >
+            <div class="app-employee-avatar app-employee-avatar--spacer">
+                <span>A</span>
+            </div>
+            <span>A</span>
+        </div>
+        <app-employee-calendar></app-employee-calendar>
+    </div>
+    <div class="calendar__employees" fxFlex fxLayout="row">
+        <div fxLayout="column" fxFlex *ngFor="let employee of employees">
+            <div class="employee-avatar-container" fxLayout="column" fxLayoutGap="4px" fxLayoutAlign=" center">    
+                <div class="app-employee-avatar">
+                    <span>{{ employee.initials }}</span>
+                </div>
+                <span>{{ employee.name }}</span>
+            </div>
+            <app-employee-calendar fxFlex [employee]="employee">
+            </app-employee-calendar>
+        </div>
+    </div> 
+</div>

@@ -48,6 +48,16 @@ export class ApiService {
       .get();
   }
 
+  getEmployeeBookings(employee_ids: string[], dateFor: string): Promise<any>
+  {
+    return this.http
+      .path('/bookings')
+      .query('employee_ids', employee_ids)
+      .query('date_for', dateFor)
+      .withCompany(this.state.company_id)
+      .get();
+  }
+
   createEmployee(companyId: string, expires: string, signature: string, data: any): Promise<any>
   {
     return this.http

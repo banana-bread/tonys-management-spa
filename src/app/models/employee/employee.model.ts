@@ -1,6 +1,7 @@
 import * as moment from "moment";
 import { BaseScheduleDay } from "src/app/helpers/base-schedule.helper";
 import { BaseModel } from "../base.model";
+import { Booking } from "../booking/booking.model";
 import { Company } from "../company/company.model";
 import { Schedulable } from "../contracts/schedulable.interface";
 export class Employee extends BaseModel implements Schedulable {
@@ -17,10 +18,13 @@ export class Employee extends BaseModel implements Schedulable {
     base_schedule?: any = null;
 
     company: Company = null;
+    bookings: Booking[] = [];
 
     relations = {
         company: Company,
+        bookings: Booking,
     };
+    dates = {}
 
     constructor(data: any = {}) 
     {

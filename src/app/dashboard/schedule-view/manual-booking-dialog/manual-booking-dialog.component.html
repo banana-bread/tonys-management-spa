@@ -1,0 +1,36 @@
+
+<h1 mat-dialog-title>New Booking</h1>
+<div mat-dialog-content>
+    <div fxLayout="column">
+        <div fxFlex fxLayout="row" fxLayoutGap="15px">
+            <mat-form-field fxFlex="35">
+                <mat-label>Start Time</mat-label>
+                <mat-select [(ngModel)]="startTime">
+                    <mat-option *ngFor="let time of times()" [value]="time">
+                        {{ time | appTimeOfDay}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field fxFlex>  
+                <mat-label>Service</mat-label>
+                <mat-select multiple>
+                    <mat-option *ngFor="let service of services" [value]="service">
+                        {{ service.name }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div fxLayout="row">
+            <span class="material-icons-outlined">perm_identity</span>
+            <span>{{ employee.name }}</span>
+        </div>
+        <div fxLayout="row">
+            <span class="material-icons-outlined">schedule</span>
+            <span>{{ event.start | date:'EEEE, MMMM d' }} - </span>
+        </div>
+    </div>
+</div>
+<div mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cancel</button>
+    <button mat-raised-button color="accent">Save</button>
+</div>

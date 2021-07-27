@@ -22,6 +22,8 @@ export class Company extends BaseModel implements Schedulable {
         // owner: Employee,
     };
 
+    dates = {};
+
     constructor(data: any = {}) 
     {
         super();

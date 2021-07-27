@@ -147,7 +147,7 @@ mat-form-field.no-padding-bottom > div.mat-form-field-wrapper {
 
 $color-light-blue: rgb(198, 198, 228);
 
-.employee-avatar {
+.app-employee-avatar {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -159,6 +159,16 @@ $color-light-blue: rgb(198, 198, 228);
     width: 40px;
     height: 40px;
 }
+
+.app-employee-avatar.app-employee-avatar--spacer {
+  visibility: hidden;
+
+  + span {
+    visibility: hidden;
+  }
+}
+
+
 
 mat-form-field.inline-input .mat-form-field-infix {
   padding: 8px 0;
@@ -217,3 +227,6 @@ mat-card.app-medium-card {
 
 
 
+// * {
+//   outline: 1px solid #f00 !important;
+// }

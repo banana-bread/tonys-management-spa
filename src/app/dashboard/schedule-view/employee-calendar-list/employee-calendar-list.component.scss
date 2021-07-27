@@ -1,26 +1,48 @@
-// TODO: these styles really belongs in an <app-employee-calendar-list> component
-
-app-employee-calendar:not(:first-of-type) div.cal-time  {
-    display: none;
+.calendar__times {
+    position: sticky;
+    left: 0;
+    z-index: 2000;
 }
 
-app-employee-calendar:not(:first-of-type) .cal-day-view .cal-current-time-marker {
-    margin-left: 0;
+.employee-avatar-container {
+    position: sticky;  
+    top: 0;
+    z-index: 1000;
+    background: #FAFAFA;
+    padding: 8px 0;
+    border-bottom: rgb(220,220,220) 1px solid;
+
+}
+
+.calendar__employees app-employee-calendar {
+    min-width: 150px;
     width: 100%;
+
+    div.cal-time  {
+        display: none;
+    }
+
+    .cal-week-view .cal-ends-within-day .cal-event {
+        margin-left: -70px;
+        width: calc(100% + 70px);
+    }
+
+    .cal-day-view .cal-current-time-marker {
+        margin-left: 0;
+        width: 100%;
+    }
 }
 
-app-employee-calendar:not(:first-of-type) .cal-week-view .cal-ends-within-day .cal-event {
-    margin-left: -70px;
-    width: calc(100% + 70px);
+.calendar__times app-employee-calendar {
+    .cal-week-view .cal-time-events .cal-day-columns:not(.cal-resize-active) .cal-hour-segment:hover {
+        background: transparent;
+    }
 }
 
-// app-employee-calendar:first-of-type div.cal-hour-start.cal-hour-segment, 
-// app-employee-calendar:first-of-type div.cal-after-hour-start.cal-hour-segment {
-//     // background: rgb(117, 119, 227);
-//     // width: calc(100% + 70px);
-//     // margin-right: 70px;
-// }
+.calendar__times app-employee-calendar {
+    left: 0;
+}
 
-app-employee-calendar:first-of-type {
-    flex-basis: 70px !important;
+.cal-week-view {
+    border-top: none;
 }
