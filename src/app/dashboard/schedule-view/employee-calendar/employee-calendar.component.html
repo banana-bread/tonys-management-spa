@@ -21,7 +21,9 @@
     [events]="events"
     [hourSegmentTemplate]="weekViewHourSegmentTemplate"
     [hourSegmentHeight]="60"
+    (beforeViewRender)="hourSegmentModifier($event)"
     [dayStartHour]="6"
-    [dayEndHour]="21">
+    [dayEndHour]="21"
+    (eventClicked)="onEventClicked($event)">
     <!-- [hourSegments]="4" -->
 </mwl-calendar-day-view>

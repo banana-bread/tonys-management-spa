@@ -1,5 +1,5 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { CalendarEvent } from 'angular-calendar';
+import { CalendarDayViewBeforeRenderEvent, CalendarEvent } from 'angular-calendar';
 import { WeekViewHourSegment } from 'calendar-utils';
 import { addDays, addMinutes, endOfWeek } from 'date-fns';
 import { AppStateService } from 'src/app/services/app-state.service';
@@ -17,7 +17,7 @@ import * as moment from 'moment';
 export class EmployeeCalendarComponent implements OnInit {
   
   @Input() employee: Employee = new Employee();
-  @Input() clickDisabled: boolean = false;
+  @Input() isFirst: boolean = false;
 
   viewDate = new Date();
   events: CalendarEvent[] = [];
@@ -34,9 +34,34 @@ export class EmployeeCalendarComponent implements OnInit {
     this._mapBookingsToCalendarEvents(this.employee.bookings)
   }
 
+  onEventClicked($event)
+  {
+    /* TODO:
+      - Create booking editor.
+      - Possible options: cancel, update services... others?
+    */
+    console.log($event)
+  }
+
+  hourSegmentModifier(renderEvent: CalendarDayViewBeforeRenderEvent)
+  {
+    renderEvent.hourColumns.forEach((hourColumn) => {
+      hourColumn.hours.forEach((hour) => {
+        hour.segments.forEach((segment) => {
+
+          if (this._isWithinEmployeeWorkingHours(segment))
+          {
+            segment.cssClass = 'hour-segment--disabled'
+          }
+
+        });
+      });
+    });
+  }
+
   async selectToCreate(segment: WeekViewHourSegment, event: MouseEvent, segmentElement: HTMLElement): Promise<void> 
   {
-    if (this.clickDisabled) return;
+    if (this.isFirst || this._isWithinEmployeeWorkingHours(segment)) return;
 
     const newEvent = this._createEventFromSelection(segment); 
     const bookingEvent = await this._createBooking(newEvent);
@@ -44,11 +69,10 @@ export class EmployeeCalendarComponent implements OnInit {
     if (! bookingEvent) return;
 
     this.events.push(newEvent)
-    // this.events = [...this.events, newEvent];
-    this.refresh();
+    this._refresh();
   }
 
-  private refresh() 
+  private _refresh() 
   {
     this.events = [...this.events];
     this.cdr.detectChanges();
@@ -90,6 +114,13 @@ export class EmployeeCalendarComponent implements OnInit {
         tmpEvent: true,
       },
     }
+  }
+
+  private _isWithinEmployeeWorkingHours(segment: WeekViewHourSegment): boolean
+  {
+    return (segment.displayDate.getHours() < this.employee.base_schedule?.today().startInHours() || 
+    segment.displayDate.getHours() >= this.employee.base_schedule?.today().endInHours()) &&  
+    !this.isFirst
   }
 
 }

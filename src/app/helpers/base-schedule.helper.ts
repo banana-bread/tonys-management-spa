@@ -94,4 +94,14 @@ export class BaseScheduleDay {
     {
         return this._times;
     }
+
+    startInHours()
+    {
+        return this.start / 3600;
+    }
+
+    endInHours()
+    {
+        return this.end / 3600;
+    }
 }
