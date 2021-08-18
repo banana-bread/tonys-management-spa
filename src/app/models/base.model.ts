@@ -26,7 +26,7 @@ export abstract class BaseModel {
         if (! this.hasOwnProperty('dates')) return;
         for (let dateKey in this.dates)
         {
-            this[dateKey] = moment(moment().format(attributes[dateKey]))
+            this[dateKey] = moment(attributes[dateKey]).toDate();
         }
     }
 

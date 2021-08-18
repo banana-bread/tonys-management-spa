@@ -1,15 +1,13 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Injectable, Input, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { CalendarEvent, CalendarEventTimesChangedEvent } from 'angular-calendar';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { CalendarEvent } from 'angular-calendar';
 import { WeekViewHourSegment } from 'calendar-utils';
-import { fromEvent } from 'rxjs';
-import { finalize, takeUntil } from 'rxjs/operators';
 import { addDays, addMinutes, endOfWeek } from 'date-fns';
 import { AppStateService } from 'src/app/services/app-state.service';
 import { CompanyService } from 'src/app/models/company/company.service';
 import { Employee } from 'src/app/models/employee/employee.model';
 import { ManualBookingDialogService } from '../manual-booking-dialog/manual-booking-dialog.component';
 import { Booking } from 'src/app/models/booking/booking.model';
-
+import * as moment from 'moment';
 @Component({
   selector: 'app-employee-calendar',
   templateUrl: './employee-calendar.component.html',
@@ -19,6 +17,7 @@ import { Booking } from 'src/app/models/booking/booking.model';
 export class EmployeeCalendarComponent implements OnInit {
   
   @Input() employee: Employee = new Employee();
+  @Input() clickDisabled: boolean = false;
 
   viewDate = new Date();
   events: CalendarEvent[] = [];
@@ -35,29 +34,17 @@ export class EmployeeCalendarComponent implements OnInit {
     this._mapBookingsToCalendarEvents(this.employee.bookings)
   }
 
-  private _mapBookingsToCalendarEvents(bookings: Booking[])
-  {
-    this.events = bookings.map(booking => this.createNewEvent(booking.started_at.toDate()))
-  }
-
-  createNewEvent(start: Date): CalendarEvent
-  {
-    return {
-      id: this.events.length,
-      title: 'New appointment',
-      start: start,
-      meta: {
-        tmpEvent: true,
-      },
-    }
-  }
-
   async selectToCreate(segment: WeekViewHourSegment, event: MouseEvent, segmentElement: HTMLElement): Promise<void> 
   {
-    const newEvent = this.createNewEvent(segment.date); 
-    await this.onNewBooking(newEvent);
+    if (this.clickDisabled) return;
 
-    this.events = [...this.events, newEvent];
+    const newEvent = this._createEventFromSelection(segment); 
+    const bookingEvent = await this._createBooking(newEvent);
+    
+    if (! bookingEvent) return;
+
+    this.events.push(newEvent)
+    // this.events = [...this.events, newEvent];
     this.refresh();
   }
 
@@ -67,24 +54,45 @@ export class EmployeeCalendarComponent implements OnInit {
     this.cdr.detectChanges();
   }
 
-  async onNewBooking(event: CalendarEvent<any>): Promise<any>
+  private async _createBooking(event: CalendarEvent<any>): Promise<any>
   {
-    await this.manualBookingDialog.open({
+    return await this.manualBookingDialog.open({
       employee: this.employee,
-      event
+      event: event
     });
-    /*
-    - [ ] Open dialog, choose start, end, service etc. 
-    - [ ] should be able to pass current employee into dialog.
-    */
+  }
+
+  private _mapBookingsToCalendarEvents(bookings: Booking[])
+  {
+    this.events = bookings.map(booking => this._createEventFromBooking(booking))
+  }
+
+  private _createEventFromBooking(booking: Booking): CalendarEvent
+  {
+    return {
+      id: booking.id,
+      title: `${moment(booking.started_at).format('h:mm')} - ${moment(booking.ended_at).format('h:mm')}`,
+      start: booking.started_at,
+      end: booking.ended_at,
+      meta: {
+        tmpEvent: true,
+      },
+    }
+  }
+
+  private _createEventFromSelection(segment: WeekViewHourSegment)
+  {
+    return {
+      id: this.events.length,
+      title: 'New Booking',
+      start: segment.date,
+      meta: {
+        tmpEvent: true,
+      },
+    }
   }
 
 }
-
-
-
-
-
 
 // May be used in the future, drag to create bookings
 

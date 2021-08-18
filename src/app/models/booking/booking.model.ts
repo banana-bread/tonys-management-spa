@@ -7,9 +7,9 @@ export class Booking extends BaseModel {
     id?: string = null;
     employee_id?: string = null;
     client_id?: string = null;
-    started_at?: Moment = null;
-    ended_at?: Moment = null;
-    cancelled_at?: number = null;
+    started_at?: Date = null;
+    ended_at?: Date = null;
+    cancelled_at?: Date = null;
 
     // TODO: type = Employee|Client
     cancelled_by? = null;

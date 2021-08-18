@@ -45,7 +45,7 @@ export class ScheduleViewComponent implements OnInit {
     const bookings: Booking[] = await this.employeeBookingService.get(
       this.filteredEmployees.map(employee => employee.id), 
       // TODO: swicth to selected date
-      moment().unix().toString()
+      moment().startOf('day').unix().toString()
     );
 
     this.filteredEmployees.forEach(employee => 

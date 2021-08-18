@@ -1,36 +1,54 @@
-
+<form #form="ngForm" (ngSubmit)="onSave()">
 <h1 mat-dialog-title>New Booking</h1>
 <div mat-dialog-content>
     <div fxLayout="column">
         <div fxFlex fxLayout="row" fxLayoutGap="15px">
             <mat-form-field fxFlex="35">
                 <mat-label>Start Time</mat-label>
-                <mat-select [(ngModel)]="startTime">
+                <mat-select name="startTime"
+                    #startTimeField="ngModel"
+                    [(ngModel)]="startTime"
+                    [disabled]="loading" 
+                    required>
                     <mat-option *ngFor="let time of times()" [value]="time">
                         {{ time | appTimeOfDay}}
                     </mat-option>
                 </mat-select>
+                <mat-error *ngIf="startTimeField.hasError('required')">Start time is required.</mat-error>
+                <mat-error *ngIf="startTimeField.hasError('overlap')">Selected services.</mat-error>
             </mat-form-field>
             <mat-form-field fxFlex>  
                 <mat-label>Service</mat-label>
-                <mat-select multiple>
+                <mat-select name="servicesField" 
+                    #servicesField="ngModel"
+                    [(ngModel)]="selectedServices"
+                    (ngModelChange)="onServicesChanged()"
+                    [disabled]="loading"
+                    multiple 
+                    required>
                     <mat-option *ngFor="let service of services" [value]="service">
                         {{ service.name }}
                     </mat-option>
                 </mat-select>
+                <mat-error *ngIf="servicesField.hasError('required')">At least one service is required.</mat-error>
             </mat-form-field>
         </div>
-        <div fxLayout="row">
-            <span class="material-icons-outlined">perm_identity</span>
-            <span>{{ employee.name }}</span>
-        </div>
-        <div fxLayout="row">
-            <span class="material-icons-outlined">schedule</span>
-            <span>{{ event.start | date:'EEEE, MMMM d' }} - </span>
+        <div fxLayout="column" fxLayoutGap="8px">
+            <div fxLayout="row" fxLayoutAlign=" center" fxLayoutGap="4px">
+                <span class="material-icons-outlined">perm_identity</span>
+                <span>{{ employee.name }}</span>
+            </div>
+            <div fxLayout="row" fxLayoutAlign=" center" fxLayoutGap="4px">
+                <span class="material-icons-outlined">schedule</span>
+                <span>{{ event.start | date:'EEEE, MMMM d' }}, {{ formatTime(startTime) | date:'h:mm a' }} - </span>
+                <span *ngIf="!! selectedServices.length">{{ formatTime(endTime) | date:'h:mm a' }}</span>
+            </div>
         </div>
     </div>
 </div>
 <div mat-dialog-actions align="end">
-    <button mat-button mat-dialog-close>Cancel</button>
-    <button mat-raised-button color="accent">Save</button>
+    <mat-progress-spinner mode="indeterminate" diameter="36" *ngIf="loading"></mat-progress-spinner>
+    <button type="button" mat-button mat-dialog-close>Cancel</button>
+    <button type="submit" mat-raised-button color="accent" [disabled]="loading">Save</button>
 </div>
+</form>

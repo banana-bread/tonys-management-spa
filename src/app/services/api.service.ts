@@ -1,5 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Injectable, ModuleWithComponentFactories } from '@angular/core';
 import { HttpAdapter } from '@tonys/shared';
+import { CalendarEvent } from 'angular-calendar';
+import * as moment from 'moment';
 import { Employee } from '../models/employee/employee.model';
 import { ServiceDefinition } from '../models/service-definition/service-definition.model';
 import { AppStateService } from './app-state.service';
@@ -56,6 +58,16 @@ export class ApiService {
       .query('date_for', dateFor)
       .withCompany(this.state.company_id)
       .get();
+  }
+
+  createEmployeeBooking(data: {event: CalendarEvent<any>, services: ServiceDefinition[]}, employee_id: string): Promise<any>
+  {
+    return this.http
+      .path('/employees/{id}/bookings/')
+      .param('id', employee_id) 
+      .data(data)
+      .withCompany(this.state.company_id)
+      .post();
   }
 
   createEmployee(companyId: string, expires: string, signature: string, data: any): Promise<any>

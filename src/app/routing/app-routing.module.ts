@@ -17,6 +17,7 @@ import { LoginPageGuard } from './login-page-guard.service';
 const routes: Routes = [
   { path: '',   redirectTo: '/login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent, canActivate: [LoginPageGuard] },
+  // { path: 'login', component: LoginComponent },
   { 
     path: ':companyId', component: DashboardComponent, canActivate: [AuthGuard], 
     children: [

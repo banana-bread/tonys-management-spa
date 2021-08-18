@@ -1,6 +1,7 @@
-
 <div fxLayout="row" *ngIf="!loading" >
     <app-employee-calendar-list fxFlex
         [employees]="filteredEmployees">
     </app-employee-calendar-list>
 </div>
+
+<mat-progress-spinner class="app-page-loading" mode="indeterminate" *ngIf="loading"></mat-progress-spinner>

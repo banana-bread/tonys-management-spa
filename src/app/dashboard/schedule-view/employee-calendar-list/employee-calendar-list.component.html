@@ -1,7 +1,3 @@
-<!-- 
-    TODO: 
-        - [ ] first employee calendar (the times one) should be non-selectable.
- -->
 <div class="calendar__container" fxLayout="row">
     <div class="calendar__times" fxLayout="column">
         <div class="employee-avatar-container" fxLayout="column" fxLayoutGap="4px" fxLayoutAlign=" center" >
@@ -10,17 +6,33 @@
             </div>
             <span>A</span>
         </div>
-        <app-employee-calendar></app-employee-calendar>
+        <app-employee-calendar [clickDisabled]="true">
+        </app-employee-calendar>
     </div>
     <div class="calendar__employees" fxFlex fxLayout="row">
-        <div fxLayout="column" fxFlex *ngFor="let employee of employees">
-            <div class="employee-avatar-container" fxLayout="column" fxLayoutGap="4px" fxLayoutAlign=" center">    
-                <div class="app-employee-avatar">
-                    <span>{{ employee.initials }}</span>
+        <!-- WHEN FILTERED EMPLOYEES EXIST -->
+        <ng-container *ngIf="!! employees.length">
+            <div fxLayout="column" fxFlex *ngFor="let employee of employees">
+                <div class="employee-avatar-container" fxLayout="column" fxLayoutGap="4px" fxLayoutAlign=" center">    
+                    <div class="app-employee-avatar">
+                        <span>{{ employee.initials }}</span>
+                    </div>
+                    <span>{{ employee.name }}</span>
                 </div>
-                <span>{{ employee.name }}</span>
+                <app-employee-calendar fxFlex [employee]="employee">
+                </app-employee-calendar>
             </div>
-            <app-employee-calendar fxFlex [employee]="employee">
+        </ng-container>
+
+        <!-- WHEN FILTERED EMPLOYEES DO NOT EXIST -->
+        <div fxFlex fxLayout="column" *ngIf="! employees.length">
+            <div class="employee-avatar-container" fxLayout="column" fxLayoutGap="4px" fxLayoutAlign=" center" >
+                <div class="app-employee-avatar app-employee-avatar--spacer">
+                    <span>A</span>
+                </div>
+                <span>A</span>
+            </div>
+            <app-employee-calendar  [clickDisabled]="true">
             </app-employee-calendar>
         </div>
     </div> 

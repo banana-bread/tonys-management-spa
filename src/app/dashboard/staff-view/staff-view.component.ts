@@ -40,8 +40,8 @@ export class StaffViewComponent implements OnInit {
     }
     catch
     {
-      this.router.navigate([`${this.state.short_company_id}/services`]);
-      this.notifications.error('Error loading services')
+      this.router.navigate([`${this.state.short_company_id}/staff`]);
+      this.notifications.error('Error loading staff')
     }
     finally
     {
@@ -52,7 +52,7 @@ export class StaffViewComponent implements OnInit {
   onEdit(employee: Employee)
   {
     this.staffEditorService.staff = employee; 
-    this.router.navigate([employee.short_id], {relativeTo: this.route});
+    this.router.navigate([employee.id], {relativeTo: this.route});
   }
 
   onNew()

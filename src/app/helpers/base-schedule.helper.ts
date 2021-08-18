@@ -46,11 +46,12 @@ export class BaseSchedule {
     parse(): RawBaseSchedule
     {       
         const result = {};
+        const utcSecondsOffset: number = moment().utcOffset() * 60;
 
         this._days.forEach((day: BaseScheduleDay) => {
             if (day.active)
             {
-                result[day.day] = {start: day.start, end: day.end}
+                result[day.day] = {start: day.start - utcSecondsOffset, end: day.end - utcSecondsOffset}
             }
             else
             {
@@ -73,10 +74,12 @@ export class BaseScheduleDay {
 
     constructor(start: number, end: number, day: string)
     {
+        const utcSecondsOffset: number = moment().utcOffset() * 60;
+
         this.day = day;
-        this.start = start;
-        this.end = end;
-        this.active = !!this.start && !!this.end;
+        this.start = start ? start + utcSecondsOffset: null;
+        this.end = end ? end + utcSecondsOffset : null;
+        this.active = !!start && !!end;
 
         if (! this.active) return
 
