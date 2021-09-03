@@ -110,6 +110,24 @@ export class ApiService {
       .put();
   }
 
+  getBooking(id: string)
+  {
+    return this.http  
+      .path('/bookings/{id}')
+      .param('id', id)
+      .withCompany(this.state.company_id)
+      .get();
+  }
+
+  cancelBooking(id: string)
+  {
+    return this.http
+      .path('/bookings/{id}')
+      .param('id', id)
+      .withCompany(this.state.company_id)
+      .delete();
+  }
+
   getServiceDefinitions(): Promise<any> 
   {
     return this.http
@@ -222,5 +240,13 @@ export class ApiService {
     return this.http
       .path('/logout')
       .delete();
+  }
+
+  refreshToken(data: { refresh_token: string }): Promise<any>
+  {
+    return this.http
+      .path('/refresh-token')
+      .data(data)
+      .post();
   }
 }

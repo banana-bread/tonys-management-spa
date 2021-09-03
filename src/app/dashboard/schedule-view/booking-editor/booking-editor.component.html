@@ -1,21 +1,22 @@
 <form #form="ngForm" (ngSubmit)="onSave()">
-<h1 mat-dialog-title>New Booking</h1>
+<h1 mat-dialog-title>{{ this.bookingExists() ? '' : 'New' }} Booking</h1>
 <div mat-dialog-content>
-    <div fxLayout="column">
-        <div fxFlex fxLayout="row" fxLayoutGap="15px">
-            <mat-form-field fxFlex="35">
+    <div fxLayout="column" *ngIf="!loading">
+        <div fxFlex fxLayout="column" *ngIf="!bookingExists()">
+            <mat-form-field fxFlex>
                 <mat-label>Start Time</mat-label>
                 <mat-select name="startTime"
                     #startTimeField="ngModel"
                     [(ngModel)]="startTime"
-                    [disabled]="loading" 
+                    [disabled]="saving" 
+                    [errorStateMatcher]="errorStateMatcher"
                     required>
                     <mat-option *ngFor="let time of times()" [value]="time">
                         {{ time | appTimeOfDay}}
                     </mat-option>
                 </mat-select>
                 <mat-error *ngIf="startTimeField.hasError('required')">Start time is required.</mat-error>
-                <mat-error *ngIf="startTimeField.hasError('overlap')">Selected services.</mat-error>
+                <mat-error *ngIf="startTimeField.hasError('overlap')">Start time unavailable for the selected services.</mat-error>
             </mat-form-field>
             <mat-form-field fxFlex>  
                 <mat-label>Service</mat-label>
@@ -23,7 +24,7 @@
                     #servicesField="ngModel"
                     [(ngModel)]="selectedServices"
                     (ngModelChange)="onServicesChanged()"
-                    [disabled]="loading"
+                    [disabled]="saving"
                     multiple 
                     required>
                     <mat-option *ngFor="let service of services" [value]="service">
@@ -34,21 +35,34 @@
             </mat-form-field>
         </div>
         <div fxLayout="column" fxLayoutGap="8px">
-            <div fxLayout="row" fxLayoutAlign=" center" fxLayoutGap="4px">
+            <div fxLayout="row" fxLayoutAlign=" center" fxLayoutGap="8px">
                 <span class="material-icons-outlined">perm_identity</span>
                 <span>{{ employee.name }}</span>
             </div>
-            <div fxLayout="row" fxLayoutAlign=" center" fxLayoutGap="4px">
+            <div fxLayout="row" fxLayoutAlign=" center" fxLayoutGap="8px">
                 <span class="material-icons-outlined">schedule</span>
                 <span>{{ event.start | date:'EEEE, MMMM d' }}, {{ formatTime(startTime) | date:'h:mm a' }} - </span>
                 <span *ngIf="!! selectedServices.length">{{ formatTime(endTime) | date:'h:mm a' }}</span>
             </div>
+            <div fxLayout="row" fxLayoutAlign=" center" fxLayoutGap="8px" *ngIf="bookingExists()">
+                <span class="material-icons-outlined">build</span>
+                <span *ngFor="let service of selectedServices; last as isLast">
+                    {{ service.name }}
+                    <span *ngIf="!isLast">,&nbsp;</span>
+                </span>
+            </div>
         </div>
+    </div>
+    <div fxLayout="row" *ngIf="loading" fxLayoutAlign="center">
+        <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
     </div>
 </div>
 <div mat-dialog-actions align="end">
-    <mat-progress-spinner mode="indeterminate" diameter="36" *ngIf="loading"></mat-progress-spinner>
-    <button type="button" mat-button mat-dialog-close>Cancel</button>
-    <button type="submit" mat-raised-button color="accent" [disabled]="loading">Save</button>
+    <mat-progress-spinner mode="indeterminate" diameter="36" *ngIf="saving"></mat-progress-spinner>
+    <button type="button" mat-button mat-dialog-close [disabled]="loading" *ngIf="!bookingExists()">Cancel</button>
+    <button class="delete-button" type="button" mat-button [disabled]="loading" *ngIf="bookingExists()" (click)="onCancelBooking()">Cancel booking</button>
+
+    <button type="submit" mat-raised-button color="accent" [disabled]="saving || loading" *ngIf="!bookingExists()">Save</button>
+    <button type="button" mat-raised-button mat-dialog-close [disabled]="saving || loading" *ngIf="bookingExists()">Ok</button>
 </div>
 </form>

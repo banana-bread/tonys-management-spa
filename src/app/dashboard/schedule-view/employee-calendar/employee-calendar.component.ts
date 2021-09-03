@@ -5,9 +5,10 @@ import { addDays, addMinutes, endOfWeek } from 'date-fns';
 import { AppStateService } from 'src/app/services/app-state.service';
 import { CompanyService } from 'src/app/models/company/company.service';
 import { Employee } from 'src/app/models/employee/employee.model';
-import { ManualBookingDialogService } from '../manual-booking-dialog/manual-booking-dialog.component';
+import { BookingEditorService } from '../booking-editor/booking-editor.component';
 import { Booking } from 'src/app/models/booking/booking.model';
 import * as moment from 'moment';
+import { BookingService } from 'src/app/models/booking/booking.service';
 @Component({
   selector: 'app-employee-calendar',
   templateUrl: './employee-calendar.component.html',
@@ -26,7 +27,8 @@ export class EmployeeCalendarComponent implements OnInit {
 
   constructor(
     private cdr: ChangeDetectorRef,
-    private manualBookingDialog: ManualBookingDialogService,
+    private bookingEditor: BookingEditorService,
+    private bookingService: BookingService,
   ) { }
 
   ngOnInit(): void 
@@ -34,13 +36,20 @@ export class EmployeeCalendarComponent implements OnInit {
     this._mapBookingsToCalendarEvents(this.employee.bookings)
   }
 
-  onEventClicked($event)
+  async onEventClicked(event: any): Promise<any>
   {
-    /* TODO:
-      - Create booking editor.
-      - Possible options: cancel, update services... others?
-    */
-    console.log($event)
+    const onBookingCancel = (booking: Booking) => 
+    {
+      const index = this.events.findIndex(event => event.id === booking.id)
+      this.events.splice(index, 1);
+      this._refresh();
+    }
+
+    return await this.bookingEditor.open({
+      employee: this.employee,
+      event,
+      onBookingCancel,
+    });
   }
 
   hourSegmentModifier(renderEvent: CalendarDayViewBeforeRenderEvent)
@@ -49,7 +58,7 @@ export class EmployeeCalendarComponent implements OnInit {
       hourColumn.hours.forEach((hour) => {
         hour.segments.forEach((segment) => {
 
-          if (this._isWithinEmployeeWorkingHours(segment))
+          if (this._isWithinEmployeeWorkingHours(segment) && !this.isFirst)
           {
             segment.cssClass = 'hour-segment--disabled'
           }
@@ -61,7 +70,7 @@ export class EmployeeCalendarComponent implements OnInit {
 
   async selectToCreate(segment: WeekViewHourSegment, event: MouseEvent, segmentElement: HTMLElement): Promise<void> 
   {
-    if (this.isFirst || this._isWithinEmployeeWorkingHours(segment)) return;
+    if (this._isWithinEmployeeWorkingHours(segment) || this.isFirst) return;
 
     const newEvent = this._createEventFromSelection(segment); 
     const bookingEvent = await this._createBooking(newEvent);
@@ -80,7 +89,7 @@ export class EmployeeCalendarComponent implements OnInit {
 
   private async _createBooking(event: CalendarEvent<any>): Promise<any>
   {
-    return await this.manualBookingDialog.open({
+    return await this.bookingEditor.open({
       employee: this.employee,
       event: event
     });
@@ -88,6 +97,7 @@ export class EmployeeCalendarComponent implements OnInit {
 
   private _mapBookingsToCalendarEvents(bookings: Booking[])
   {
+    console.log(bookings)
     this.events = bookings.map(booking => this._createEventFromBooking(booking))
   }
 
@@ -107,7 +117,7 @@ export class EmployeeCalendarComponent implements OnInit {
   private _createEventFromSelection(segment: WeekViewHourSegment)
   {
     return {
-      id: this.events.length,
+      id: null,
       title: 'New Booking',
       start: segment.date,
       meta: {
@@ -119,8 +129,7 @@ export class EmployeeCalendarComponent implements OnInit {
   private _isWithinEmployeeWorkingHours(segment: WeekViewHourSegment): boolean
   {
     return (segment.displayDate.getHours() < this.employee.base_schedule?.today().startInHours() || 
-    segment.displayDate.getHours() >= this.employee.base_schedule?.today().endInHours()) &&  
-    !this.isFirst
+    segment.displayDate.getHours() >= this.employee.base_schedule?.today().endInHours());
   }
 
 }

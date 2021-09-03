@@ -1,6 +1,7 @@
 import { Moment } from "src/types";
 import { BaseModel } from "../base.model";
 import { Employee } from "../employee/employee.model";
+import { Service } from "../service/service.model";
 
 export class Booking extends BaseModel {
 
@@ -13,8 +14,12 @@ export class Booking extends BaseModel {
 
     // TODO: type = Employee|Client
     cancelled_by? = null;
+    services: Service[] = [];
 
-    relations = {};
+    relations = {
+        services: Service,
+        bookings: Booking,
+    };
     
     dates = {
         started_at: null,

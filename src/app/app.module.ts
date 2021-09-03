@@ -52,7 +52,7 @@ import * as moment from 'moment';
 import { EmployeeCalendarComponent } from './dashboard/schedule-view/employee-calendar/employee-calendar.component';
 import { Employee } from './models/employee/employee.model';
 import { EmployeeCalendarListComponent } from './dashboard/schedule-view/employee-calendar-list/employee-calendar-list.component';
-import { ManualBookingDialogComponent } from './dashboard/schedule-view/manual-booking-dialog/manual-booking-dialog.component';
+import { BookingEditorComponent } from './dashboard/schedule-view/booking-editor/booking-editor.component';
 
 export function momentAdapterFactory() {
   return adapterFactory(moment);
@@ -93,7 +93,7 @@ export function momentAdapterFactory() {
     ScheduleViewComponent,
     EmployeeCalendarComponent,
     EmployeeCalendarListComponent,
-    ManualBookingDialogComponent
+    BookingEditorComponent,
   ],
   imports: [
     BrowserModule,

@@ -27,9 +27,9 @@ export class AppStateService {
         return localStorage.getItem('company_id');
     }
 
-    get short_company_id(): string
+    get short_company_id(): string|null
     {
-        return this.company_id.slice(0, 8);
+        return this.company_id?.slice(0, 8);
     }
 
     set employee(val: Employee)

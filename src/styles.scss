@@ -86,10 +86,11 @@ mat-toolbar.app-editor-toolbar {
   button {
     font-size: 16px;
   }
+}
 
-  .delete-button {
-    color: $color-warn;
-  }
+.delete-button {
+  color: #fff;
+  background-color: $color-warn;
 }
 
 .app-editor-title {

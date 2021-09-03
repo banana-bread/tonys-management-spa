@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, QueryList, ViewChildren } from '@angular/core';
 import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild, forwardRef } from '@angular/core';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor, NgForm, NgModel } from '@angular/forms';
-import { BaseScheduleErrorState } from '../helpers/base-schedule-error-state.matcher';
+import { SyncErrorStateMatcher } from '../helpers/sync-error-state.matcher';
 import { BaseSchedule, BaseScheduleDay } from '../helpers/base-schedule.helper';
 
 // TODO: Make sure end time is greater than start time
@@ -19,7 +19,7 @@ export class BaseScheduleEditorComponent implements OnInit, AfterViewInit, Contr
 
   @Output() errorChange = new EventEmitter<boolean>();
 
-  errorStateMatcher = new BaseScheduleErrorState();
+  errorStateMatcher = new SyncErrorStateMatcher();
   value: BaseSchedule;
   onChange: (schedule: BaseSchedule) => void;
   onTouched: () => void;
