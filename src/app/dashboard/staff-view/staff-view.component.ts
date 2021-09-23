@@ -69,7 +69,6 @@ export class StaffViewComponent implements OnInit {
 
    try
    {
-    //  console.log(employee)
       await this.employeeService.updateActive(employee);
       this.notifications.success(`Employee bookings ${employee.active ? 'enabled' : 'disabled'}`)
    }

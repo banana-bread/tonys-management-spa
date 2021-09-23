@@ -1,10 +1,81 @@
 @import '~@angular/material/theming';
+@include mat-core();
+
+
 
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
-$app-primary: mat-palette($mat-indigo);
-$app-accent: mat-palette($mat-pink, A200, A100, A400);
+
+$app-accent: (
+    50 : #e0f3ee,
+    100 : #b3e2d5,
+    200 : #80cfba,
+    300 : #4dbb9e,
+    400 : #26ad89,
+    500 : #009e74,
+    600 : #00966c,
+    700 : #008c61,
+    800 : #008257,
+    900 : #007044,
+    A100 : #9fffd2,
+    A200 : #6cffbb,
+    A400 : #39ffa3,
+    A700 : #1fff97,
+    contrast: (
+        50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #000000,
+        400 : #000000,
+        500 : #ffffff,
+        600 : #ffffff,
+        700 : #ffffff,
+        800 : #ffffff,
+        900 : #ffffff,
+        A100 : #000000,
+        A200 : #000000,
+        A400 : #000000,
+        A700 : #000000,
+    )
+);
+
+$app-primary: (
+    50 : #e9e9e9,
+    100 : #c7c8c8,
+    200 : #a2a3a3,
+    300 : #7c7e7e,
+    400 : #606262,
+    500 : #444646,
+    600 : #3e3f3f,
+    700 : #353737,
+    800 : #2d2f2f,
+    900 : #1f2020,
+    A100 : #79f2f2,
+    A200 : #4aeeee,
+    A400 : #06ffff,
+    A700 : #00ebeb,
+    contrast: (
+        50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #ffffff,
+        400 : #ffffff,
+        500 : #ffffff,
+        600 : #ffffff,
+        700 : #ffffff,
+        800 : #ffffff,
+        900 : #ffffff,
+        A100 : #000000,
+        A200 : #000000,
+        A400 : #000000,
+        A700 : #000000,
+    )
+);
+
+ 
+$app-primary: mat-palette($app-primary);
+$app-accent: mat-palette($app-accent);
 $app-warn: mat-palette($mat-red);
 
 $color-primary: mat-color($app-primary);

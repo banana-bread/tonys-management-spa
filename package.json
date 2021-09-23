@@ -10,7 +10,8 @@
     "e2e": "ng e2e",
     "shared-r": "npm uninstall @tonys/shared --registry http://localhost:4873 && npm i @tonys/shared --registry http://localhost:4873",
     "shared-u": "npm uninstall @tonys/shared --registry http://localhost:4873",
-    "shared-i": "npm i @tonys/shared --registry http://localhost:4873"
+    "shared-i": "npm i @tonys/shared --registry http://localhost:4873",
+    "reset-github-token": "git remote remove origin && git remote add origin https://$TOKEN@github.com/banana-bread/tonys-management-spa"
   },
   "private": true,
   "dependencies": {

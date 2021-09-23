@@ -156,7 +156,9 @@ export class BookingEditorComponent implements OnInit {
   {
     const shouldCancel = await this.confirmDialog.open({
       title: 'Confirm cancellation',
-      message: 'Are you sure you want to cancel this booking?'
+      message: 'Are you sure you want to cancel this booking?',
+      okLabel: 'Yes',
+      cancelLabel: 'No',
     });
 
     if (shouldCancel)
@@ -172,7 +174,6 @@ export class BookingEditorComponent implements OnInit {
       }
       catch (e)
       {
-        console.log(e)
         this.notification.error('Booking could not be cancelled')
       }
       finally

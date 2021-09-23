@@ -82,6 +82,10 @@ button.app-fab-new {
 
 mat-toolbar.app-editor-toolbar {
   background-color: #fff;
+  border-bottom: solid 1px #f3f3f3;
+  position: sticky;
+  top: 0;
+  z-index: 100;
 
   button {
     font-size: 16px;
@@ -89,8 +93,7 @@ mat-toolbar.app-editor-toolbar {
 }
 
 .delete-button {
-  color: #fff;
-  background-color: $color-warn;
+  color: $color-warn;
 }
 
 .app-editor-title {
@@ -104,8 +107,9 @@ mat-toolbar.app-editor-toolbar {
 }
 
 .app-editor-view {
-  height: 100%;
+  min-height: 100%;
   background-color: $color-background;
+  padding-bottom: 50px;
 }
 
 mat-card-title.app-editor-card-title {

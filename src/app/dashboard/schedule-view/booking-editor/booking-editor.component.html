@@ -60,7 +60,7 @@
 <div mat-dialog-actions align="end">
     <mat-progress-spinner mode="indeterminate" diameter="36" *ngIf="saving"></mat-progress-spinner>
     <button type="button" mat-button mat-dialog-close [disabled]="loading" *ngIf="!bookingExists()">Cancel</button>
-    <button class="delete-button" type="button" mat-button [disabled]="loading" *ngIf="bookingExists()" (click)="onCancelBooking()">Cancel booking</button>
+    <button class="delete-button" type="button" mat-raised-button [disabled]="loading" *ngIf="bookingExists()" (click)="onCancelBooking()">Cancel booking</button>
 
     <button type="submit" mat-raised-button color="accent" [disabled]="saving || loading" *ngIf="!bookingExists()">Save</button>
     <button type="button" mat-raised-button mat-dialog-close [disabled]="saving || loading" *ngIf="bookingExists()">Ok</button>

@@ -97,8 +97,8 @@ export class EmployeeCalendarComponent implements OnInit {
 
   private _mapBookingsToCalendarEvents(bookings: Booking[])
   {
-    console.log(bookings)
     this.events = bookings.map(booking => this._createEventFromBooking(booking))
+
   }
 
   private _createEventFromBooking(booking: Booking): CalendarEvent
