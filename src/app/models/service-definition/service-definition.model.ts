@@ -15,9 +15,4 @@ export class ServiceDefinition extends BaseModel {
         super();
         this.map(data);
     }
-
-    get short_id(): string
-    {
-        return this.id.slice(0, 8);
-    }
 }

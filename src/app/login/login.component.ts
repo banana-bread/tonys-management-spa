@@ -42,7 +42,7 @@ export class LoginComponent implements OnInit {
     {
       await this.auth.login(this.email, this.password);
 
-      this.router.navigate(['/', this.state.short_company_id]);
+      this.router.navigate(['/', this.state.company_id]);
       this.notifications.success('Signed in')
     }
     catch

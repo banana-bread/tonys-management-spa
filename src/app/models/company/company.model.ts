@@ -30,11 +30,6 @@ export class Company extends BaseModel implements Schedulable {
         this.map(data);
     }
 
-    get short_id(): string
-    {
-        return this.id.slice(0, 7);
-    }
-
     get employees_working_now(): Employee[]
     {
         return this.employees.filter(employee => employee.isWorkingNow());

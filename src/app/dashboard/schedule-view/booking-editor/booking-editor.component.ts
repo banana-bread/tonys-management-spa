@@ -35,7 +35,7 @@ export class BookingEditorComponent implements OnInit {
   onCancel = this.data.onBookingCancel;
   services: ServiceDefinition[] = [];
   startTime: number = secondsSinceStartOfDay(moment(this.event.start));
-  endTime: number;
+  endTime: number = secondsSinceStartOfDay(moment(this.event.end));
   selectedServices: ServiceDefinition[] = [];
   errorStateMatcher = new SyncErrorStateMatcher();
   booking: Booking;

@@ -173,10 +173,12 @@ $color-light-blue: rgb(198, 198, 228);
   }
 }
 
-
-
 mat-form-field.inline-input .mat-form-field-infix {
   padding: 8px 0;
+}
+
+button.icon-button {
+  color: gray;
 }
 // ITEMS
 // .item-list {

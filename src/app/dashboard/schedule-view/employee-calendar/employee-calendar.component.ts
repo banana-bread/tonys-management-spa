@@ -1,9 +1,6 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
 import { CalendarDayViewBeforeRenderEvent, CalendarEvent } from 'angular-calendar';
 import { WeekViewHourSegment } from 'calendar-utils';
-import { addDays, addMinutes, endOfWeek } from 'date-fns';
-import { AppStateService } from 'src/app/services/app-state.service';
-import { CompanyService } from 'src/app/models/company/company.service';
 import { Employee } from 'src/app/models/employee/employee.model';
 import { BookingEditorService } from '../booking-editor/booking-editor.component';
 import { Booking } from 'src/app/models/booking/booking.model';

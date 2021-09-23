@@ -40,7 +40,7 @@ export class StaffViewComponent implements OnInit {
     }
     catch
     {
-      this.router.navigate([`${this.state.short_company_id}/staff`]);
+      this.router.navigate([`${this.state.company_id}/staff`]);
       this.notifications.error('Error loading staff')
     }
     finally

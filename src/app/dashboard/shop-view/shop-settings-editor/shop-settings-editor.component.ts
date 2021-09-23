@@ -39,7 +39,7 @@ export class ShopSettingsEditorComponent implements OnInit {
     catch
     {
       this.notifications.error('Error loading shop settings');
-      this.router.navigate([`/${this.state.short_company_id}`]);
+      this.router.navigate([`/${this.state.company_id}`]);
     }
     finally
     {
@@ -73,7 +73,7 @@ export class ShopSettingsEditorComponent implements OnInit {
 
   onClose()
   {
-    this.unsavedChangesRouter.tryNavigate(`/${this.state.short_company_id}`, () => true);
+    this.unsavedChangesRouter.tryNavigate(`/${this.state.company_id}`, () => true);
   }
 
 }

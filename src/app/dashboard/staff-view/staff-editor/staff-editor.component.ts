@@ -110,7 +110,7 @@ export class StaffEditorComponent implements OnInit {
   {
     if (! this.original) return;
 
-    this.unsavedChangesRouter.tryNavigate(`/${this.state.short_company_id}/staff`, () => !this.updates.size);
+    this.unsavedChangesRouter.tryNavigate(`/${this.state.company_id}/staff`, () => !this.updates.size);
   }
 
   onSave()
@@ -134,7 +134,7 @@ export class StaffEditorComponent implements OnInit {
     {
       await Promise.all([...this.updates.values()].map(callback => callback()))
 
-      this.router.navigate([`/${this.state.short_company_id}/staff`]);
+      this.router.navigate([`/${this.state.company_id}/staff`]);
       
       this.notifications.success('Employee updated');
     }

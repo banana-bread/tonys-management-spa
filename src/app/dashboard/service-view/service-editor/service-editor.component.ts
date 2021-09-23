@@ -133,10 +133,9 @@ export class ServiceEditorComponent implements OnInit {
   onClose()
   {
     this.unsavedChangesRouter.tryNavigate(
-      `/${this.state.short_company_id}/services`, 
+      `/${this.state.company_id}/services`, 
       () => this.editorForm.pristine
     );
-    // this.router.navigate([`/${this.state.short_company_id}/services`]);
   }
 
   private generateDurationOptions(): number[]

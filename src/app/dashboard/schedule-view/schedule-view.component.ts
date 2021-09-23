@@ -7,16 +7,6 @@ import { Employee } from 'src/app/models/employee/employee.model';
 import { EmployeeBookingService } from 'src/app/models/employee_booking.service';
 import { AppStateService } from 'src/app/services/app-state.service';
 
-
-
-
-/*
-  TODO:
-  - [ ] Should refresh calendar every ~5 minutes
-*/
-
-
-
 @Component({
   selector: 'app-schedule-view',
   templateUrl: './schedule-view.component.html',

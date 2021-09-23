@@ -18,7 +18,7 @@ export class LoginPageGuard implements CanActivate {
   {
     if (this.auth.isLoggedIn()) 
     {
-      this.router.navigate(['/', this.state.short_company_id]);
+      this.router.navigate(['/', this.state.company_id]);
       return false;
     }
 
