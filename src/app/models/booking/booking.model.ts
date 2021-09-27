@@ -30,6 +30,5 @@ export class Booking extends BaseModel {
     {
         super();
         this.map(data);
-        console.log(data)
     }
 }

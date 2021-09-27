@@ -1,3 +1,7 @@
+.calendar__container {
+    padding-top: 60px;
+}
+
 .calendar__times {
     position: sticky;
     left: 0;
@@ -6,7 +10,7 @@
 
 .employee-avatar-container {
     position: sticky;  
-    top: 0;
+    top: 60px;
     z-index: 1000;
     background: #FAFAFA;
     padding: 8px 0;

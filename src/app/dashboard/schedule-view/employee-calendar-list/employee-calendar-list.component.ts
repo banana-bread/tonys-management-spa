@@ -9,7 +9,6 @@ import { Employee } from 'src/app/models/employee/employee.model';
 })
 export class EmployeeCalendarListComponent implements OnInit {
 
-
   @Input() employees: Employee[];
 
   constructor() { }

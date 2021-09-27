@@ -128,7 +128,6 @@ export class EmployeeCalendarComponent implements OnInit {
     return (segment.displayDate.getHours() < this.employee.base_schedule?.today().startInHours() || 
     segment.displayDate.getHours() >= this.employee.base_schedule?.today().endInHours());
   }
-
 }
 
 // May be used in the future, drag to create bookings
