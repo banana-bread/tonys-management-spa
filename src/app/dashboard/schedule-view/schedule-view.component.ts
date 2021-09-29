@@ -21,6 +21,7 @@ export class ScheduleViewComponent implements OnInit {
   company: Company = new Company();
   filteredEmployees: Employee[] = [];
   selectedDate: number;
+  selectedPickerDate: Date;
 
   constructor(
     private route: ActivatedRoute,
@@ -35,56 +36,45 @@ export class ScheduleViewComponent implements OnInit {
     this.loading = true;
 
     this.company = await this.companyService.get(this.state.company_id);
-    this.filteredEmployees = this.working_employees;
-
     this._setDateParam( this._determineDate() );
-    this._setBookings();
+    this._setFilteredEmployees();
+
+    await this._setBookings();
 
     this.loading = false;
-  }
-
-  // TODO: This needs to be dealt with.  working employees needs to be changed depending on
-  //       the date selected in this component... not by if they are working based on base 
-  //       schedule... 
-  get working_employees(): Employee[]
-  {
-    return this.company.employees_working_today;
-  }
-
-  onFilterChanged()
-  {
-    // TODO: set this.filteredEmployees to new filter, load.
   }
   
   formattedDate(): string
   {
-    return this._dateToCalendar().format('dddd, MMM D, YYYY')
+    return this._dateToMoment().format('dddd, MMM D, YYYY')
   }
 
   async onPrevChosen(): Promise<void>
   {
-    this.loading = true;
-
-    this._setDateParam( this._dateToCalendar().subtract(1, 'day').unix() );
-    await this._setBookings();
-
-    this.loading = false;
+    await this._onDateChosen( this._dateToMoment().subtract(1, 'day') );
   }
 
   async onNextChosen(): Promise<void>
   {
-    this.loading = true;
-
-    this._setDateParam( this._dateToCalendar().add(1, 'day').unix() );
-    await this._setBookings();
-
-    this.loading = false;
+    await this._onDateChosen( this._dateToMoment().add(1, 'day') );
   }
 
   async onTodayChosen(): Promise<void>
   {
+    await this._onDateChosen( moment().startOf('day') );
+  }
+
+  async onSelectedPickerDateChanged(): Promise<void>
+  {
+    await this._onDateChosen( moment(this.selectedPickerDate) );
+  }
+
+  async _onDateChosen(date: Moment): Promise<void>
+  {
     this.loading = true;
-    this._setDateParam( moment().startOf('day').unix() );
+
+    this._setDateParam( date.unix() );
+    this._setFilteredEmployees();
     await this._setBookings();
 
     this.loading = false;
@@ -92,9 +82,9 @@ export class ScheduleViewComponent implements OnInit {
 
   private _determineDate(): number
   {
-    const dateParam = this.route.snapshot.queryParamMap.get('date');
+    const dateParam = parseInt(this.route.snapshot.queryParamMap.get('date'));
 
-    return (typeof dateParam == 'number') 
+    return (! isNaN(dateParam)) 
       ? dateParam 
       : moment().startOf('day').unix();
   }
@@ -127,8 +117,13 @@ export class ScheduleViewComponent implements OnInit {
     ); 
   }
 
-  private _dateToCalendar(): Moment
+  private _dateToMoment(): Moment
   {
     return moment(new Date(this.selectedDate * 1000));
+  }
+
+  private _setFilteredEmployees(): void
+  {
+    this.filteredEmployees = this.company.getEmployeesWorking( this._dateToMoment() );
   }
 }

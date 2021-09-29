@@ -49,3 +49,9 @@ $light-gray: #D5D7DA;
     padding-left: 16px;
     padding-right: 16px;
 }
+
+.date-picker {
+    width:0;
+    height:0;
+    visibility:hidden;
+}

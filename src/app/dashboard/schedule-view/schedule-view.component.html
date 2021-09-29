@@ -4,12 +4,24 @@
             <div class="filter__button filter__button--prev" (click)="onPrevChosen()">
                 <mat-icon class="">chevron_left</mat-icon>
             </div>
+
             <div class="filter__button filter__button--today" (click)="onTodayChosen()">
                 Today
             </div>
-            <div class="filter__button filter__button--pick">
+
+            <mat-form-field class="date-picker">
+                <input matInput 
+                    [matDatepicker]="datePicker" 
+                    name="selectedDateField"
+                    [(ngModel)]="this.selectedPickerDate"
+                    (ngModelChange)="this.onSelectedPickerDateChanged()">
+                <mat-datepicker #datePicker></mat-datepicker>
+            </mat-form-field>
+
+            <div class="filter__button filter__button--pick" (click)="datePicker.open()">
                 {{ formattedDate() }}
             </div>
+
             <div class="filter__button filter__button--next" (click)="onNextChosen()">
                 <mat-icon class="">chevron_right</mat-icon>
             </div>

@@ -53,6 +53,7 @@ import { EmployeeCalendarComponent } from './dashboard/schedule-view/employee-ca
 import { Employee } from './models/employee/employee.model';
 import { EmployeeCalendarListComponent } from './dashboard/schedule-view/employee-calendar-list/employee-calendar-list.component';
 import { BookingEditorComponent } from './dashboard/schedule-view/booking-editor/booking-editor.component';
+import { MatDateFormats, MatNativeDateModule, MAT_DATE_FORMATS, MAT_NATIVE_DATE_FORMATS } from '@angular/material/core';
 
 export function momentAdapterFactory() {
   return adapterFactory(moment);
@@ -71,6 +72,18 @@ export function momentAdapterFactory() {
 //     } as Intl.DateTimeFormatOptions,
 //   }
 // };
+
+const APP_DATE_FORMATS: MatDateFormats = {
+  ...MAT_NATIVE_DATE_FORMATS,
+  display: {
+    ...MAT_NATIVE_DATE_FORMATS.display,
+    dateInput: {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    } as Intl.DateTimeFormatOptions,
+  }
+}
 
 @NgModule({
   declarations: [
@@ -122,7 +135,7 @@ export function momentAdapterFactory() {
     MatSlideToggleModule,
 
     MatDatepickerModule,
-    // MatNativeDateModule,
+    MatNativeDateModule,
 
     TonysSharedModule.forRoot(),
     CalendarModule.forRoot({ provide: DateAdapter, useFactory: momentAdapterFactory }),
@@ -131,7 +144,7 @@ export function momentAdapterFactory() {
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'outline' } },
     { provide: MAT_CHIPS_DEFAULT_OPTIONS, useValue: { separatorKeyCodes: [ENTER, COMMA] } },
-    // { provide: MAT_DATE_FORMATS, useValue: GRI_DATE_FORMATS },
+    { provide: MAT_DATE_FORMATS, useValue: APP_DATE_FORMATS },
     CurrencyPipe,
   ],
   bootstrap: [AppComponent]

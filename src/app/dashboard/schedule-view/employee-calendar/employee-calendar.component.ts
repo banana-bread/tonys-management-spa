@@ -49,22 +49,6 @@ export class EmployeeCalendarComponent implements OnInit {
     });
   }
 
-  hourSegmentModifier(renderEvent: CalendarDayViewBeforeRenderEvent)
-  {
-    renderEvent.hourColumns.forEach((hourColumn) => {
-      hourColumn.hours.forEach((hour) => {
-        hour.segments.forEach((segment) => {
-
-          if (this._isWithinEmployeeWorkingHours(segment) && !this.isFirst)
-          {
-            segment.cssClass = 'hour-segment--disabled'
-          }
-
-        });
-      });
-    });
-  }
-
   async selectToCreate(segment: WeekViewHourSegment, event: MouseEvent, segmentElement: HTMLElement): Promise<void> 
   {
     if (this._isWithinEmployeeWorkingHours(segment) || this.isFirst) return;
@@ -95,7 +79,6 @@ export class EmployeeCalendarComponent implements OnInit {
   private _mapBookingsToCalendarEvents(bookings: Booking[])
   {
     this.events = bookings.map(booking => this._createEventFromBooking(booking))
-
   }
 
   private _createEventFromBooking(booking: Booking): CalendarEvent
@@ -127,6 +110,20 @@ export class EmployeeCalendarComponent implements OnInit {
   {
     return (segment.displayDate.getHours() < this.employee.base_schedule?.today().startInHours() || 
     segment.displayDate.getHours() >= this.employee.base_schedule?.today().endInHours());
+  }
+
+  hourSegmentModifier(renderEvent: CalendarDayViewBeforeRenderEvent)
+  {
+    renderEvent.hourColumns.forEach((hourColumn) => {
+      hourColumn.hours.forEach((hour) => {
+        hour.segments.forEach((segment) => {
+          if (this._isWithinEmployeeWorkingHours(segment) && !this.isFirst)
+          {
+            segment.cssClass = 'hour-segment--disabled'
+          }
+        });
+      });
+    });
   }
 }
 
