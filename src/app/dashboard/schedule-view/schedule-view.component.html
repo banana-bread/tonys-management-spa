@@ -28,7 +28,8 @@
         </div>
     </div>
     <app-employee-calendar-list *ngIf="!loading" fxFlex
-        [employees]="filteredEmployees">
+        [employees]="filteredEmployees"
+        [date]="dateToMoment()">
     </app-employee-calendar-list>
 </div>
 

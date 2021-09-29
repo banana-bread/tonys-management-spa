@@ -7,7 +7,8 @@
             <span>A</span>
         </div>
         <app-employee-calendar 
-            [isFirst]="true">
+            [isFirst]="true"
+            [date]="date">
         </app-employee-calendar>
     </div>
     <div class="calendar__employees" fxFlex fxLayout="row">
@@ -20,7 +21,9 @@
                     </div>
                     <span>{{ employee.name }}</span>
                 </div>
-                <app-employee-calendar fxFlex [employee]="employee">
+                <app-employee-calendar fxFlex 
+                    [employee]="employee"
+                    [date]="date">
                 </app-employee-calendar>
             </div>
         </ng-container>

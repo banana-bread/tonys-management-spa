@@ -6,6 +6,7 @@ import { BookingEditorService } from '../booking-editor/booking-editor.component
 import { Booking } from 'src/app/models/booking/booking.model';
 import * as moment from 'moment';
 import { BookingService } from 'src/app/models/booking/booking.service';
+import { Moment } from 'src/types';
 @Component({
   selector: 'app-employee-calendar',
   templateUrl: './employee-calendar.component.html',
@@ -15,6 +16,7 @@ import { BookingService } from 'src/app/models/booking/booking.service';
 export class EmployeeCalendarComponent implements OnInit {
   
   @Input() employee: Employee = new Employee();
+  @Input() date: Moment;
   @Input() isFirst: boolean = false;
 
   viewDate = new Date();
@@ -30,6 +32,8 @@ export class EmployeeCalendarComponent implements OnInit {
 
   ngOnInit(): void 
   {
+    this.viewDate = this.date.toDate();
+
     this._mapBookingsToCalendarEvents(this.employee.bookings)
   }
 

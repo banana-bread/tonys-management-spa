@@ -46,17 +46,22 @@ export class ScheduleViewComponent implements OnInit {
   
   formattedDate(): string
   {
-    return this._dateToMoment().format('dddd, MMM D, YYYY')
+    return this.dateToMoment().format('dddd, MMM D, YYYY')
+  }
+
+  dateToMoment(): Moment
+  {
+    return moment(new Date(this.selectedDate * 1000));
   }
 
   async onPrevChosen(): Promise<void>
   {
-    await this._onDateChosen( this._dateToMoment().subtract(1, 'day') );
+    await this._onDateChosen( this.dateToMoment().subtract(1, 'day') );
   }
 
   async onNextChosen(): Promise<void>
   {
-    await this._onDateChosen( this._dateToMoment().add(1, 'day') );
+    await this._onDateChosen( this.dateToMoment().add(1, 'day') );
   }
 
   async onTodayChosen(): Promise<void>
@@ -117,13 +122,8 @@ export class ScheduleViewComponent implements OnInit {
     ); 
   }
 
-  private _dateToMoment(): Moment
-  {
-    return moment(new Date(this.selectedDate * 1000));
-  }
-
   private _setFilteredEmployees(): void
   {
-    this.filteredEmployees = this.company.getEmployeesWorking( this._dateToMoment() );
+    this.filteredEmployees = this.company.getEmployeesWorking( this.dateToMoment() );
   }
 }
