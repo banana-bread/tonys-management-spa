@@ -20,7 +20,7 @@ export class ScheduleViewComponent implements OnInit {
   loading = false;
   company: Company = new Company();
   filteredEmployees: Employee[] = [];
-  selectedDate: number;
+  selectedDate: number = moment().unix();
   selectedPickerDate: Date;
 
   constructor(
