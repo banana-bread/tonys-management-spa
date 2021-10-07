@@ -1,4 +1,5 @@
 import * as moment from "moment";
+import { toEnglishDay } from "./moment.helper";
 
 const NullRawBaseSchedule: RawBaseSchedule = {monday:{start:null,end:null},tuesday:{start:null,end:null},wednesday:{start:null,end:null},thursday:{start:null,end:null},friday:{start:null,end:null},saturday:{start:null,end:null},sunday:{start:null,end:null},} 
 export type RawBaseSchedule = {[key: string]: {start: number|null, end: number|null}};
@@ -29,15 +30,25 @@ export class BaseSchedule {
         return this._days.find(day => day.day === moment().format('dddd').toLocaleLowerCase())
     }
 
-    startOfToday(): number
+    startOf(day: Date): number
     {
-        return this.today().start;
+        return this.get( toEnglishDay(day) ).start;
     }
 
-    endOfToday(): number
+    endOf(day: Date)
     {
-        return this.today().end;
+        return this.get( toEnglishDay(day) ).end;
     }
+
+    // startOfToday(): number
+    // {
+    //     return this.today().start;
+    // }
+
+    // endOfToday(): number
+    // {
+    //     return this.today().end;
+    // }
 
     /**
      * parses current base schedule into api payload format

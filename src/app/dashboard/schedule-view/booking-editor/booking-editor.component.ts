@@ -34,8 +34,8 @@ export class BookingEditorComponent implements OnInit {
   event: CalendarEvent<any> = this.data.event;
   onCancel = this.data.onBookingCancel;
   services: ServiceDefinition[] = [];
-  startTime: number = secondsSinceStartOfDay(moment(this.event.start));
-  endTime: number = secondsSinceStartOfDay(moment(this.event.end));
+  startTime: number;
+  endTime: number;
   selectedServices: ServiceDefinition[] = [];
   errorStateMatcher = new SyncErrorStateMatcher();
   booking: Booking;
@@ -56,6 +56,9 @@ export class BookingEditorComponent implements OnInit {
   async ngOnInit(): Promise<void> 
   {
     this.loading = true;
+
+    this.startTime = secondsSinceStartOfDay(moment(this.event.start));
+    this.endTime = secondsSinceStartOfDay(moment(this.event.end));
 
     this.services = await this.serviceDefService.getAll()
 
@@ -79,25 +82,24 @@ export class BookingEditorComponent implements OnInit {
 
   formatTime(seconds: number): Date
   {
-    return moment().startOf('day').add(seconds, 'seconds').toDate();
+    return moment(this.event.start).startOf('day').add(seconds, 'seconds').toDate();
   }
 
   times(): number[]
   {
     const result: number[] = [];
-    const dayStart = this.employee.base_schedule.startOfToday();
-    const dayEnd = this.employee.base_schedule.endOfToday();
+    const dayStart = this.employee.base_schedule.startOf(this.event.start);
+    const dayEnd = this.employee.base_schedule.endOf(this.event.start);
 
     // TODO: hardcoded to increase start time by 15 minutes from start - end.
     for (let i = dayStart; i < dayEnd; i += 900)
     {
-      const overlappingBookingExists: boolean = 
-        !!this.employee.bookings.find(booking => secondsSinceStartOfDay(booking.started_at) == i)
+      const overlappingBookingExists: boolean = !!this.employee.bookings.find(booking => secondsSinceStartOfDay(booking.started_at) == i)
 
-          if (! overlappingBookingExists)
-          {
-            result.push(i);
-          }
+      if (! overlappingBookingExists)
+      {
+        result.push(i);
+      }
     }
 
     return result;
@@ -130,8 +132,8 @@ export class BookingEditorComponent implements OnInit {
 
     this.saving = true; 
     
-    this.event.start = moment().startOf('day').add(this.startTime, 'seconds').toDate();
-    this.event.end = moment().startOf('day').add(this.endTime, 'seconds').toDate();
+    this.event.start = moment(this.event.start).startOf('day').add(this.startTime, 'seconds').toDate();
+    this.event.end = moment(this.event.start).startOf('day').add(this.endTime, 'seconds').toDate();
     this.event.title = `${moment(this.event.start).format('h:mm')} - ${moment(this.event.end).format('h:mm')}`
     
     try

@@ -7,6 +7,7 @@ import { Booking } from 'src/app/models/booking/booking.model';
 import * as moment from 'moment';
 import { BookingService } from 'src/app/models/booking/booking.service';
 import { Moment } from 'src/types';
+import { toEnglishDay } from 'src/app/helpers/moment.helper';
 @Component({
   selector: 'app-employee-calendar',
   templateUrl: './employee-calendar.component.html',
@@ -14,7 +15,7 @@ import { Moment } from 'src/types';
   encapsulation: ViewEncapsulation.None
 })
 export class EmployeeCalendarComponent implements OnInit {
-  
+
   @Input() employee: Employee = new Employee();
   @Input() date: Moment;
   @Input() isFirst: boolean = false;
@@ -66,6 +67,20 @@ export class EmployeeCalendarComponent implements OnInit {
     this._refresh();
   }
 
+  hourSegmentModifier(renderEvent: CalendarDayViewBeforeRenderEvent)
+  {
+    renderEvent.hourColumns.forEach((hourColumn) => {
+      hourColumn.hours.forEach((hour) => {
+        hour.segments.forEach((segment) => {
+          if (this._isWithinEmployeeWorkingHours(segment) && !this.isFirst)
+          {
+            segment.cssClass = 'hour-segment--disabled'
+          }
+        });
+      });
+    });
+  }
+
   private _refresh() 
   {
     this.events = [...this.events];
@@ -112,22 +127,8 @@ export class EmployeeCalendarComponent implements OnInit {
 
   private _isWithinEmployeeWorkingHours(segment: WeekViewHourSegment): boolean
   {
-    return (segment.displayDate.getHours() < this.employee.base_schedule?.today().startInHours() || 
-    segment.displayDate.getHours() >= this.employee.base_schedule?.today().endInHours());
-  }
-
-  hourSegmentModifier(renderEvent: CalendarDayViewBeforeRenderEvent)
-  {
-    renderEvent.hourColumns.forEach((hourColumn) => {
-      hourColumn.hours.forEach((hour) => {
-        hour.segments.forEach((segment) => {
-          if (this._isWithinEmployeeWorkingHours(segment) && !this.isFirst)
-          {
-            segment.cssClass = 'hour-segment--disabled'
-          }
-        });
-      });
-    });
+    return (segment.displayDate.getHours() < this.employee.base_schedule?.get( toEnglishDay(segment.date) ).startInHours() || 
+    segment.displayDate.getHours() >= this.employee.base_schedule?.get( toEnglishDay(segment.date) ).endInHours());
   }
 }
 
