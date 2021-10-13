@@ -5,7 +5,6 @@ import { ScheduleViewComponent } from '../dashboard/schedule-view/schedule-view.
 import { ServiceEditorComponent } from '../dashboard/service-view/service-editor/service-editor.component';
 import { ServiceViewComponent } from '../dashboard/service-view/service-view.component';
 import { ShopSettingsEditorComponent } from '../dashboard/shop-view/shop-settings-editor/shop-settings-editor.component';
-import { ShopViewComponent } from '../dashboard/shop-view/shop-view.component';
 import { StaffEditorComponent } from '../dashboard/staff-view/staff-editor/staff-editor.component';
 import { StaffViewComponent } from '../dashboard/staff-view/staff-view.component';
 import { LoginComponent } from '../login/login.component';
@@ -21,7 +20,7 @@ const routes: Routes = [
   { 
     path: ':companyId', component: DashboardComponent, canActivate: [AuthGuard], 
     children: [
-      { path: 'schedule', component: ScheduleViewComponent },
+      { path: 'calendar', component: ScheduleViewComponent },
       { path: 'staff', component: StaffViewComponent },
       { path: 'services', component: ServiceViewComponent },
       // { path: 'shop', component: ShopViewComponent },

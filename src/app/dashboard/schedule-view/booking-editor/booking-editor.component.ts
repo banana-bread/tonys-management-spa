@@ -13,7 +13,6 @@ import { SnackbarNotificationService } from '@tonys/shared';
 import { SyncErrorStateMatcher } from 'src/app/helpers/sync-error-state.matcher';
 import { BookingService } from 'src/app/models/booking/booking.service';
 import { ConfirmDialogService } from 'src/app/confirm-dialog/confirm-dialog.service';
-import { CalendarEventActionsComponent } from 'angular-calendar/modules/common/calendar-event-actions.component';
 
 type DialogData = {employee: Employee, event: CalendarEvent<any>, onBookingCancel?: (booking: Booking) => void};
 

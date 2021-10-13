@@ -54,6 +54,7 @@ import { Employee } from './models/employee/employee.model';
 import { EmployeeCalendarListComponent } from './dashboard/schedule-view/employee-calendar-list/employee-calendar-list.component';
 import { BookingEditorComponent } from './dashboard/schedule-view/booking-editor/booking-editor.component';
 import { MatDateFormats, MatNativeDateModule, MAT_DATE_FORMATS, MAT_NATIVE_DATE_FORMATS } from '@angular/material/core';
+import { NgxMaskModule } from 'ngx-mask';
 
 export function momentAdapterFactory() {
   return adapterFactory(moment);
@@ -139,6 +140,7 @@ const APP_DATE_FORMATS: MatDateFormats = {
 
     TonysSharedModule.forRoot(),
     CalendarModule.forRoot({ provide: DateAdapter, useFactory: momentAdapterFactory }),
+    NgxMaskModule.forRoot(),
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },

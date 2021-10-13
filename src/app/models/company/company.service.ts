@@ -15,4 +15,18 @@ export class CompanyService {
 
     return new Company(response.data.company);
   }
+
+  async updateProfile(company: Company): Promise<Company>
+  {
+    const response = await this.api.updateCompany(company);
+
+    return new Company(response.data.company);
+  }
+
+  async updateEmployees(company: Company): Promise<Company>
+  {
+    const response = await this.api.updateCompanyEmployees(company.employees);
+
+    return new Company(response.data.company);
+  }
 }

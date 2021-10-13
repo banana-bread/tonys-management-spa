@@ -6,10 +6,13 @@ import * as moment from 'moment';
 
 export class Company extends BaseModel implements Schedulable {
 
-    id? = '';
-    name? = '';
-    address? = '';
-    phone? = '';
+    id? =  null;
+    name? = null;
+    city? = null;
+    region = null;
+    postal_code = null;
+    country = null;
+    phone? = null;
     time_slot_duration?: number = null;
     booking_grace_period?: number = null;
     settings?: any = null;
@@ -32,15 +35,19 @@ export class Company extends BaseModel implements Schedulable {
         this.map(data);
     }
 
-    // get employees_working_now(): Employee[]
-    // {
-    //     return this.employees.filter(employee => employee.isWorkingNow());
-    // }
+    get bookings_enabled(): boolean
+    {
+        return this.employees.some(
+            employee => employee.bookings_enabled
+        );
+    }
 
-    // get employees_working_today(): Employee[]
-    // {
-    //     return this.employees.filter(employee => employee.isWorkingToday());
-    // }
+    set bookings_enabled(val: boolean)
+    {
+        this.employees.forEach(
+            employee => employee.bookings_enabled = val
+        );
+    }
 
     getEmployeesWorking(date: Moment)
     {

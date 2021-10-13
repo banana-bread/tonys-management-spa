@@ -134,7 +134,7 @@ export class StaffEditorComponent implements OnInit {
     {
       await Promise.all([...this.updates.values()].map(callback => callback()))
 
-      this.router.navigate([`/${this.state.company_id}/staff`]);
+      this.router.navigate([`/${this.state.company_id}/calendar`]);
       
       this.notifications.success('Employee updated');
     }
@@ -178,11 +178,18 @@ export class StaffEditorComponent implements OnInit {
     this.updates.set('active', () => this.employeeService.updateActive(this.employee))
   }
 
+  hasUpdates(): boolean
+  {
+    return !!this.updates.size;
+  }
+
+
   // When creating new emplyee from invite url
   protected async create(): Promise<any>
   {
     const data = {
-      name: this.employee.name,
+      first_name: this.employee.first_name,
+      last_name: this.employee.last_name,
       email: this.employee.email,
       phone: this.employee.phone,
       password: this.password,

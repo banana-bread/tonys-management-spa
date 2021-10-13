@@ -26,6 +26,24 @@ export class ApiService {
       .get();
   }
 
+  updateCompany(data): Promise<any>
+  {
+    return this.http
+      .path('/company')
+      .data(data)
+      .withCompany(this.state.company_id)
+      .put();
+  }
+
+  updateCompanyEmployees(data): Promise<any>
+  {
+    return this.http
+      .path('/company/employees')
+      .data(data)
+      .withCompany(this.state.company_id)
+      .patch();
+  }
+
   getEmployee(id: string): Promise<any>
   {
     return this.http

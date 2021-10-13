@@ -7,11 +7,12 @@ import { Company } from "../company/company.model";
 import { Schedulable } from "../contracts/schedulable.interface";
 export class Employee extends BaseModel implements Schedulable {
 
-    id?: string = '';
-    company_id?: string = '';
-    name?: string = '';
-    email?: string = '';
-    phone?: string = '';
+    id?: string = null;
+    company_id?: string = null;
+    first_name?: string = null;
+    last_name?: string = null;
+    email?: string = null;
+    phone?: string = null;
     admin?: boolean = false;
     owner?: boolean = false;
     bookings_enabled?: boolean = false;
@@ -33,6 +34,11 @@ export class Employee extends BaseModel implements Schedulable {
         this.map(data);
     }
 
+    get full_name(): string
+    {
+        return `${this.first_name} ${this.last_name}`;
+    }
+
     get active(): boolean
     {
         return this.bookings_enabled;
@@ -45,7 +51,7 @@ export class Employee extends BaseModel implements Schedulable {
 
     get initials(): string
     {
-        return this.name[0].toUpperCase();
+        return `${this.first_name[0]?.toUpperCase()}${this.last_name[0]?.toUpperCase()}`;
     }
 
     get type(): string

@@ -1,6 +1,7 @@
-import { Component,  OnInit, ViewEncapsulation } from '@angular/core';
+import { Component,  OnDestroy,  OnInit, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import * as moment from 'moment';
+import { interval, Subscription } from 'rxjs';
 import { Booking } from 'src/app/models/booking/booking.model';
 import { Company } from 'src/app/models/company/company.model';
 import { CompanyService } from 'src/app/models/company/company.service';
@@ -15,13 +16,14 @@ import { Moment } from 'src/types';
   styleUrls: ['./schedule-view.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class ScheduleViewComponent implements OnInit {
+export class ScheduleViewComponent implements OnInit, OnDestroy {
 
   loading = false;
   company: Company = new Company();
   filteredEmployees: Employee[] = [];
   selectedDate: number = moment().unix();
   selectedPickerDate: Date;
+  _refreshSubscription: Subscription;
 
   constructor(
     private route: ActivatedRoute,
@@ -36,12 +38,21 @@ export class ScheduleViewComponent implements OnInit {
     this.loading = true;
 
     this.company = await this.companyService.get(this.state.company_id);
+
     this._setDateParam( this._determineDate() );
+
     this._setFilteredEmployees();
 
     await this._setBookings();
 
+    this._startRefreshInterval();
+
     this.loading = false;
+  }
+
+  ngOnDestroy(): void 
+  {
+    this._refreshSubscription.unsubscribe();
   }
   
   formattedDate(): string
@@ -125,5 +136,12 @@ export class ScheduleViewComponent implements OnInit {
   private _setFilteredEmployees(): void
   {
     this.filteredEmployees = this.company.getEmployeesWorking( this.dateToMoment() );
+  }
+
+  private _startRefreshInterval()
+  {
+    this._refreshSubscription = interval(60000).subscribe(
+      async () => await this._setBookings()
+    );
   }
 }

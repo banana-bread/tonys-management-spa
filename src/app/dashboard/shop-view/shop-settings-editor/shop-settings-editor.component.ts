@@ -1,5 +1,5 @@
-import { P } from '@angular/cdk/keycodes';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { SnackbarNotificationService } from '@tonys/shared';
 import { Company } from 'src/app/models/company/company.model';
@@ -13,6 +13,8 @@ import { UnsavedChangesRouterService } from 'src/app/unsaved-changes/unsaved-cha
   styleUrls: ['./shop-settings-editor.component.scss']
 })
 export class ShopSettingsEditorComponent implements OnInit {
+
+  @ViewChild('profileForm') profileForm: NgForm;
 
   loading = false;
   saving = false;
@@ -47,27 +49,46 @@ export class ShopSettingsEditorComponent implements OnInit {
     }
   }
 
+  onProfileChanged()
+  {
+    this.updates.set('profile_update', () => this.companyService.updateProfile(this.company))
+  }
+
+  onActiveChanged()
+  {
+    this.updates.set('settings_update', () => this.companyService.updateEmployees(this.company))
+  }
+
+  hasUpdates(): boolean
+  {
+    return !!this.updates.size;
+  }
+
   async onSave(): Promise<void>
   {
-    // if (this.baseScheduleInvalid)
-    // {
-    //   this.notifications.error('Please resolve existing errors')
-    //   return;
-    // }
+    if (this.profileForm.invalid)
+    {
+      this.notifications.error('Please resolve existing errors')
+      return;
+    }
 
     this.saving = true;
 
     try
     {
+      await Promise.all([...this.updates.values()].map(callback => callback()))
 
+      this.router.navigate([`/${this.state.company_id}/calendar`]);
+
+      this.notifications.success('Shop settings updated');
     }
     catch
     {
-
+      this.notifications.error('Error updating shop settings');
     }
     finally
     {
-
+      this.saving = false;
     }
   }
 
