@@ -134,7 +134,7 @@ export class StaffEditorComponent implements OnInit {
     {
       await Promise.all([...this.updates.values()].map(callback => callback()))
 
-      this.router.navigate([`/${this.state.company_id}/calendar`]);
+      this.router.navigate([`/${this.state.company_id}/staff`]);
       
       this.notifications.success('Employee updated');
     }

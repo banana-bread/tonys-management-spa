@@ -6,13 +6,14 @@ import * as moment from 'moment';
 
 export class Company extends BaseModel implements Schedulable {
 
-    id? =  null;
-    name? = null;
-    city? = null;
-    region = null;
-    postal_code = null;
-    country = null;
-    phone? = null;
+    id?: string = null;
+    name?: string = null;
+    city?: string = null;
+    region? = null;
+    postal_code?: string = null;
+    address?: string = null;
+    country?: string = null;
+    phone?: string = null;
     time_slot_duration?: number = null;
     booking_grace_period?: number = null;
     settings?: any = null;
