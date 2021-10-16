@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -110,7 +110,7 @@ export class StaffEditorComponent implements OnInit {
   {
     if (! this.original) return;
 
-    this.unsavedChangesRouter.tryNavigate(`/${this.state.company_id}/staff`, () => !this.updates.size);
+    this.unsavedChangesRouter.tryNavigate(`/${this.state.company_id}/staff`, () => !this.hasUpdates());
   }
 
   onSave()
@@ -138,9 +138,9 @@ export class StaffEditorComponent implements OnInit {
       
       this.notifications.success('Employee updated');
     }
-    catch
+    catch (e)
     {
-      this.notifications.error('Error updating employee');
+      this.notifications.error(e.error.message);
     }
     finally
     {
@@ -183,44 +183,89 @@ export class StaffEditorComponent implements OnInit {
     return !!this.updates.size;
   }
 
-
-  // When creating new emplyee from invite url
-  protected async create(): Promise<any>
+  async onDelete(): Promise<void>
   {
-    const data = {
-      first_name: this.employee.first_name,
-      last_name: this.employee.last_name,
-      email: this.employee.email,
-      phone: this.employee.phone,
-      password: this.password,
-      admin: false,
-      owner: false,
-      settings: {
-        base_schedule: this.base_scheulde,
-      }
-    }
+    if (this.original?.owner) return;
+
+    const shouldDelete = await this.confirmDialog.open({
+      title: 'Confirm deletion',
+      message: 'Are you sure you want to continue?  Deleting an employee is unrecoverable.',
+    });
+
+    if (! shouldDelete) return;
 
     this.saving = true;
 
     try
     {
-      await this.employeeService.create(this.urlCompanyId, this.urlExpires, this.urlSignature, data);
-      // TODO: should do a confirm email here???
-      this.router.navigate(['login']);
-      this.notifications.success('Account created')
+      await this.employeeService.delete(this.employee);
+      this.notifications.success('Employee deleted.')
+      this.router.navigate([`/${this.state.company_id}/staff`]);
     }
-    catch
+    catch (e)
     {
-      this.notifications.error('Error creating account')
+      this.notifications.error(e.error.message);
     }
     finally
     {
       this.saving = false;
     }
-    
   }
 
-  onDelete(){}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   // When creating new emplyee from invite url
+   protected async create(): Promise<any>
+   {
+     const data = {
+       first_name: this.employee.first_name,
+       last_name: this.employee.last_name,
+       email: this.employee.email,
+       phone: this.employee.phone,
+       password: this.password,
+       admin: false,
+       owner: false,
+       settings: {
+         base_schedule: this.base_scheulde,
+       }
+     }
+ 
+     this.saving = true;
+ 
+     try
+     {
+       await this.employeeService.create(this.urlCompanyId, this.urlExpires, this.urlSignature, data);
+       // TODO: should do a confirm email here???
+       this.router.navigate(['login']);
+       this.notifications.success('Account created')
+     }
+     catch
+     {
+       this.notifications.error('Error creating account')
+     }
+     finally
+     {
+       this.saving = false;
+     }
+     
+   }
 
 // TEST PAYLOAD
    base_scheulde = {

@@ -94,7 +94,7 @@ export class ShopSettingsEditorComponent implements OnInit {
 
   onClose()
   {
-    this.unsavedChangesRouter.tryNavigate(`/${this.state.company_id}`, () => true);
+    this.unsavedChangesRouter.tryNavigate(`/${this.state.company_id}/calendar`, () => !this.hasUpdates());
   }
 
 }

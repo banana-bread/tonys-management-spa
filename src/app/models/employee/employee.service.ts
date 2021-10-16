@@ -31,6 +31,11 @@ export class EmployeeService {
       .map((employee: any) => new Employee(employee));
   }
 
+  async delete(employee: Employee): Promise<void>
+  {
+    await this.api.deleteEmployee(employee.id);
+  }
+
   async getAuthed(): Promise<Employee>
   {
     const response = await this.api.getAuthedEmployee();

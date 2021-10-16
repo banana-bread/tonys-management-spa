@@ -128,6 +128,15 @@ export class ApiService {
       .put();
   }
 
+  deleteEmployee(id: string)
+  {
+    return this.http
+      .path('/employees/{id}')
+      .param('id', id)
+      .withCompany(this.state.company_id)
+      .delete();
+  }
+
   getBooking(id: string)
   {
     return this.http  

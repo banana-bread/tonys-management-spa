@@ -14,7 +14,7 @@
             *ngIf="original"
             class="delete-button" 
             mat-raised-button 
-            [disabled]="saving || loading || !original"
+            [disabled]="saving || loading || !original || original.owner"
             (click)="onDelete()"> 
             Delete
         </button>
