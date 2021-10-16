@@ -1,4 +1,5 @@
 import { Injectable } from "@angular/core";
+import { id } from "date-fns/locale";
 import { Employee } from "../models/employee/employee.model";
 import { AppStateService } from "./app-state.service";
 
@@ -10,6 +11,11 @@ export class AuthedUserService {
     constructor(private appState: AppStateService) 
     {
         this.appState.employee$.subscribe(res => this._employee = res);
+    }
+
+    get user$()
+    {
+        return this.appState.employee$;
     }
 
     canViewAllEmployees(): boolean
@@ -40,5 +46,20 @@ export class AuthedUserService {
     canAlterEmployeeBooking(employee: Employee): boolean
     {
         return this._employee?.isAdmin() || this._employee?.id === employee.id;
+    }
+
+    isAdmin(): boolean
+    {
+        return this._employee.admin;
+    }
+
+    is(employee: Employee|string): boolean
+    {
+        if (employee instanceof Employee)
+        {
+            return this._employee.id === employee.id
+        }
+
+        return this._employee.id === employee;
     }
 }

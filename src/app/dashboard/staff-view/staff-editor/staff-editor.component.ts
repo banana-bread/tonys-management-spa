@@ -68,37 +68,44 @@ export class StaffEditorComponent implements OnInit {
 
   async ngOnInit(): Promise<void> 
   {
-    if (this.employeeId === 'new' && !!this.employeeRegistrationUrl)
+    if (!! this.staffEditorService.staff)
     {
-      this.urlCompanyId = getUuid(this.employeeRegistrationUrl);
-      this.urlExpires = getQueryParam(this.employeeRegistrationUrl, 'expires');
-      this.urlSignature = getQueryParam(this.employeeRegistrationUrl, 'signature');
+      this.original = this.staffEditorService.staff;
+      this.employee = this.original.copy();
     }
     else
     {
-      if (!! this.staffEditorService.staff)
+      this.loading = true;
+
+      if (! this.authedUser.is(this.employeeId))
       {
-        this.original = this.staffEditorService.staff;
+        this.authedUser.user$.subscribe(res => {
+
+          this.original = res;
+          this.employee = this.original.copy();
+
+          if (!! this.employee.id)
+          {
+            this.loading = false;
+          }
+        });
+
+        return;
+      }
+
+      try
+      {
+        this.original = await this.employeeService.get(this.employeeId)
         this.employee = this.original.copy();
       }
-      else
+      catch
       {
-        this.loading = true;
-
-        try
-        {
-          this.original = await this.employeeService.get(this.employeeId)
-          this.employee = this.original.copy();
-        }
-        catch
-        {
-          this.onClose();
-          this.notifications.error('Error loading staff')
-        }
-        finally
-        {
-          this.loading = false;
-        }
+        this.onClose();
+        this.notifications.error('Error loading staff')
+      }
+      finally
+      {
+        this.loading = false;
       }
     }
   }

@@ -9,6 +9,7 @@ import { StaffEditorComponent } from '../dashboard/staff-view/staff-editor/staff
 import { StaffViewComponent } from '../dashboard/staff-view/staff-view.component';
 import { LoginComponent } from '../login/login.component';
 import { PageNotFoundComponent } from '../page-not-found/page-not-found.component';
+import { AdminGuardService as AdminGuard } from './admin-guard.service';
 import { AuthGuardService as AuthGuard } from './auth-guard.service';
 import { LoginPageGuard } from './login-page-guard.service';
 
@@ -16,19 +17,18 @@ import { LoginPageGuard } from './login-page-guard.service';
 const routes: Routes = [
   { path: '',   redirectTo: '/login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent, canActivate: [LoginPageGuard] },
-  // { path: 'login', component: LoginComponent },
   { 
     path: ':companyId', component: DashboardComponent, canActivate: [AuthGuard], 
     children: [
       { path: 'calendar', component: ScheduleViewComponent },
-      { path: 'staff', component: StaffViewComponent },
-      { path: 'services', component: ServiceViewComponent },
-      // { path: 'shop', component: ShopViewComponent },
+      { path: 'staff', component: StaffViewComponent, canActivate: [AdminGuard] },
+      { path: 'services', component: ServiceViewComponent, canActivate: [AdminGuard] },
     ] 
   },
   { path: ':companyId/services/:id', component: ServiceEditorComponent, canActivate: [AuthGuard]},
   { path: ':companyId/staff/:id', component: StaffEditorComponent, canActivate: [AuthGuard] },
-  { path: ':companyId/shop', component: ShopSettingsEditorComponent, canActivate: [AuthGuard] },
+  { path: ':companyId/shop', component: ShopSettingsEditorComponent, canActivate: [AuthGuard, AdminGuard] },
+  { path: ':companyId/account', component: StaffEditorComponent, canActivate: [AuthGuard] },
 
   // TODO: implement a 404
   { path: '404', component: PageNotFoundComponent },

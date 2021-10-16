@@ -2,7 +2,6 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
-import { AppStateService } from '../services/app-state.service';
 import { CompanyService } from '../models/company/company.service';
 import { AuthService } from '../services/auth.service';
 import { SnackbarNotificationService } from '@tonys/shared';
@@ -29,17 +28,13 @@ export class DashboardComponent implements OnInit {
   // TODO: move company getting into login spot.
   constructor(
     private breakpointObserver: BreakpointObserver,
-    // private state: AppStateService,
     public authedUser: AuthedUserService,
-    private companyService: CompanyService,
     private auth: AuthService,
     private router: Router,
     private notification: SnackbarNotificationService,
   ) {}
 
-  ngOnInit(): void 
-  {
-  }
+  ngOnInit(): void {}
 
   async logout(): Promise<void>
   {
