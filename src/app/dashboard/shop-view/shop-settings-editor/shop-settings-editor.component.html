@@ -96,10 +96,12 @@
                                 [(ngModel)]="company.postal_code"
                                 (ngModelChange)="onProfileChanged()"
                                 name="postalCodeField"
+                                mask="A0A 0A0"
                                 #postalCodeField="ngModel"
                                 required
                                 matInput>
                             <mat-error *ngIf="postalCodeField.hasError('required')">Postal code is required.</mat-error>
+                            <mat-error *ngIf="postalCodeField.hasError('mask')">Postal code is invalid.</mat-error>
                         </mat-form-field>
 
                         <mat-form-field fxFlex hideRequiredMarker>
