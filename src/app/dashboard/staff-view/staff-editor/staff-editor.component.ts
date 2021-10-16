@@ -77,21 +77,21 @@ export class StaffEditorComponent implements OnInit {
     {
       this.loading = true;
 
-      if (! this.authedUser.is(this.employeeId))
-      {
-        this.authedUser.user$.subscribe(res => {
+      // if (! this.authedUser.is(this.employeeId))
+      // {
+      //   this.authedUser.user$.subscribe(res => {
 
-          this.original = res;
-          this.employee = this.original.copy();
+      //     this.original = res;
+      //     this.employee = this.original.copy();
 
-          if (!! this.employee.id)
-          {
-            this.loading = false;
-          }
-        });
+      //     if (!! this.employee.id)
+      //     {
+      //       this.loading = false;
+      //     }
+      //   });
 
-        return;
-      }
+      //   return;
+      // }
 
       try
       {
@@ -142,6 +142,7 @@ export class StaffEditorComponent implements OnInit {
     try
     {
       await Promise.all([...this.updates.values()].map(callback => callback()))
+
 
       this.router.navigate([`/${this.state.company_id}/staff`]);
       
