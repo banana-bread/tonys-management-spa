@@ -124,7 +124,8 @@ mat-progress-spinner.app-page-loading {
 }
 
 mat-progress-bar.app-loading-bar {
-  position: absolute;
+  position: fixed;
+  z-index: 500;
 }
 
 mat-card.app-card {
