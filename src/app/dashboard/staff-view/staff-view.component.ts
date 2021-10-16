@@ -37,6 +37,14 @@ export class StaffViewComponent implements OnInit {
     try
     {
       this.employees = await this.employeeService.getAll();
+
+      this.employees.sort((a, b) => {
+        if (a.owner) return -1;
+        if (b.owner) return 1;
+        if (! b.admin) return -1;
+
+        return 1;
+      });
     }
     catch
     {
