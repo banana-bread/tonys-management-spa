@@ -7,6 +7,7 @@ import { CompanyService } from '../models/company/company.service';
 import { AuthService } from '../services/auth.service';
 import { SnackbarNotificationService } from '@tonys/shared';
 import { Router } from '@angular/router';
+import { AuthedUserService } from '../services/authed-user.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -17,6 +18,7 @@ import { Router } from '@angular/router';
 export class DashboardComponent implements OnInit {
 
   isExpanded = false;
+
   
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(
@@ -27,14 +29,17 @@ export class DashboardComponent implements OnInit {
   // TODO: move company getting into login spot.
   constructor(
     private breakpointObserver: BreakpointObserver,
-    private state: AppStateService,
+    // private state: AppStateService,
+    public authedUser: AuthedUserService,
     private companyService: CompanyService,
     private auth: AuthService,
     private router: Router,
     private notification: SnackbarNotificationService,
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void 
+  {
+  }
 
   async logout(): Promise<void>
   {

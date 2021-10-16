@@ -85,4 +85,14 @@ export class Employee extends BaseModel implements Schedulable {
     {
         return this.isWorking( moment().startOf('day') );
     }
+
+    isAdmin(): boolean
+    {
+        return this.admin;
+    }
+
+    isOwner(): boolean
+    {
+        return this.owner;
+    }
 }

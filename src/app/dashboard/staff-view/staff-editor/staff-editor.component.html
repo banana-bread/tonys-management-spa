@@ -84,7 +84,7 @@
             </form>
         </mat-card>
 
-        <mat-card class="app-editor-card" *ngIf="state.employee.owner || state.employee.id === employee.id">
+        <mat-card class="app-editor-card">
             <mat-card-title class="app-editor-card-title">Account</mat-card-title>
 
             <div fxLayout="column" fxLayoutGap="16px">
@@ -98,14 +98,16 @@
                 <div fxFlex fxLayout="row" fxLayoutGap="20px">
                     <mat-slide-toggle name="admin"
                         [(ngModel)]="employee.admin"
-                        (change)="onAdminChanged()">
+                        (change)="onAdminChanged()"
+                        [disabled]="! this.authedUser.canUpgradeEmployeesToAdmin()">
                     </mat-slide-toggle>
                     <span class="mat-subheading-2 capitalize" fxFlex>Admin</span> 
                 </div>
                 <div fxFlex fxLayout="row" fxLayoutGap="20px">
                     <mat-slide-toggle name="owner" 
                         [(ngModel)]="employee.owner"
-                        (change)="onOwnerChanged()">
+                        (change)="onOwnerChanged()"
+                        [disabled]="! this.authedUser.canUpgradeEmployeesToOwner()">
                     </mat-slide-toggle>
                     <span class="mat-subheading-2 capitalize" fxFlex>Owner</span> 
                 </div>

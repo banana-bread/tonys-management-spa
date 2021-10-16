@@ -3,8 +3,21 @@ app-employee-calendar {
         border: none;
     }    
 
-    .hour-segment--disabled {
+    .hour-segment--out-of-bounds {
         background-image: linear-gradient(45deg, #ebebeb 35.71%, #bdbdbd 35.71%, #bdbdbd 50%, #ebebeb 50%, #ebebeb 85.71%, #bdbdbd 85.71%, #bdbdbd 100%);
         background-size: 9.90px 9.90px;
+
+        cursor: default;
     }
+
+    .cal-hour-segment {
+        cursor: pointer;
+    }
+
+    .hour-segment--disabled.cal-hour-segment:hover {
+        background-color: transparent !important; 
+        cursor: auto;
+    }
+
+
 }

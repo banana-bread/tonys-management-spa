@@ -11,6 +11,7 @@ import { Employee } from 'src/app/models/employee/employee.model';
 import { EmployeeService } from 'src/app/models/employee/employee.service';
 import { ApiService } from 'src/app/services/api.service';
 import { AppStateService } from 'src/app/services/app-state.service';
+import { AuthedUserService } from 'src/app/services/authed-user.service';
 import { UnsavedChangesRouterService } from 'src/app/unsaved-changes/unsaved-changes-router.service';
 import { StaffEditorService } from './staff-editor.service';
 
@@ -62,6 +63,7 @@ export class StaffEditorComponent implements OnInit {
     private employeeService: EmployeeService,
     private companyService: CompanyService,
     private unsavedChangesRouter: UnsavedChangesRouterService,
+    public authedUser: AuthedUserService,
   ) { }
 
   async ngOnInit(): Promise<void> 

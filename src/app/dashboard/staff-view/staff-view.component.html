@@ -4,23 +4,11 @@
             *ngFor="let employee of employees" 
             (click)="onEdit(employee)">
             <div fxLayout="row" fxLayoutGap="20px">
-                <!-- <div> -->
                 <div class="app-employee-avatar">{{ employee.initials }}</div>
-                <!-- </div> -->
                 <div fxFlex fxLayout="column">
-                    <mat-card-title>{{ employee.first_name }}</mat-card-title>
-                    <!-- <div fxFlex fxLayout="row"> -->
-                        <!-- <span fxFlex></span> -->
-                        <!-- <span class="mat-caption">Active</span> -->
-                        <!-- <mat-slide-toggle [(ngModel)]="employee.active" 
-                            (ngModelChange)="onToggleActive(employee)"
-                            (click)="$event.stopPropagation();">
-                        </mat-slide-toggle> -->
-                    <!-- </div> -->
+                    <mat-card-title fxFlex>{{ employee.first_name }}</mat-card-title>
                     <mat-card-subtitle>{{ employee.type }}</mat-card-subtitle>
                 </div>
-                <span fxFlex></span>
-                <!-- <mat-icon fxFlexAlign="center">arrow_forward_ios</mat-icon> -->
                 <mat-icon fxFlexAlign="center">arrow_forward_ios</mat-icon>
             </div>
         </mat-card>

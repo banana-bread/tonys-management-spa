@@ -8,6 +8,8 @@ import * as moment from 'moment';
 import { BookingService } from 'src/app/models/booking/booking.service';
 import { Moment } from 'src/types';
 import { toEnglishDay } from 'src/app/helpers/moment.helper';
+import { AuthedUserService } from 'src/app/services/authed-user.service';
+import { SnackbarNotificationService } from '@tonys/shared';
 @Component({
   selector: 'app-employee-calendar',
   templateUrl: './employee-calendar.component.html',
@@ -29,6 +31,8 @@ export class EmployeeCalendarComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private bookingEditor: BookingEditorService,
     private bookingService: BookingService,
+    private notification: SnackbarNotificationService,
+    public authedUser: AuthedUserService,
   ) { }
 
   ngOnInit(): void 
@@ -40,6 +44,8 @@ export class EmployeeCalendarComponent implements OnInit {
 
   async onEventClicked(event: any): Promise<any>
   {
+    if (! this.authedUser.canAlterEmployeeBooking(this.employee)) return;
+
     const onBookingCancel = (booking: Booking) => 
     {
       const index = this.events.findIndex(event => event.id === booking.id)
@@ -58,6 +64,11 @@ export class EmployeeCalendarComponent implements OnInit {
   {
     if (this._isWithinEmployeeWorkingHours(segment) || this.isFirst) return;
 
+    if (! this.authedUser.canAlterEmployeeBooking(this.employee))
+    {
+      return
+    }
+  
     const newEvent = this._createEventFromSelection(segment); 
     const bookingEvent = await this._createBooking(newEvent);
     
@@ -74,7 +85,7 @@ export class EmployeeCalendarComponent implements OnInit {
         hour.segments.forEach((segment) => {
           if (this._isWithinEmployeeWorkingHours(segment) && !this.isFirst)
           {
-            segment.cssClass = 'hour-segment--disabled'
+            segment.cssClass = 'hour-segment--out-of-bounds'
           }
         });
       });

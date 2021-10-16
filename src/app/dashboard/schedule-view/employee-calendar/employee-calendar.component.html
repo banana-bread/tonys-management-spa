@@ -8,6 +8,7 @@
             [style.height.px]="segmentHeight"
             [class.cal-hour-start]="segment.isStart"
             [class.cal-after-hour-start]="!segment.isStart"
+            [class.hour-segment--disabled]="! this.authedUser.canAlterEmployeeBooking(this.employee)"
             [ngClass]="segment.cssClass"
             (mousedown)="selectToCreate(segment, $event, segmentElement)">
                 <div class="cal-time" *ngIf="isTimeLabel">
