@@ -72,8 +72,6 @@ export class EmployeeCalendarComponent implements OnInit {
     const newEvent = this._createEventFromSelection(segment); 
     const bookingEvent = await this._createBooking(newEvent);
     newEvent.cssClass =  moment(bookingEvent.end).isAfter(moment()) ?  'calendar-booking-event' : 'calendar-booking-event--passed';
-
-    console.log(bookingEvent)
     
     if (! bookingEvent) return;
 
