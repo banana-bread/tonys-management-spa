@@ -199,7 +199,7 @@ export class StaffEditorComponent implements OnInit {
 
     const shouldDelete = await this.confirmDialog.open({
       title: 'Confirm deletion',
-      message: 'Are you sure you want to continue?  Deleting an employee is unrecoverable.',
+      message: 'Are you sure you want to continue?  Deleting an employee is an nonreversible.',
     });
 
     if (! shouldDelete) return;

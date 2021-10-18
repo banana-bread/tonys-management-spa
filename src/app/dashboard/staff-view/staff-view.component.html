@@ -1,6 +1,6 @@
 <div class="app-view-padding" fxLayout="row" fxLayoutAlign="center">
     <div fxFlex fxLayoutAlign=" center" fxLayout="column" *ngIf="!loading" fxLayoutGap="15px">
-        <mat-card class="app-selectable-card app-medium-card" 
+        <mat-card class="app-selectable-card app-medium-card app-color-black" 
             *ngFor="let employee of employees" 
             (click)="onEdit(employee)">
             <div fxLayout="row" fxLayoutGap="20px">
@@ -18,7 +18,7 @@
 <mat-progress-spinner class="app-page-loading" mode="indeterminate" *ngIf="loading"></mat-progress-spinner>
 <button class="app-fab-new" 
     mat-fab
-    color="primary" 
+    color="accent" 
     aria-label="Create new employee button." 
     matTooltip="Invite staff"
     matTooltipPosition="before"

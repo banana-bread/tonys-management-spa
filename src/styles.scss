@@ -58,15 +58,16 @@ body,
 }
 
 .app-tooltip {
-  background-color: $color-primary;
-  font-size: 16px;
-  color: $color-white;
+  // background-color: $app-color-primary;
+  // font-size: 16px;
+  // color: $app-color-black;
 }
 
 button.app-fab-new {
   position: fixed;
   bottom: 30px;
   right: 30px;
+  color: $app-color-white;
 }
 
 // LAYOUT
@@ -93,7 +94,7 @@ mat-toolbar.app-editor-toolbar {
 }
 
 .delete-button {
-  color: $color-warn;
+  color: $app-color-warn;
 }
 
 .app-editor-title {
@@ -108,7 +109,7 @@ mat-toolbar.app-editor-toolbar {
 
 .app-editor-view {
   min-height: 100%;
-  background-color: $color-background;
+  background-color: $app-color-background;
   padding-bottom: 50px;
 }
 
@@ -158,13 +159,20 @@ $color-light-blue: rgb(198, 198, 228);
     justify-content: center;
     align-items: center;
     border-radius: 50%;
-    color: darken($color-light-blue, 60%);
-    background: rgb(198, 198, 228);
+    color: $app-color-white;
+    background: $app-color-accent;
 
     font-size: 18px;
     width: 40px;
     height: 40px;
+
+    ~ span {
+      color: $app-color-accent;
+      text-transform: uppercase;
+      // letter-spacing: 1px;
+    }
 }
+
 
 .app-employee-avatar.app-employee-avatar--spacer {
   visibility: hidden;
@@ -181,43 +189,6 @@ mat-form-field.inline-input .mat-form-field-infix {
 button.icon-button {
   color: gray;
 }
-// ITEMS
-// .item-list {
-//   width: 100%;
-//   max-width: 600px;
-//   margin: 0 auto;
-//   min-height: 60px;
-//   background: white;
-//   border-radius: 4px;
-//   overflow: hidden;
-//   box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%), 0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
-// }
-
-// .item-list > div:not(:last-of-type) {
-//   border-bottom: solid 1px #ccc;
-// } 
-
-// .item-list .item {
-//   padding: 20px 10px;
-//   color: rgba(0, 0, 0, 0.87);
-//   display: flex;
-//   box-sizing: border-box;
-//   background: white;
-//   cursor: pointer;
-//   font-size: 18px;
-//   font-weight: 500;
-
-//   &:hover {
-//       background: $color-light-gray;
-//   }
-// }
-
-// .item-list .item-caption {
-//   font-size: 14px;
-//   font-weight: 400;
-//   color: $color-dark-gray;
-// }
-
 // CARDS
 
 mat-card.app-selectable-card {
@@ -233,8 +204,33 @@ mat-card.app-medium-card {
   width: 100%;
 }
 
+.app-color-black {
+  color: $app-color-black;
+}
 
+button[color="accent"] {
+  color: $app-color-white;
+}
 
-// * {
-//   outline: 1px solid #f00 !important;
-// }
+div.cal-event {
+  color: red;
+}
+
+.calendar-booking-event div.cal-event {
+  background: $app-color-accent;
+  border-color: $app-color-white;
+  color: $app-color-white;
+  font-size: 14px;
+}
+
+.calendar-booking-event--passed div.cal-event {
+  // background: $app-color-accent;
+  background: $app-color-accent-light;
+  border-color: $app-color-white;
+  color: $app-color-light-gray;
+  font-size: 14px;
+}
+
+        // background: $app-color-accent;
+        // border-color: white;
+        // color: $app-color-white;

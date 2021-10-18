@@ -118,6 +118,7 @@ export class EmployeeCalendarComponent implements OnInit {
       title: `${moment(booking.started_at).format('h:mm')} - ${moment(booking.ended_at).format('h:mm')}`,
       start: booking.started_at,
       end: booking.ended_at,
+      cssClass: moment(booking.ended_at).isAfter(moment()) ?  'calendar-booking-event' : 'calendar-booking-event--passed',
       meta: {
         tmpEvent: true,
       },

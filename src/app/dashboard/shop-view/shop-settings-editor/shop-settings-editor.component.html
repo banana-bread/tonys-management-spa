@@ -10,7 +10,7 @@
             </button>
             <span class="app-editor-title" *ngIf="!loading">Shop Settings</span>
             <span fxFlex></span>
-            <button type="submit" mat-raised-button color="primary" (click)="onSave()" [disabled]="saving || loading || !this.hasUpdates()">
+            <button type="submit" mat-raised-button color="accent" (click)="onSave()" [disabled]="saving || loading || !this.hasUpdates()">
                 Save
             </button>
         </mat-toolbar>

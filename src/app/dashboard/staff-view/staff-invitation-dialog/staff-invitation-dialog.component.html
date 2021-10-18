@@ -29,7 +29,7 @@
     </div>
     <div mat-dialog-actions align="end">
         <mat-progress-spinner mode="indeterminate" diameter="36" *ngIf="sending"></mat-progress-spinner>
-        <button type="button" mat-button mat-dialog-close>Cancel</button>
-        <button (click)="onSend()" mat-button [disabled]="sending">Send</button>
+        <button type="button" mat-flat-button mat-dialog-close>Cancel</button>
+        <button (click)="onSend()" mat-flat-button color="accent" [disabled]="sending">Send</button>
     </div>
 </form>

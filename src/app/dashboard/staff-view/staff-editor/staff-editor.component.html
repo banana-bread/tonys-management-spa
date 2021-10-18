@@ -18,7 +18,7 @@
             (click)="onDelete()"> 
             Delete
         </button>
-        <button (click)="onSave()" mat-raised-button color="primary" [disabled]="saving || loading || !this.hasUpdates()">
+        <button (click)="onSave()" mat-raised-button color="accent" [disabled]="saving || loading || !this.hasUpdates()">
             {{ !!original ? 'Save' : 'Submit' }}
         </button>
     </mat-toolbar>

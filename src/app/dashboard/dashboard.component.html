@@ -10,10 +10,10 @@
 
     <!-- <mat-toolbar>Menu</mat-toolbar> -->
     <mat-nav-list fxLayout="column" fxFlex>
-      <button mat-icon-button style="margin: 10px;" (click)="isExpanded = !isExpanded">
+      <!-- <button mat-icon-button style="margin: 10px;" (click)="isExpanded = !isExpanded">
         <mat-icon fontSet="material-icons-round" [fxShow]="isExpanded" mat-list-icon>first_page</mat-icon>
         <mat-icon fontSet="material-icons-round" [fxShow]="!isExpanded" mat-list-icon>last_page</mat-icon>
-      </button>
+      </button> -->
       <mat-list-item [routerLink]="['calendar']" matTooltip="Calendar" matTooltipPosition="after" [matTooltipDisabled]="isExpanded" matTooltipClass="app-tooltip">
         <mat-icon fontSet="material-icons-round" mat-list-icon>today</mat-icon>
         <h4 mat-line *ngIf="isExpanded">Calendar</h4>

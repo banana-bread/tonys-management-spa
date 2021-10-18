@@ -63,8 +63,8 @@
     <span fxFlex></span>
 
     <mat-progress-spinner mode="indeterminate" diameter="36" *ngIf="saving"></mat-progress-spinner>
-    <button type="button" mat-button mat-dialog-close>Cancel</button>
-    <button type="submit" mat-raised-button color="accent" [disabled]="saving || loading || bookingExists()">Save</button>
+    <button type="button" mat-flat-button mat-dialog-close>Cancel</button>
+    <button type="submit" mat-flat-button color="accent" [disabled]="saving || loading || bookingExists()">Save</button>
     <!-- <button type="button" mat-raised-button mat-dialog-close [disabled]="saving || loading" *ngIf="bookingExists()">Ok</button> -->
 </div>
 </form>

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Router, CanActivate, ActivatedRoute } from '@angular/router';
+import { Router, CanActivate } from '@angular/router';
 import { SnackbarNotificationService } from '@tonys/shared';
 import { AppStateService } from '../services/app-state.service';
 import { AuthedUserService } from '../services/authed-user.service';
@@ -18,15 +18,21 @@ export class AdminGuardService implements CanActivate {
 
   async canActivate(): Promise<boolean> 
   {
+    // this.authedUser.user$.subscribe(user => {
+    //   if 
+    //   if (! this.authedUser.isAdmin())
+    //   {
+    //     this.notification.error('Unauthorized.');
+    //     this.router.navigate([`/${this.state.company_id}/calendar`]);
+    //     return false;
+    //   }
 
-    if (! this.authedUser.isAdmin())
-    {
-      this.notification.error('Unauthorized.');
-      this.router.navigate([`/${this.state.company_id}/calendar`]);
-      return false;
-    }
-    
-    return true;    
+    //   if ()
+      
+    //   return true;    
+    // });
+
+    return true;
   }
 
 }
