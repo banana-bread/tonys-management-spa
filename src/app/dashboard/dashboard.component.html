@@ -30,7 +30,7 @@
         <mat-icon fontSet="material-icons-round" mat-list-icon>business</mat-icon>
         <h4 mat-line *ngIf="isExpanded">Shop</h4>
       </mat-list-item>
-      <mat-list-item [routerLink]="['account']" matTooltip="Account" matTooltipPosition="after" [matTooltipDisabled]="isExpanded" matTooltipClass="app-tooltip">
+      <mat-list-item [routerLink]="['account', this.authedUser.getId()]" matTooltip="Account" matTooltipPosition="after" [matTooltipDisabled]="isExpanded" matTooltipClass="app-tooltip">
         <mat-icon fontSet="material-icons-round" mat-list-icon>person</mat-icon>
         <h4 mat-line *ngIf="isExpanded">Account</h4>
       </mat-list-item>

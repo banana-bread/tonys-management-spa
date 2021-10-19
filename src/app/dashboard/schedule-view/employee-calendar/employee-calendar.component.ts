@@ -50,7 +50,7 @@ export class EmployeeCalendarComponent implements OnInit {
     {
       const index = this.events.findIndex(event => event.id === booking.id)
       this.events.splice(index, 1);
-      this._refresh();
+      this.refresh();
     }
 
     return await this.bookingEditor.open({
@@ -76,7 +76,7 @@ export class EmployeeCalendarComponent implements OnInit {
     if (! bookingEvent) return;
 
     this.events.push(newEvent)
-    this._refresh();
+    this.refresh();
   }
 
   hourSegmentModifier(renderEvent: CalendarDayViewBeforeRenderEvent)
@@ -93,7 +93,7 @@ export class EmployeeCalendarComponent implements OnInit {
     });
   }
 
-  private _refresh() 
+  public refresh() 
   {
     this.events = [...this.events];
     this.cdr.detectChanges();

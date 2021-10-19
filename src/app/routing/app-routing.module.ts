@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { AccountEditorComponent } from '../dashboard/account-view/account-editor/account-editor.component';
 import { DashboardComponent } from '../dashboard/dashboard.component';
 import { ScheduleViewComponent } from '../dashboard/schedule-view/schedule-view.component';
 import { ServiceEditorComponent } from '../dashboard/service-view/service-editor/service-editor.component';
@@ -13,7 +14,6 @@ import { AdminGuardService as AdminGuard } from './admin-guard.service';
 import { AuthGuardService as AuthGuard } from './auth-guard.service';
 import { LoginPageGuard } from './login-page-guard.service';
 
-// TODO: create 
 const routes: Routes = [
   { path: '',   redirectTo: '/login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent, canActivate: [LoginPageGuard] },
@@ -22,13 +22,13 @@ const routes: Routes = [
     children: [
       { path: 'calendar', component: ScheduleViewComponent },
       { path: 'staff', component: StaffViewComponent, canActivate: [AdminGuard] },
-      { path: 'services', component: ServiceViewComponent, canActivate: [AdminGuard] },
+    { path: 'services', component: ServiceViewComponent, canActivate: [AdminGuard] },
     ] 
   },
-  { path: ':companyId/services/:id', component: ServiceEditorComponent, canActivate: [AuthGuard]},
+  { path: ':companyId/services/:id', component: ServiceEditorComponent, canActivate: [AuthGuard, AdminGuard]},
   { path: ':companyId/staff/:id', component: StaffEditorComponent, canActivate: [AuthGuard] },
   { path: ':companyId/shop', component: ShopSettingsEditorComponent, canActivate: [AuthGuard, AdminGuard] },
-  { path: ':companyId/account', component: StaffEditorComponent, canActivate: [AuthGuard] },
+  { path: ':companyId/account/:id', component: AccountEditorComponent, canActivate: [AuthGuard, AdminGuard] },
 
   // TODO: implement a 404
   { path: '404', component: PageNotFoundComponent },

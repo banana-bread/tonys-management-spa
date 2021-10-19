@@ -1,7 +1,6 @@
-import { Component,  OnDestroy,  OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import * as moment from 'moment';
-import { interval, Subscription } from 'rxjs';
 import { Booking } from 'src/app/models/booking/booking.model';
 import { Company } from 'src/app/models/company/company.model';
 import { CompanyService } from 'src/app/models/company/company.service';
@@ -9,6 +8,7 @@ import { Employee } from 'src/app/models/employee/employee.model';
 import { EmployeeBookingService } from 'src/app/models/employee_booking.service';
 import { AppStateService } from 'src/app/services/app-state.service';
 import { Moment } from 'src/types';
+import { EmployeeCalendarComponent } from './employee-calendar/employee-calendar.component';
 
 @Component({
   selector: 'app-schedule-view',
@@ -16,14 +16,15 @@ import { Moment } from 'src/types';
   styleUrls: ['./schedule-view.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class ScheduleViewComponent implements OnInit, OnDestroy {
+export class ScheduleViewComponent implements OnInit {
+
+  @ViewChild(EmployeeCalendarComponent) calendarComponent: EmployeeCalendarComponent;
 
   loading = false;
   company: Company = new Company();
   filteredEmployees: Employee[] = [];
   selectedDate: number = moment().unix();
   selectedPickerDate: Date;
-  _refreshSubscription: Subscription;
 
   constructor(
     private route: ActivatedRoute,
@@ -45,16 +46,9 @@ export class ScheduleViewComponent implements OnInit, OnDestroy {
 
     await this._setBookings();
 
-    this._startRefreshInterval();
-
     this.loading = false;
   }
 
-  ngOnDestroy(): void 
-  {
-    this._refreshSubscription.unsubscribe();
-  }
-  
   formattedDate(): string
   {
     return this.dateToMoment().format('dddd, MMM D, YYYY')
@@ -136,12 +130,5 @@ export class ScheduleViewComponent implements OnInit, OnDestroy {
   private _setFilteredEmployees(): void
   {
     this.filteredEmployees = this.company.getEmployeesWorking( this.dateToMoment() );
-  }
-
-  private _startRefreshInterval()
-  {
-    this._refreshSubscription = interval(60000).subscribe(
-      async () => await this._setBookings()
-    );
   }
 }

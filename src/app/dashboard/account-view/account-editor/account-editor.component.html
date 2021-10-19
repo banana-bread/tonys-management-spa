@@ -1,0 +1,118 @@
+<div class="app-editor-view">
+    <mat-toolbar class="app-editor-toolbar" fxLayout="row" fxLayoutGap="10px">
+        <button mat-icon-button 
+            *ngIf="original"
+            type="button"
+            class="close-button" 
+            aria-label="Close edit employee button."
+            (click)="onClose()">
+            <mat-icon>close</mat-icon>
+        </button>
+        <span class="app-editor-title" *ngIf="!loading">Edit  Account</span>
+        <span fxFlex></span>
+        <button type="button" 
+            *ngIf="original"
+            class="delete-button" 
+            mat-raised-button 
+            [disabled]="saving || loading || !original || original.owner"
+            (click)="onDelete()"> 
+            Delete
+        </button>
+        <button (click)="onSave()" mat-raised-button color="accent" [disabled]="saving || loading || !this.hasUpdates()">
+            {{ !!original ? 'Save' : 'Submit' }}
+        </button>
+    </mat-toolbar>
+    <mat-progress-bar class="app-loading-bar" *ngIf="saving" mode="indeterminate"></mat-progress-bar>
+
+    <div class="app-view-padding"
+        fxLayout="column"
+        fxLayoutAlign=" center"
+        fxLayoutGap="40px"
+        *ngIf="!loading">
+
+        <app-base-schedule-editor
+            [schedule]="employee.base_schedule"
+            [(ngModel)]="employee.base_schedule"
+            (ngModelChange)="onBaseScheduleChanged()"
+            (errorChange)="onBaseScheduleErrorChange($event)">
+        </app-base-schedule-editor>
+
+        <mat-card class="app-editor-card">
+            <form #profileForm="ngForm">
+                <mat-card-title class="app-editor-card-title">Profile</mat-card-title>
+                <div fxLayout="column">
+                    <mat-form-field fxFlex hideRequiredMarker>
+                        <mat-label>First name</mat-label>
+                        <input type="text"
+                            [(ngModel)]="employee.first_name"
+                            (ngModelChange)="onProfileChanged()"
+                            name="employeeFirstName"
+                            #employeeFirstName="ngModel"
+                            required
+                            [disabled]="saving"
+                            matInput>
+                        <mat-error *ngIf="employeeFirstName.hasError('required')">First name is required</mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field fxFlex hideRequiredMarker>
+                        <mat-label>Last name</mat-label>
+                        <input type="text"
+                            [(ngModel)]="employee.last_name"
+                            (ngModelChange)="onProfileChanged()"
+                            name="employeeLastName"
+                            #employeeLastName="ngModel"
+                            required
+                            [disabled]="saving"
+                            matInput>
+                        <mat-error *ngIf="employeeLastName.hasError('required')">Last name is required</mat-error>
+                    </mat-form-field>
+    
+                    <mat-form-field fxFlex hideRequiredMarker>
+                        <mat-label>Phone</mat-label>
+                        <input type="phone"
+                            [(ngModel)]="employee.phone"
+                            (ngModelChange)="onProfileChanged()"
+                            name="employeePhone"
+                            #employeePhone="ngModel"
+                            required
+                            mask="(000) 000-0000"
+                            [disabled]="saving"
+                            matInput>
+                        <mat-error *ngIf="employeePhone.hasError('required')">Phone is required</mat-error>
+                    </mat-form-field>
+                </div>
+            </form>
+        </mat-card>
+
+        <mat-card class="app-editor-card">
+            <mat-card-title class="app-editor-card-title">Account</mat-card-title>
+
+            <div fxLayout="column" fxLayoutGap="16px">
+                <div fxFlex fxLayout="row" fxLayoutGap="20px">
+                    <mat-slide-toggle name="active" 
+                        [(ngModel)]="employee.active" 
+                        (change)="onActiveChanged()">
+                    </mat-slide-toggle>
+                    <span class="mat-subheading-2 capitalize" fxFlex>Online bookings</span> 
+                </div>
+                <div fxFlex fxLayout="row" fxLayoutGap="20px">
+                    <mat-slide-toggle name="admin"
+                        [(ngModel)]="employee.admin"
+                        (change)="onAdminChanged()"
+                        [disabled]="! this.authedUser.canUpgradeEmployeesToAdmin()">
+                    </mat-slide-toggle>
+                    <span class="mat-subheading-2 capitalize" fxFlex>Admin</span> 
+                </div>
+                <div fxFlex fxLayout="row" fxLayoutGap="20px">
+                    <mat-slide-toggle name="owner" 
+                        [(ngModel)]="employee.owner"
+                        (change)="onOwnerChanged()"
+                        [disabled]="! this.authedUser.canUpgradeEmployeesToOwner()">
+                    </mat-slide-toggle>
+                    <span class="mat-subheading-2 capitalize" fxFlex>Owner</span> 
+                </div>
+            </div>
+        </mat-card>
+    </div>
+    <mat-progress-spinner class="app-page-loading" mode="indeterminate" *ngIf="loading"></mat-progress-spinner>
+</div>

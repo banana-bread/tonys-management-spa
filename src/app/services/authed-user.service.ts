@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import { id } from "date-fns/locale";
+import { filter } from "rxjs/operators";
 import { Employee } from "../models/employee/employee.model";
 import { AppStateService } from "./app-state.service";
 
@@ -16,6 +17,17 @@ export class AuthedUserService {
     get user$()
     {
         return this.appState.employee$;
+    }
+
+    getId(): string
+    {
+        let id: string;
+
+        this.user$
+            .pipe(filter(res => !!res.id))
+            .subscribe(res => id = res.id)
+
+        return id;
     }
 
     canViewAllEmployees(): boolean

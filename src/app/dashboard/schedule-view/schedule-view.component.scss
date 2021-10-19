@@ -1,3 +1,4 @@
+@import './../../../assets/scss/variables';
 $light-gray: #D5D7DA;
 
 .filter__container {
@@ -7,6 +8,7 @@ $light-gray: #D5D7DA;
     top: 0; 
     z-index: 10000; 
     background-color: #FAFAFA;
+    color: $app-color-black;
 }
 
 .filter__button {

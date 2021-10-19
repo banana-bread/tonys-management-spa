@@ -144,10 +144,10 @@ export class BookingEditorComponent implements OnInit {
       this.dialogRef.close(this.event);
       this.notification.success('Booking created!');
     }
-    catch
+    catch (e)
     {
       this.dialogRef.close();
-      this.notification.error('Error creating booking');
+      this.notification.error(e.error.message);
     }
     finally
     {

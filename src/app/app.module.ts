@@ -50,11 +50,13 @@ import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/moment';
 import * as moment from 'moment';
 import { EmployeeCalendarComponent } from './dashboard/schedule-view/employee-calendar/employee-calendar.component';
-import { Employee } from './models/employee/employee.model';
 import { EmployeeCalendarListComponent } from './dashboard/schedule-view/employee-calendar-list/employee-calendar-list.component';
 import { BookingEditorComponent } from './dashboard/schedule-view/booking-editor/booking-editor.component';
 import { MatDateFormats, MatNativeDateModule, MAT_DATE_FORMATS, MAT_NATIVE_DATE_FORMATS } from '@angular/material/core';
 import { NgxMaskModule } from 'ngx-mask';
+import { AccountEditorComponent } from './dashboard/account-view/account-editor/account-editor.component';
+
+
 
 export function momentAdapterFactory() {
   return adapterFactory(moment);
@@ -108,6 +110,7 @@ const APP_DATE_FORMATS: MatDateFormats = {
     EmployeeCalendarComponent,
     EmployeeCalendarListComponent,
     BookingEditorComponent,
+    AccountEditorComponent,
   ],
   imports: [
     BrowserModule,
