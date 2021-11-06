@@ -6,6 +6,7 @@ export class ServiceDefinition extends BaseModel {
     name?: string = '';
     price?: number = 0;
     duration?: number = 0;
+    ordinal_position?: number = 0;
 
     relations = {};
     dates = {}

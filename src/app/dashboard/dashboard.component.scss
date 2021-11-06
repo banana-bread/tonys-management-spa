@@ -40,3 +40,14 @@ mat-nav-list mat-icon {
   background-color: $app-color-background;
 }
 
+mat-nav-list > h1.brand-logo {
+  font-size: 61px;
+  margin-top: 20px;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.active-router-link,
+.mat-list-item:focus {
+  background: darken($app-color-primary, 15%) !important;
+}

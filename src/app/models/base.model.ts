@@ -33,8 +33,11 @@ export abstract class BaseModel {
     private _mapProperties(attributes: any)
     {
         Object.keys(this).forEach(key => {
+            // console.log(key)
+            // console.log(attributes)
+
             // If key is a relation, skip here.
-            if (key === 'relations' || key === 'dates' || this.relations[key] || this.dates[key])
+            if (key === 'relations' || key === 'dates' || this.relations[key] || this.dates[key] || !attributes)
             {
                 return;
             } 

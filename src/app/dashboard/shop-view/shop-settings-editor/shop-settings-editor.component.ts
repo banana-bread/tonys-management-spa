@@ -56,7 +56,14 @@ export class ShopSettingsEditorComponent implements OnInit {
 
   onActiveChanged()
   {
-    this.updates.set('settings_update', () => this.companyService.updateEmployees(this.company))
+    const payload = this.company.employees.map(
+      employee => ({
+        id: employee.id,
+        bookings_enabled: this.company.bookings_enabled
+      })
+    )
+
+    this.updates.set('settings_update', () => this.companyService.updateEmployees(payload))
   }
 
   hasUpdates(): boolean

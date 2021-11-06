@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { CalendarDayViewBeforeRenderEvent, CalendarEvent } from 'angular-calendar';
 import { WeekViewHourSegment } from 'calendar-utils';
 import { Employee } from 'src/app/models/employee/employee.model';
@@ -10,14 +10,17 @@ import { Moment } from 'src/types';
 import { toEnglishDay } from 'src/app/helpers/moment.helper';
 import { AuthedUserService } from 'src/app/services/authed-user.service';
 import { SnackbarNotificationService } from '@tonys/shared';
+import { interval, Subscription } from 'rxjs';
+import { Company } from 'src/app/models/company/company.model';
 @Component({
   selector: 'app-employee-calendar',
   templateUrl: './employee-calendar.component.html',
   styleUrls: ['./employee-calendar.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class EmployeeCalendarComponent implements OnInit {
+export class EmployeeCalendarComponent implements OnInit, OnDestroy {
 
+  @Input() company: Company;
   @Input() employee: Employee = new Employee();
   @Input() date: Moment;
   @Input() isFirst: boolean = false;
@@ -26,6 +29,8 @@ export class EmployeeCalendarComponent implements OnInit {
   events: CalendarEvent[] = [];
   dragToCreateActive = false;
   weekStartsOn: 0 = 0;
+
+  refreshPage: Subscription;
 
   constructor(
     private cdr: ChangeDetectorRef,
@@ -40,6 +45,13 @@ export class EmployeeCalendarComponent implements OnInit {
     this.viewDate = this.date.toDate();
 
     this._mapBookingsToCalendarEvents(this.employee.bookings)
+
+    this.refreshPage = interval(60000).subscribe(() => this.refresh());
+  }
+
+  ngOnDestroy(): void 
+  {
+    this.refreshPage.unsubscribe();
   }
 
   async onEventClicked(event: any): Promise<any>
@@ -54,7 +66,9 @@ export class EmployeeCalendarComponent implements OnInit {
     }
 
     return await this.bookingEditor.open({
+      services: this.company.service_definitions,
       employee: this.employee,
+      booking: this.employee.bookings.find(booking => booking.id === event.id),
       event,
       onBookingCancel,
     });
@@ -101,10 +115,18 @@ export class EmployeeCalendarComponent implements OnInit {
 
   private async _createBooking(event: CalendarEvent<any>): Promise<any>
   {
-    return await this.bookingEditor.open({
+    const result: any =  await this.bookingEditor.open({
+      services: this.company.service_definitions,
       employee: this.employee,
       event: event
     });
+
+    if (!! result.booking)
+    {
+      this.employee.bookings.push(result.booking)
+    } 
+
+    return result.event;
   }
 
   private _mapBookingsToCalendarEvents(bookings: Booking[])
@@ -116,7 +138,7 @@ export class EmployeeCalendarComponent implements OnInit {
   {
     return {
       id: booking.id,
-      title: `${moment(booking.started_at).format('h:mm')} - ${moment(booking.ended_at).format('h:mm')}`,
+      title: this._createEventTitleFromBooking(booking),
       start: booking.started_at,
       end: booking.ended_at,
       cssClass: moment(booking.ended_at).isAfter(moment()) ?  'calendar-booking-event' : 'calendar-booking-event--passed',
@@ -124,6 +146,15 @@ export class EmployeeCalendarComponent implements OnInit {
         tmpEvent: true,
       },
     }
+  }
+
+  private _createEventTitleFromBooking(booking: Booking): string
+  {
+    let title = `${moment(booking.started_at).format('h:mm')} - ${moment(booking.ended_at).format('h:mm')} &nbsp;&nbsp;(${booking.services.map(service => service.name).join(', ')})<br>`;
+
+    const client = booking.client.first_name ? booking.client.full_name : 'Walk-in';
+
+    return title + client;
   }
 
   private _createEventFromSelection(segment: WeekViewHourSegment): any

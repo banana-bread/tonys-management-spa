@@ -1,7 +1,9 @@
+import { moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SnackbarNotificationService } from '@tonys/shared';
 import { ConfirmDialogService } from 'src/app/confirm-dialog/confirm-dialog.service';
+import { CompanyService } from 'src/app/models/company/company.service';
 import { Employee } from 'src/app/models/employee/employee.model';
 import { EmployeeService } from 'src/app/models/employee/employee.service';
 import { AppStateService } from 'src/app/services/app-state.service';
@@ -16,18 +18,20 @@ import { StaffInvitationDialogService } from './staff-invitation-dialog/staff-in
 export class StaffViewComponent implements OnInit {
 
   loading = false;
+  saving = false;
 
   employees: Employee[];
 
   constructor(
     private employeeService: EmployeeService,
     private router: Router,
-    private notifications: SnackbarNotificationService,
+    private notification: SnackbarNotificationService,
     private confirmDialog: ConfirmDialogService,
     private route: ActivatedRoute,
     private staffEditorService: StaffEditorService,
     private staffInvitationDialog: StaffInvitationDialogService,
     private state: AppStateService,
+    private companyService: CompanyService,
   ) { }
 
   async ngOnInit(): Promise<void> 
@@ -37,19 +41,11 @@ export class StaffViewComponent implements OnInit {
     try
     {
       this.employees = await this.employeeService.getAll();
-
-      this.employees.sort((a, b) => {
-        if (a.owner) return -1;
-        if (b.owner) return 1;
-        if (! b.admin) return -1;
-
-        return 1;
-      });
     }
     catch
     {
       this.router.navigate([`${this.state.company_id}/staff`]);
-      this.notifications.error('Error loading staff')
+      this.notification.error('Error loading staff')
     }
     finally
     {
@@ -68,21 +64,42 @@ export class StaffViewComponent implements OnInit {
     this.staffInvitationDialog.open()
   }
 
+  async onItemDropped(event): Promise<void>
+  {
+    moveItemInArray(this.employees, event.previousIndex, event.currentIndex);
+
+    // Reset ordinal_position
+    this.employees.forEach(
+      (employee, index) => employee.ordinal_position = index
+    );
+
+    // Create paylod for PATCH update
+    const payload = this.employees.map(
+      employee => ({
+        id: employee.id,
+        ordinal_position: employee.ordinal_position,
+      })
+    )
+
+    // Save
+    this.saving = true;
+    await this.companyService.updateEmployees(payload);
+    this.saving = false;
+
+
+    this.notification.success('Employee order updated')
+  }
+
   async onToggleActive(employee: Employee): Promise<void>
   {
-    /*
-     - [ ] Create route for updating employee bookings enabled (EmployeeBookingsEnabledController)
-     - [ ] 
-    */
-
    try
    {
       await this.employeeService.updateActive(employee);
-      this.notifications.success(`Employee bookings ${employee.active ? 'enabled' : 'disabled'}`)
+      this.notification.success(`Employee bookings ${employee.active ? 'enabled' : 'disabled'}`)
    }
    catch
    {
-      this.notifications.error('Error updating employee')
+      this.notification.error('Error updating employee')
    }
   }
 }

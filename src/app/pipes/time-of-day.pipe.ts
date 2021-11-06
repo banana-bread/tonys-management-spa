@@ -8,8 +8,8 @@ export class AppTimeOfDayPipe implements PipeTransform {
 
     constructor() {}
 
-    transform(value: number): string 
+    transform(value: number, date: Date = new Date()): string 
     {
-        return moment().startOf('day').add(value, 'seconds').format('h:mma');
+        return moment(date).startOf('day').add(value, 'seconds').format('h:mma');
     }
 }

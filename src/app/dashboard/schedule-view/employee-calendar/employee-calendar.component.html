@@ -21,10 +21,10 @@
     [viewDate]="viewDate"
     [events]="events"
     [hourSegmentTemplate]="weekViewHourSegmentTemplate"
-    [hourSegmentHeight]="60"
+    [hourSegmentHeight]="40"
     (beforeViewRender)="hourSegmentModifier($event)"
     [dayStartHour]="6"
     [dayEndHour]="21"
-    (eventClicked)="onEventClicked($event.event)">
-    <!-- [hourSegments]="4" -->
+    (eventClicked)="onEventClicked($event.event)"
+    [hourSegments]="4">
 </mwl-calendar-day-view>

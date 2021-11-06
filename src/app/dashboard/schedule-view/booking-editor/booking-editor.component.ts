@@ -13,8 +13,15 @@ import { SnackbarNotificationService } from '@tonys/shared';
 import { SyncErrorStateMatcher } from 'src/app/helpers/sync-error-state.matcher';
 import { BookingService } from 'src/app/models/booking/booking.service';
 import { ConfirmDialogService } from 'src/app/confirm-dialog/confirm-dialog.service';
+import { Service } from 'src/app/models/service/service.model';
 
-type DialogData = {employee: Employee, event: CalendarEvent<any>, onBookingCancel?: (booking: Booking) => void};
+type DialogData = {
+  services: ServiceDefinition[], 
+  employee: Employee, 
+  booking?: Booking,
+  event: CalendarEvent<any>, 
+  onBookingCancel?: (booking: Booking) => void
+};
 
 // TODO: maybe add this to the moment prototype
 
@@ -32,10 +39,10 @@ export class BookingEditorComponent implements OnInit {
   employee: Employee = this.data.employee;
   event: CalendarEvent<any> = this.data.event;
   onCancel = this.data.onBookingCancel;
-  services: ServiceDefinition[] = [];
   startTime: number;
   endTime: number;
-  selectedServices: ServiceDefinition[] = [];
+  services: any = [];
+  selectedServices: any = [];
   errorStateMatcher = new SyncErrorStateMatcher();
   booking: Booking;
 
@@ -59,20 +66,28 @@ export class BookingEditorComponent implements OnInit {
     this.startTime = secondsSinceStartOfDay(moment(this.event.start));
     this.endTime = secondsSinceStartOfDay(moment(this.event.end));
 
-    this.services = await this.serviceDefService.getAll()
-
-    if (this.bookingExists())
+    if (!! this.data.booking)
     {
-      this.booking = await this.bookingService.get(this.event.id as string);
+      this.booking = this.data.booking;
       this._mapServicesToBooking()
+      this.services = this.booking.services;
+    }
+    else
+    {
+      this.services = this.data.services
     }
 
     this.loading = false;
   }
 
+  displayServices(): string
+  {
+    return this.services.map(service => service.name).join(', ');
+  }
+
   private _mapServicesToBooking()
   {
-    this.selectedServices = this.services.filter(
+    this.services = this.services.filter(
       serviceDef => this.booking.services.find(
         service => service.service_definition_id === serviceDef.id
       )
@@ -132,16 +147,16 @@ export class BookingEditorComponent implements OnInit {
     if (this.form.invalid) return;
 
     this.saving = true; 
-    
     this.event.start = moment(this.event.start).startOf('day').add(this.startTime, 'seconds').toDate();
     this.event.end = moment(this.event.start).startOf('day').add(this.endTime, 'seconds').toDate();
-    this.event.title = `${moment(this.event.start).format('h:mm')} - ${moment(this.event.end).format('h:mm')}`
+    this.event.title = `${moment(this.event.start).format('h:mm')} - ${moment(this.event.end).format('h:mm')} (${this.selectedServices.map(service => service.name).join(', ')})  <br>Walk-in`
     
     try
     {
       const booking = await this.employeeBookingService.create(this.event, this.selectedServices, this.employee.id);
+      // this._mapServicesToBooking();
       this.event.id = booking.id;
-      this.dialogRef.close(this.event);
+      this.dialogRef.close({event: this.event, booking: booking});
       this.notification.success('Booking created!');
     }
     catch (e)
@@ -185,11 +200,6 @@ export class BookingEditorComponent implements OnInit {
       }
     }
   }
-
-  bookingExists(): boolean
-  {
-    return !!this.event.id
-  }
 }
 
 @Injectable({
@@ -199,7 +209,7 @@ export class BookingEditorService {
 
   constructor(private dialog: MatDialog) {}
 
-  async open(data: DialogData): Promise<CalendarEvent<any>>
+  async open(data: DialogData): Promise<any>
   {
     const dialogConfig: MatDialogConfig = {
       disableClose: true,

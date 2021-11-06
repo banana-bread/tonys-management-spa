@@ -22,6 +22,7 @@
                     <span>{{ employee.first_name }}</span>
                 </div>
                 <app-employee-calendar fxFlex 
+                    [company]="company"
                     [employee]="employee"
                     [date]="date">
                 </app-employee-calendar>
@@ -36,7 +37,9 @@
                 </div>
                 <span>A</span>
             </div>
-            <app-employee-calendar  [clickDisabled]="true">
+            <app-employee-calendar  
+            [clickDisabled]="true"
+            [date]="date">
             </app-employee-calendar>
         </div>
     </div> 

@@ -23,9 +23,16 @@ export class CompanyService {
     return new Company(response.data.company);
   }
 
-  async updateEmployees(company: Company): Promise<Company>
+  async updateEmployees(data: any): Promise<Company>
   {
-    const response = await this.api.updateCompanyEmployees(company.employees);
+    const response = await this.api.updateCompanyEmployees(data);
+
+    return new Company(response.data.company);
+  }
+
+  async updateServiceDefinitions(data: any): Promise<Company>
+  {
+    const response = await this.api.updateCompanyServiceDefinitions(data);
 
     return new Company(response.data.company);
   }

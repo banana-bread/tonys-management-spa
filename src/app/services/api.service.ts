@@ -44,6 +44,15 @@ export class ApiService {
       .patch();
   }
 
+  updateCompanyServiceDefinitions(data): Promise<any>
+  {
+    return this.http
+      .path('/company/service-definitions')
+      .data(data)
+      .withCompany(this.state.company_id)
+      .patch();
+  }
+
   getEmployee(id: string): Promise<any>
   {
     return this.http

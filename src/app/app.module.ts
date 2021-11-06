@@ -55,7 +55,7 @@ import { BookingEditorComponent } from './dashboard/schedule-view/booking-editor
 import { MatDateFormats, MatNativeDateModule, MAT_DATE_FORMATS, MAT_NATIVE_DATE_FORMATS } from '@angular/material/core';
 import { NgxMaskModule } from 'ngx-mask';
 import { AccountEditorComponent } from './dashboard/account-view/account-editor/account-editor.component';
-
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 
 export function momentAdapterFactory() {
@@ -137,6 +137,7 @@ const APP_DATE_FORMATS: MatDateFormats = {
     MatDialogModule,
     MatChipsModule,
     MatSlideToggleModule,
+    DragDropModule,
 
     MatDatepickerModule,
     MatNativeDateModule,

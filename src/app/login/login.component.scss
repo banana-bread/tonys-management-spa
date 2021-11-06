@@ -1,7 +1,11 @@
 mat-card {
     width: 100%;
     max-width: 400px;
-    margin-top: -150px;
+    // margin-top: -150px;
+}
+h1 {
+    font-size: 75px;
+    margin-bottom: 60px;
 }
 
 span.fake-link {
@@ -12,4 +16,8 @@ span.fake-link {
 
 div.forgot-password {
     margin-bottom: 16px;
+}
+
+mat-card {
+    margin-bottom: 100px;
 }

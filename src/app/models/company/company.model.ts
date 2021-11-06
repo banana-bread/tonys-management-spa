@@ -3,6 +3,7 @@ import { BaseModel } from "../base.model";
 import { Schedulable } from "../contracts/schedulable.interface";
 import { Employee } from "../employee/employee.model";
 import * as moment from 'moment';
+import { ServiceDefinition } from "../service-definition/service-definition.model";
 
 export class Company extends BaseModel implements Schedulable {
 
@@ -18,6 +19,7 @@ export class Company extends BaseModel implements Schedulable {
     booking_grace_period?: number = null;
     settings?: any = null;
     base_schedule?: any = null;
+    service_definitions?: ServiceDefinition[] = [];
 
     employees: Employee[] = [];
 
@@ -25,6 +27,7 @@ export class Company extends BaseModel implements Schedulable {
 
     relations = {
         employees: Employee,
+        service_definitions: ServiceDefinition
         // owner: Employee,
     };
 

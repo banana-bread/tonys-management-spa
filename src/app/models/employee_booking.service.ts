@@ -14,7 +14,7 @@ export class EmployeeBookingService {
     async get(employee_ids: string[], dateFor: string): Promise<any>
     {
         const response = await this.api.getEmployeeBookings(employee_ids, dateFor);
-
+        
         return response.data.bookings.map((booking: any) => new Booking(booking));
     }
 

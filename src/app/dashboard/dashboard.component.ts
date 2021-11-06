@@ -2,7 +2,6 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
-import { CompanyService } from '../models/company/company.service';
 import { AuthService } from '../services/auth.service';
 import { SnackbarNotificationService } from '@tonys/shared';
 import { Router } from '@angular/router';

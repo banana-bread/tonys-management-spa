@@ -17,6 +17,7 @@ export class Employee extends BaseModel implements Schedulable {
     owner?: boolean = false;
     bookings_enabled?: boolean = false;
     settings?: any = null;
+    ordinal_position?: number = 0;
     base_schedule?: any = null;
 
     company: Company = null;

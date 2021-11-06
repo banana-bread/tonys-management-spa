@@ -1,4 +1,5 @@
 import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
+import { Company } from 'src/app/models/company/company.model';
 import { Employee } from 'src/app/models/employee/employee.model';
 import { Moment } from 'src/types';
 
@@ -10,6 +11,7 @@ import { Moment } from 'src/types';
 })
 export class EmployeeCalendarListComponent implements OnInit {
 
+  @Input() company: Company;
   @Input() employees: Employee[];
   @Input() date: Moment;
 

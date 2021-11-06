@@ -1,8 +1,9 @@
 <mat-progress-bar class="app-loading-bar" *ngIf="this.loading" mode="indeterminate"></mat-progress-bar>
-<div fxLayout="row" fxLayoutAlign="center center" fxFlexFill>
+<div class="container" fxLayout="column" fxLayoutAlign="center center" fxFlexFill>
+<h1 class="brand-logo">Simple Barber</h1>
 <mat-card class="app-card">
     <div fxLayout="row" fxLayoutAlign="center">
-        <h2 class="mat-display-1">Sign in</h2>
+        <h2 class="mat-display-1">Admin Portal</h2>
     </div>
     
     <form #authForm="ngForm" (ngSubmit)="this.onSubmit()" novalidate>
@@ -57,4 +58,5 @@
     </form>
 </mat-card>
 </div>
+
     
