@@ -19,6 +19,11 @@ export class AuthedUserService {
         return this.appState.employee$;
     }
 
+    // set(employee: Employee)
+    // {
+    //     this.appState.employee$.
+    // }
+
     getId(): string
     {
         let id: string;

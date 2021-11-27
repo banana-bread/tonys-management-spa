@@ -46,7 +46,6 @@ export abstract class BaseModel {
         });  
     }
 
-    // TODO: should check that relation is of type array
     private _mapRelations(attributes: any)
     {
         for (let relation in this.relations)

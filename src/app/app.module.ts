@@ -142,7 +142,8 @@ const APP_DATE_FORMATS: MatDateFormats = {
     MatDatepickerModule,
     MatNativeDateModule,
 
-    TonysSharedModule.forRoot(),
+    TonysSharedModule.forRoot('http://localhost:89'),
+    // TonysSharedModule.forRoot({ apiUrl: 'http://localhost:89' }),
     CalendarModule.forRoot({ provide: DateAdapter, useFactory: momentAdapterFactory }),
     NgxMaskModule.forRoot(),
   ],

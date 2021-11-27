@@ -99,7 +99,7 @@
                     <mat-slide-toggle name="admin"
                         [(ngModel)]="employee.admin"
                         (change)="onAdminChanged()"
-                        [disabled]="! this.authedUser.canUpgradeEmployeesToAdmin()">
+                        [disabled]="! this.authedUserService.canUpgradeEmployeesToAdmin()">
                     </mat-slide-toggle>
                     <span class="mat-subheading-2 capitalize" fxFlex>Admin</span> 
                 </div>
@@ -107,7 +107,7 @@
                     <mat-slide-toggle name="owner" 
                         [(ngModel)]="employee.owner"
                         (change)="onOwnerChanged()"
-                        [disabled]="! this.authedUser.canUpgradeEmployeesToOwner()">
+                        [disabled]="! this.authedUserService.canUpgradeEmployeesToOwner()">
                     </mat-slide-toggle>
                     <span class="mat-subheading-2 capitalize" fxFlex>Owner</span> 
                 </div>

@@ -1,8 +1,9 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SnackbarNotificationService } from '@tonys/shared';
+import { Subscription } from 'rxjs';
 import { ConfirmDialogService } from 'src/app/confirm-dialog/confirm-dialog.service';
 import { CompanyService } from 'src/app/models/company/company.service';
 import { Employee } from 'src/app/models/employee/employee.model';
@@ -17,7 +18,7 @@ import { UnsavedChangesRouterService } from 'src/app/unsaved-changes/unsaved-cha
   templateUrl: './account-editor.component.html',
   // styleUrls: ['./account-editor.component.scss']
 })
-export class AccountEditorComponent implements OnInit {
+export class AccountEditorComponent implements OnInit, OnDestroy {
 
   @ViewChild('profileForm') profileForm: NgForm;
   @ViewChild('accountForm') accountForm: NgForm;
@@ -41,6 +42,8 @@ export class AccountEditorComponent implements OnInit {
   updates = new Map();
   baseScheduleInvalid = false;
 
+  authedUserSubscription: Subscription;
+
   constructor(
     private route: ActivatedRoute,
     private api: ApiService,
@@ -58,7 +61,7 @@ export class AccountEditorComponent implements OnInit {
   {
     this.loading = true;
 
-    this.authedUser.user$.subscribe(res =>  {
+    this.authedUserSubscription = this.authedUser.user$.subscribe(res =>  {
       if (! res.id) return;
 
       this.original = res;
@@ -66,6 +69,11 @@ export class AccountEditorComponent implements OnInit {
 
       this.loading = false;
     });
+  }
+
+  ngOnDestroy()
+  {
+    this.authedUserSubscription.unsubscribe();
   }
 
   toggleActiveDay(event: MatSlideToggleChange, day: {day: string, start: number, end: number, active: boolean})

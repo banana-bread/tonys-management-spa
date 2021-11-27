@@ -1,8 +1,9 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SnackbarNotificationService } from '@tonys/shared';
+import { Subscription } from 'rxjs/internal/Subscription';
 import { ConfirmDialogService } from 'src/app/confirm-dialog/confirm-dialog.service';
 import { getQueryParam, getUuid } from 'src/app/helpers/regex.helper';
 import { Company } from 'src/app/models/company/company.model';
@@ -28,7 +29,7 @@ import { StaffEditorService } from './staff-editor.service';
   templateUrl: './staff-editor.component.html',
   styleUrls: ['./staff-editor.component.scss']
 })
-export class StaffEditorComponent implements OnInit {
+export class StaffEditorComponent implements OnInit, OnDestroy {
 
   @ViewChild('profileForm') profileForm: NgForm;
   @ViewChild('accountForm') accountForm: NgForm;
@@ -52,6 +53,9 @@ export class StaffEditorComponent implements OnInit {
   updates = new Map();
   baseScheduleInvalid = false;
 
+  authedUserSubscription: Subscription;
+  authedUser: Employee;
+
   constructor(
     private route: ActivatedRoute,
     private api: ApiService,
@@ -63,11 +67,17 @@ export class StaffEditorComponent implements OnInit {
     private employeeService: EmployeeService,
     private companyService: CompanyService,
     private unsavedChangesRouter: UnsavedChangesRouterService,
-    public authedUser: AuthedUserService,
+    public authedUserService: AuthedUserService,
   ) { }
 
   async ngOnInit(): Promise<void> 
-  {
+  { 
+    this.authedUserSubscription = this.authedUserService.user$.subscribe(res => {
+      if (! res.id) return;
+
+      this.authedUser = res;
+    });
+
     if (!! this.staffEditorService.staff)
     {
       this.original = this.staffEditorService.staff;
@@ -76,22 +86,6 @@ export class StaffEditorComponent implements OnInit {
     else
     {
       this.loading = true;
-
-      // if (! this.authedUser.is(this.employeeId))
-      // {
-      //   this.authedUser.user$.subscribe(res => {
-
-      //     this.original = res;
-      //     this.employee = this.original.copy();
-
-      //     if (!! this.employee.id)
-      //     {
-      //       this.loading = false;
-      //     }
-      //   });
-
-      //   return;
-      // }
 
       try
       {
@@ -110,6 +104,11 @@ export class StaffEditorComponent implements OnInit {
     }
   }
 
+  ngOnDestroy(): void 
+  {
+    this.authedUserSubscription.unsubscribe();
+  }
+
   toggleActiveDay(event: MatSlideToggleChange, day: {day: string, start: number, end: number, active: boolean})
   {
     day.active = event.checked;
@@ -125,7 +124,7 @@ export class StaffEditorComponent implements OnInit {
   onSave()
   {
     this.submitted = true;
-    !!this.original ? this.update() : this.create();
+    this.update();
   }
 
   // When editing employee
@@ -143,6 +142,13 @@ export class StaffEditorComponent implements OnInit {
     {
       await Promise.all([...this.updates.values()].map(callback => callback()))
 
+      // This is sucky!  Do this better.  When we update our account through
+      // this view, then go to account view without refreshing, employee state
+      // is out of sync
+      if (this.authedUser.id === this.employee.id)
+      {
+        this.state.employee = this.employee;
+      }
 
       this.router.navigate([`/${this.state.company_id}/staff`]);
       
@@ -221,91 +227,4 @@ export class StaffEditorComponent implements OnInit {
       this.saving = false;
     }
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-   // When creating new emplyee from invite url
-   protected async create(): Promise<any>
-   {
-     const data = {
-       first_name: this.employee.first_name,
-       last_name: this.employee.last_name,
-       email: this.employee.email,
-       phone: this.employee.phone,
-       password: this.password,
-       admin: false,
-       owner: false,
-       settings: {
-         base_schedule: this.base_scheulde,
-       }
-     }
- 
-     this.saving = true;
- 
-     try
-     {
-       await this.employeeService.create(this.urlCompanyId, this.urlExpires, this.urlSignature, data);
-       // TODO: should do a confirm email here???
-       this.router.navigate(['login']);
-       this.notifications.success('Account created')
-     }
-     catch
-     {
-       this.notifications.error('Error creating account')
-     }
-     finally
-     {
-       this.saving = false;
-     }
-     
-   }
-
-// TEST PAYLOAD
-   base_scheulde = {
-    monday: {
-      start: 32400,
-      end: 61200,
-    },
-    tuesday: {
-      start: 32400,
-      end: 61200,
-    },
-    wednesday: {
-      start: 32400,
-      end: 61200,
-    },
-    thursday: {
-      start: 32400,
-      end: 61200,
-    },
-    friday: {
-      start: 32400,
-      end: 61200,
-    },
-    saturday: {
-      start: 32400,
-      end: 61200,
-    },
-    sunday: {
-      start: 32400,
-      end: 61200,
-    },
-   }
 }
