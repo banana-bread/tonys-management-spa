@@ -1,8 +1,7 @@
 import * as moment from "moment";
 import { toEnglishDay } from "./moment.helper";
 
-const NullRawBaseSchedule: RawBaseSchedule = {monday:{start:null,end:null},tuesday:{start:null,end:null},wednesday:{start:null,end:null},thursday:{start:null,end:null},friday:{start:null,end:null},saturday:{start:null,end:null},sunday:{start:null,end:null},} 
-export type RawBaseSchedule = {[key: string]: {start: number|null, end: number|null}};
+export type RawBaseSchedule = {[key: string]: {start: string|null, end: string|null}};
 
 export class BaseSchedule {
 
@@ -11,8 +10,9 @@ export class BaseSchedule {
 
     constructor(schedule: RawBaseSchedule) 
     {
-        this._days = this._weekdays
-            .map(day =>  new BaseScheduleDay(schedule[day].start, schedule[day].end, day));
+        this._days = this._weekdays.map(
+            day =>  new BaseScheduleDay(schedule[day].start, schedule[day].end, day)
+        );
     }
 
     get days(): BaseScheduleDay[]
@@ -30,25 +30,15 @@ export class BaseSchedule {
         return this._days.find(day => day.day === moment().format('dddd').toLocaleLowerCase())
     }
 
-    startOf(day: Date): number
+    startOf(day: Date): string
     {
         return this.get( toEnglishDay(day) ).start;
     }
 
-    endOf(day: Date)
+    endOf(day: Date): string
     {
         return this.get( toEnglishDay(day) ).end;
     }
-
-    // startOfToday(): number
-    // {
-    //     return this.today().start;
-    // }
-
-    // endOfToday(): number
-    // {
-    //     return this.today().end;
-    // }
 
     /**
      * parses current base schedule into api payload format
@@ -57,12 +47,11 @@ export class BaseSchedule {
     parse(): RawBaseSchedule
     {       
         const result = {};
-        const utcSecondsOffset: number = moment().utcOffset() * 60;
 
         this._days.forEach((day: BaseScheduleDay) => {
             if (day.active)
             {
-                result[day.day] = {start: day.start - utcSecondsOffset, end: day.end - utcSecondsOffset}
+                result[day.day] = {start: day.start , end: day.end }
             }
             else
             {
@@ -77,42 +66,60 @@ export class BaseSchedule {
 export class BaseScheduleDay {
     
     public day: string;
-    public start: number; 
-    public end: number;
+    public start: string; 
+    public end: string;
     public active: boolean;
 
-    private _times: any[] = [];
+    // private _times: any[] = [];
 
-    constructor(start: number, end: number, day: string)
+    constructor(start: string, end: string, day: string)
     {
-        const utcSecondsOffset: number = moment().utcOffset() * 60;
-
         this.day = day;
-        this.start = start ? start + utcSecondsOffset: null;
-        this.end = end ? end + utcSecondsOffset : null;
+        this.start = start;
+        this.end = end;
         this.active = !!start && !!end;
 
         if (! this.active) return
 
         // TODO: hardcoded to increase start time by 30 minutes from start - end.
-        for(let i = this.start; i <= this.end; i +=  1800)
+        // for(let i = this.start; i <= this.end; i +=  1800)
+        // {
+        //     this._times.push(i)
+        // }
+    }
+
+    // startInHours(): number
+    // {
+    //     return parseInt( this.start.split(':')[0] );
+    // }
+
+    startInSeconds(): number|null
+    {
+        return this.timeInSeconds('start');
+    }
+
+    // endInHours(): number
+    // {
+    //     return parseInt( this.end.split(':')[0] );
+    // }
+
+    endInSeconds(): number|null
+    {
+        return this.timeInSeconds('end');
+    }
+
+    private timeInSeconds(time: 'start'|'end'): number|null
+    {
+        if (! this[time])
         {
-            this._times.push(i)
+            return null;
         }
-    }
 
-    get times()
-    {
-        return this._times;
-    }
+        // 09:00
+        const timeSplit: string[] = this[time].split(':');
+        const hourInSeconds = parseInt(timeSplit[0]) * 3600;
+        const minuteInSeconds = parseInt(timeSplit[1]) * 60;
 
-    startInHours()
-    {
-        return this.start / 3600;
-    }
-
-    endInHours()
-    {
-        return this.end / 3600;
+        return hourInSeconds + minuteInSeconds;
     }
 }

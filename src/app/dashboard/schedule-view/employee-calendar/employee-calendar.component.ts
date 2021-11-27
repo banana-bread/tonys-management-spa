@@ -10,7 +10,7 @@ import { Moment } from 'src/types';
 import { toEnglishDay } from 'src/app/helpers/moment.helper';
 import { AuthedUserService } from 'src/app/services/authed-user.service';
 import { SnackbarNotificationService } from '@tonys/shared';
-import { interval, Subscription } from 'rxjs';
+import { interval, Subject, Subscription } from 'rxjs';
 import { Company } from 'src/app/models/company/company.model';
 @Component({
   selector: 'app-employee-calendar',
@@ -31,6 +31,7 @@ export class EmployeeCalendarComponent implements OnInit, OnDestroy {
   weekStartsOn: 0 = 0;
 
   refreshPage: Subscription;
+  // refreshSubject: Subject<any> = new Subject();
 
   constructor(
     private cdr: ChangeDetectorRef,
@@ -46,7 +47,14 @@ export class EmployeeCalendarComponent implements OnInit, OnDestroy {
 
     this._mapBookingsToCalendarEvents(this.employee.bookings)
 
-    this.refreshPage = interval(60000).subscribe(() => this.refresh());
+    this.refreshPage = interval(60000).subscribe(() => {
+      // this.refreshSubject.next()
+      this.events.forEach(event => {
+        event.cssClass = this._determineEventClass(event);
+      })
+      
+      this.refresh();
+    });
   }
 
   ngOnDestroy(): void 
@@ -76,16 +84,17 @@ export class EmployeeCalendarComponent implements OnInit, OnDestroy {
 
   async selectToCreate(segment: WeekViewHourSegment, event: MouseEvent, segmentElement: HTMLElement): Promise<void> 
   {
-    if (this._isWithinEmployeeWorkingHours(segment) || this.isFirst) return;
-
-    if (! this.authedUser.canAlterEmployeeBooking(this.employee))
+    if ( ! this._isWithinEmployeeWorkingHours(segment) || 
+         this.isFirst || 
+         ! this.authedUser.canAlterEmployeeBooking(this.employee) ) 
     {
-      return
+      return;
     }
   
     const newEvent = this._createEventFromSelection(segment); 
+
     const bookingEvent = await this._createBooking(newEvent);
-    newEvent.cssClass =  moment(bookingEvent.end).isAfter(moment()) ?  'calendar-booking-event' : 'calendar-booking-event--passed';
+    newEvent.cssClass = this._determineEventClass(newEvent)
     
     if (! bookingEvent) return;
 
@@ -98,7 +107,7 @@ export class EmployeeCalendarComponent implements OnInit, OnDestroy {
     renderEvent.hourColumns.forEach((hourColumn) => {
       hourColumn.hours.forEach((hour) => {
         hour.segments.forEach((segment) => {
-          if (this._isWithinEmployeeWorkingHours(segment) && !this.isFirst)
+          if (! this._isWithinEmployeeWorkingHours(segment) && !this.isFirst)
           {
             segment.cssClass = 'hour-segment--out-of-bounds'
           }
@@ -111,6 +120,11 @@ export class EmployeeCalendarComponent implements OnInit, OnDestroy {
   {
     this.events = [...this.events];
     this.cdr.detectChanges();
+  }
+
+  private _determineEventClass(bookingEvent)
+  {
+    return moment(bookingEvent.end).isAfter(moment()) ?  'calendar-booking-event' : 'calendar-booking-event--passed';
   }
 
   private async _createBooking(event: CalendarEvent<any>): Promise<any>
@@ -170,9 +184,15 @@ export class EmployeeCalendarComponent implements OnInit, OnDestroy {
   }
 
   private _isWithinEmployeeWorkingHours(segment: WeekViewHourSegment): boolean
-  {
-    return (segment.displayDate.getHours() < this.employee.base_schedule?.get( toEnglishDay(segment.date) ).startInHours() || 
-    segment.displayDate.getHours() >= this.employee.base_schedule?.get( toEnglishDay(segment.date) ).endInHours());
+  {    
+    // segment start time in seconds since start of day
+    const segmentStartTime = (segment.displayDate.getHours() * 3600) + (segment.displayDate.getMinutes() * 60);
+    // employee start time in seconds since start of day
+    const employeeStartTime = this.employee.base_schedule?.get( toEnglishDay(segment.date) ).startInSeconds();
+    // employee end time in seconds since start of day
+    const employeeEndTime = this.employee.base_schedule?.get( toEnglishDay(segment.date) ).endInSeconds();
+
+    return (segmentStartTime >= employeeStartTime) && (segmentStartTime < employeeEndTime);
   }
 }
 

@@ -3,6 +3,7 @@ import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChil
 import { NG_VALUE_ACCESSOR, ControlValueAccessor, NgForm, NgModel } from '@angular/forms';
 import { SyncErrorStateMatcher } from '../helpers/sync-error-state.matcher';
 import { BaseSchedule, BaseScheduleDay } from '../helpers/base-schedule.helper';
+import * as moment from 'moment';
 
 // TODO: Make sure end time is greater than start time
 @Component({
@@ -23,6 +24,8 @@ export class BaseScheduleEditorComponent implements OnInit, AfterViewInit, Contr
   value: BaseSchedule;
   onChange: (schedule: BaseSchedule) => void;
   onTouched: () => void;
+
+  times: string[] = [];
 
   constructor(private changeDetection: ChangeDetectorRef) { }
 
@@ -47,7 +50,22 @@ export class BaseScheduleEditorComponent implements OnInit, AfterViewInit, Contr
     throw new Error('Method not implemented.');
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void 
+  {
+    for (let i = 0; i < 48; i++)
+    {
+      this.times.push( moment().startOf('day').add(30 * i, 'minutes').format('HH:mm') )
+    }  
+  }
+
+  getFormattedTime(time: string): string
+  {
+    const hourMinuteArray = time.split(':');
+    const hours = hourMinuteArray[0];
+    const minutes = hourMinuteArray[1];
+
+    return moment().startOf('day').add(hours, 'hours').add(minutes, 'minutes').format('LT')
+  }
 
   ngAfterViewInit()
   {
@@ -67,20 +85,6 @@ export class BaseScheduleEditorComponent implements OnInit, AfterViewInit, Contr
   isSelectDisabled(day: BaseScheduleDay): boolean
   {
     return !day.active
-  }
-
-  times(): number[]
-  {
-    const result: number[] = [];
-    const secondsInDay = 86400;
-
-    // TODO: hardcoded to increase start time by 30 minutes from start - end.
-    for (let i = 0; i < secondsInDay; i += 1800)
-    {
-      result.push(i);
-    }
-
-    return result;
   }
 
   private _registerErrorHandling(list: QueryList<NgModel>): void
@@ -108,3 +112,4 @@ export class BaseScheduleEditorComponent implements OnInit, AfterViewInit, Contr
   // {
   //   return !!day.start ? time <= day.start : false;
   // }
+

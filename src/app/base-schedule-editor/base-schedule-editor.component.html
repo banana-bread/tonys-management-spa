@@ -21,8 +21,8 @@
                     [required]="day.active"
                     [min]="endTime"
                     [errorStateMatcher]="errorStateMatcher">
-                    <mat-option *ngFor="let time of times()" [value]="time">
-                        {{ time | appTimeOfDay}}
+                    <mat-option *ngFor="let time of times" [value]="time">
+                        {{ getFormattedTime(time) }}
                     </mat-option>
                 </mat-select>
             </mat-form-field>
@@ -34,8 +34,8 @@
                     [(ngModel)]="day.end"
                     [required]="day.active"
                     [errorStateMatcher]="errorStateMatcher">
-                    <mat-option *ngFor="let time of times()" [value]="time">
-                        {{ time | appTimeOfDay}}
+                    <mat-option *ngFor="let time of times" [value]="time">
+                        {{ getFormattedTime(time) }}
                     </mat-option>
                 </mat-select>
             </mat-form-field>

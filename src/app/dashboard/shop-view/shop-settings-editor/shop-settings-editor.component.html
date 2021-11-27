@@ -78,7 +78,7 @@
                             <mat-error *ngIf="regionField.hasError('required')">Province is required.</mat-error>
                         </mat-form-field>
                         
-                        <mat-form-field fxFlex hideRequiredMarker>
+                        <!-- <mat-form-field fxFlex hideRequiredMarker>
                             <mat-label>Country</mat-label>
                             <input type="text" 
                                 [(ngModel)]="company.country"
@@ -88,6 +88,18 @@
                                 required
                                 matInput>
                             <mat-error *ngIf="countryField.hasError('required')">Country is required.</mat-error>
+                        </mat-form-field> -->
+
+                        <mat-form-field fxFlex hideRequiredMarker>
+                            <mat-label>Address</mat-label>
+                            <input type="text" 
+                                [(ngModel)]="company.address"
+                                (ngModelChange)="onProfileChanged()"
+                                name="addressField"
+                                #addressField="ngModel"
+                                required
+                                matInput>
+                            <mat-error *ngIf="addressField.hasError('required')">Address is required.</mat-error>
                         </mat-form-field>
 
                         <mat-form-field fxFlex hideRequiredMarker>

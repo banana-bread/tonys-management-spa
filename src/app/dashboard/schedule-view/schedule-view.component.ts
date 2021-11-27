@@ -42,7 +42,7 @@ export class ScheduleViewComponent implements OnInit {
 
     this._setDateParam( this._determineDate() );
 
-    this._setFilteredEmployees();
+    // this._setFilteredEmployees();
 
     await this._setBookings();
 
@@ -84,7 +84,7 @@ export class ScheduleViewComponent implements OnInit {
     this.loading = true;
 
     this._setDateParam( date.unix() );
-    this._setFilteredEmployees();
+
     await this._setBookings();
 
     this.loading = false;
@@ -116,19 +116,20 @@ export class ScheduleViewComponent implements OnInit {
 
   private async _setBookings(): Promise<void>
   {
-    const bookings: Booking[] = await this.employeeBookingService.get(
-      this.filteredEmployees.map(employee => employee.id), this.selectedDate.toString()
-    );
+    const response: any = await this.employeeBookingService.get(this.selectedDate.toString());
 
-    this.filteredEmployees.forEach(employee => 
-      employee.bookings = bookings.filter(booking => 
-        booking.employee_id === employee.id
-      )
-    ); 
-  }
+    // Filter companies employees by if they are scheduled to work, or have bookings
+    const employees = this.company.employees
+      .filter(employee => !!response[employee.id] || employee.isWorking( this.dateToMoment() ))
+      .sort((a, b) => a.ordinal_position - b.ordinal_position)
 
-  private _setFilteredEmployees(): void
-  {
-    this.filteredEmployees = this.company.getEmployeesWorking( this.dateToMoment() );
+    // Apply bookings to employees that have them
+    employees
+      .filter(employee => !!response[employee.id])
+      .forEach(employee => {
+        employee.bookings = response[employee.id].map((data: any) => new Booking(data))
+      });
+
+    this.filteredEmployees = employees;
   }
 }

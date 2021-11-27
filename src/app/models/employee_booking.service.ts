@@ -11,11 +11,11 @@ export class EmployeeBookingService {
 
     constructor(private api: ApiService) {}
 
-    async get(employee_ids: string[], dateFor: string): Promise<any>
+    async get(dateFor: string): Promise<any>
     {
-        const response = await this.api.getEmployeeBookings(employee_ids, dateFor);
+        const response = await this.api.getEmployeeBookings(dateFor);
         
-        return response.data.bookings.map((booking: any) => new Booking(booking));
+        return response.data.employee_bookings;
     }
 
     async create(event: CalendarEvent<any>, services: ServiceDefinition[], employee_id: string): Promise<Booking>

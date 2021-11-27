@@ -66,6 +66,7 @@ export class BookingEditorComponent implements OnInit {
     this.startTime = secondsSinceStartOfDay(moment(this.event.start));
     this.endTime = secondsSinceStartOfDay(moment(this.event.end));
 
+
     if (!! this.data.booking)
     {
       this.booking = this.data.booking;
@@ -102,13 +103,22 @@ export class BookingEditorComponent implements OnInit {
   times(): number[]
   {
     const result: number[] = [];
-    const dayStart = this.employee.base_schedule.startOf(this.event.start);
-    const dayEnd = this.employee.base_schedule.endOf(this.event.start);
+    let dayStart = this.employee.base_schedule.startOf(this.event.start);
+    let dayEnd = this.employee.base_schedule.endOf(this.event.start);
+
+    dayStart = parseInt(dayStart.split(':')[0]) * 3600;
+    dayEnd = parseInt(dayEnd.split(':')[0]) * 3600;
 
     // TODO: hardcoded to increase start time by 15 minutes from start - end.
     for (let i = dayStart; i < dayEnd; i += 900)
     {
-      const overlappingBookingExists: boolean = !!this.employee.bookings.find(booking => secondsSinceStartOfDay(booking.started_at) == i)
+      // TODO: again... hard coded to 15 minutes
+      const overlappingBookingExists: boolean = 
+        !!this.employee.bookings.find(
+          booking => secondsSinceStartOfDay(booking.started_at) == i || 
+          ( secondsSinceStartOfDay(booking.started_at) + 900 == i &&
+          secondsSinceStartOfDay(booking.ended_at) > (i + 1) )
+        );
 
       if (! overlappingBookingExists)
       {
