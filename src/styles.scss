@@ -291,7 +291,9 @@ h1.brand-logo {
   max-width: 450px;
 }
 
+// MOBILE
 
-        // background: $app-color-accent;
-        // border-color: white;
-        // color: $app-color-white;
+// Targets flyout menu on mobile view
+div.mat-menu-panel {
+  margin-bottom: 12px;
+}

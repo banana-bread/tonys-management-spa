@@ -127,6 +127,7 @@
                                 required
                                 matInput>
                             <mat-error *ngIf="phoneField.hasError('required')">Phone number is required.</mat-error>
+                            <mat-error *ngIf="phoneField.hasError('mask')">Phone number is invalid</mat-error>
                         </mat-form-field>
                     </div>
                 </form>

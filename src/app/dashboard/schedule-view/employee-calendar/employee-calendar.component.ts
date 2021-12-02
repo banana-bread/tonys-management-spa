@@ -53,7 +53,7 @@ export class EmployeeCalendarComponent implements OnInit, OnDestroy {
       this.events.forEach(event => {
         event.cssClass = this._determineEventClass(event);
       })
-      console.log('[employee-calendar] Refreshing view')
+
       this.refresh();
     });
   }

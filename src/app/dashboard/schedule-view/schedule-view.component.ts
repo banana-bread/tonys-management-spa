@@ -46,7 +46,7 @@ export class ScheduleViewComponent implements OnInit, OnDestroy {
 
     await this._setBookings();
 
-    this._startRefreshBookingsSubscription();
+    setTimeout(() => this._startRefreshBookingsSubscription(), 20000)
 
     this.loading = false;
   }
@@ -142,8 +142,8 @@ export class ScheduleViewComponent implements OnInit, OnDestroy {
 
   private async _startRefreshBookingsSubscription()
   {
-    // Every 5 minutes
-    this._refreshBookingsSubscription = interval((60000 * 5)).subscribe(() => {
+    // Every minute
+    this._refreshBookingsSubscription = interval(60000).subscribe(() => {
       this._setBookings();
     });
   }

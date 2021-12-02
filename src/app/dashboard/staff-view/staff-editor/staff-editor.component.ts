@@ -5,7 +5,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SnackbarNotificationService } from '@tonys/shared';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { ConfirmDialogService } from 'src/app/confirm-dialog/confirm-dialog.service';
-import { getQueryParam, getUuid } from 'src/app/helpers/regex.helper';
 import { Company } from 'src/app/models/company/company.model';
 import { CompanyService } from 'src/app/models/company/company.service';
 import { Employee } from 'src/app/models/employee/employee.model';

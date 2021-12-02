@@ -80,7 +80,8 @@
                             mask="(000) 000-0000"
                             [disabled]="saving"
                             matInput>
-                        <mat-error *ngIf="employeePhone.hasError('required')">Phone is required</mat-error>
+                        <mat-error *ngIf="employeePhone.hasError('required')">Phone number is required</mat-error>
+                        <mat-error *ngIf="employeePhone.hasError('mask')">Phone number is invalid</mat-error>
                     </mat-form-field>
                 </div>
             </form>
