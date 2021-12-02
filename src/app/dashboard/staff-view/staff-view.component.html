@@ -1,26 +1,24 @@
 <mat-progress-bar class="app-loading-bar" *ngIf="saving" mode="indeterminate"></mat-progress-bar>
-<div class="app-view-padding" fxLayout="row" fxLayoutAlign="center">
+<div class="app-view-padding" fxLayout="row" fxLayoutAlign="center center">
     <div class="drag-list" fxFlex fxLayoutAlign=" center" fxLayout="column" *ngIf="!loading" fxLayoutGap="15px" 
         cdkDropList
         (cdkDropListDropped)="onItemDropped($event)">
         <div class="drag-item card-drag-item" cdkDrag *ngFor="let employee of employees"> 
             <mat-card class="app-selectable-card app-medium-card app-color-black" 
                 (click)="onEdit(employee)">
-                <div fxLayout="row" fxLayoutGap="20px">
                     <div class="app-employee-avatar">{{ employee.initials }}</div>
                     <div fxFlex fxLayout="column">
-                        <mat-card-title fxFlex>{{ employee.first_name }}</mat-card-title>
+                        <mat-card-title>{{ employee.first_name }}</mat-card-title>
                         <mat-card-subtitle>{{ employee.type }}</mat-card-subtitle>
                     </div>
                     <mat-icon fxFlexAlign="center">arrow_forward_ios</mat-icon>
-                </div>
             </mat-card>
         </div>
     </div>
 </div>
 
 <mat-progress-spinner class="app-page-loading" mode="indeterminate" *ngIf="loading"></mat-progress-spinner>
-<button class="app-fab-new" 
+<!-- <button class="app-fab-new" 
     mat-fab
     color="accent" 
     aria-label="Create new employee button." 
@@ -29,6 +27,5 @@
     matTooltipClass="app-tooltip"
     (click)="onNew()"
     disabled>
-    <!-- [disabled]="loading" -->
     <mat-icon fontSet="material-icons-round">add</mat-icon>
-</button>
+</button> -->

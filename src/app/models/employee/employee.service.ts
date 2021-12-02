@@ -48,9 +48,9 @@ export class EmployeeService {
     await this.api.inviteEmployees({ emails });
   }
 
-  async updateProfile(employee: Employee): Promise<any>
+  async updateProfile(employee: Employee, oldPassword = '', newPassword = ''): Promise<any>
   {
-    await this.api.updateEmployeeProfile(employee, employee.id);
+    await this.api.updateEmployeeProfile(employee, oldPassword, newPassword);
   }
 
   async updateActive(employee: Employee)

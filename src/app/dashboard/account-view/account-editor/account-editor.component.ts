@@ -27,13 +27,15 @@ export class AccountEditorComponent implements OnInit, OnDestroy {
   saving = false;
   submitted = false;
 
+  oldPassword: string;
+  newPassword: string;
+
   original: Employee;
   employee: Employee = new Employee();
   authedEmployee: Employee = new Employee();
   employeeName: string;
   employeeId: string = this.route.snapshot.paramMap.get('id');
-  employeeRegistrationUrl = this.route.snapshot.queryParams['signed-url'];
-  password: string;
+  // employeeRegistrationUrl = this.route.snapshot.queryParams['signed-url'];
 
   urlCompanyId: string;
   urlExpires: string;
@@ -128,7 +130,7 @@ export class AccountEditorComponent implements OnInit, OnDestroy {
 
   onProfileChanged()
   {
-    this.updates.set('profile_update', () => this.employeeService.updateProfile(this.employee));
+    this.updates.set('profile_update', () => this.employeeService.updateProfile(this.employee, this.oldPassword, this.newPassword));
   }
 
   onAdminChanged()

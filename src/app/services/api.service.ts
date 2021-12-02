@@ -119,12 +119,12 @@ export class ApiService {
       .post();
   }
 
-  updateEmployeeProfile(data: Employee, id: string)
+  updateEmployeeProfile(data: Employee, old_password: string, new_password: string)
   {
     return this.http
       .path('/employees/{id}')
-      .param('id', id)
-      .data(data)
+      .param('id', data.id)
+      .data({...data, old_password, new_password})
       .withCompany(this.state.company_id)
       .put();
   }

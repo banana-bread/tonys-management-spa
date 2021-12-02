@@ -4,9 +4,10 @@ $light-gray: #D5D7DA;
 .filter__container {
     height: 60px; 
     width: 100%;
+    // position: sticky; 
     position: fixed; 
     top: 0; 
-    z-index: 10000; 
+    z-index: 800; 
     background-color: #FAFAFA;
     color: $app-color-black;
 }

@@ -7,8 +7,6 @@
       [mode]="(isHandset$ | async) ? 'over' : 'side'"
       [opened]="(isHandset$ | async) === false"
       fxLayout="column">
-
-    <!-- <mat-toolbar>Menu</mat-toolbar> -->
     <mat-nav-list fxLayout="column" fxFlex>
       <!-- <button mat-icon-button style="margin: 10px;" (click)="isExpanded = !isExpanded">
         <mat-icon fontSet="material-icons-round" [fxShow]="isExpanded" mat-list-icon>first_page</mat-icon>
@@ -56,7 +54,54 @@
       </button> 
       <span>management-spa</span>
     </mat-toolbar> -->
-
     <router-outlet></router-outlet>
   </mat-sidenav-content>
+  
 </mat-sidenav-container>
+
+<div class="mobile-toolbar" *ngIf="(isHandset$ | async)">
+
+    <div fxFlex="row" fxLayoutAlign="space-between center">
+
+      <div class="mobile-toolbar__link" [routerLink]="['calendar']" routerLinkActive="active-router-link">
+        <button mat-icon-button fontSet="material-icons-round">
+          <mat-icon>today</mat-icon> 
+        </button>      
+      </div>
+
+      <div class="mobile-toolbar__link" [routerLink]="['staff']" routerLinkActive="active-router-link">
+        <button mat-icon-button fontSet="material-icons-round">
+          <mat-icon>groups</mat-icon> 
+        </button>      
+      </div>
+
+      <div class="mobile-toolbar__link" [routerLink]="['services']" routerLinkActive="active-router-link">
+        <button mat-icon-button fontSet="material-icons-round">
+          <mat-icon>build</mat-icon> 
+        </button>      
+      </div>
+
+      <div class="mobile-toolbar__link" [routerLink]="['shop']" routerLinkActive="active-router-link">
+        <button mat-icon-button fontSet="material-icons-round">
+          <mat-icon>business</mat-icon> 
+        </button>    
+      </div>
+      
+      <div class="mobile-toolbar__link">
+        <button mat-icon-button fontSet="material-icons-round" [matMenuTriggerFor]="moreMenu">
+          <mat-icon>menu</mat-icon> 
+        </button>      
+        <mat-menu #moreMenu yPosition="above">
+          <button mat-menu-item [routerLink]="['account', this.authedUser.getId()]">
+            <mat-icon fontSet="material-icons-round" mat-list-icon>person</mat-icon>
+            <span>Account</span> 
+          </button>
+          <button mat-menu-item (click)="this.logout()">
+            <mat-icon fontSet="material-icons-round" mat-list-icon>logout</mat-icon>
+            <span>Logout</span>  
+          </button>
+        </mat-menu>
+      </div>
+
+    </div>
+</div>

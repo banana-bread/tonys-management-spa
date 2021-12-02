@@ -5,18 +5,35 @@
 .calendar__times {
     position: sticky;
     left: 0;
-    z-index: 2000;
+    z-index: 600;
 }
 
 .employee-avatar-container {
     position: sticky;  
     top: 60px;
-    z-index: 1000;
+    z-index: 500;
     background: #FAFAFA;
-    padding: 8px 0;
+    padding: 4px 0;
     border-bottom: rgb(220,220,220) 1px solid;
 
+     
+    @media (min-width: 600px) {
+        padding: 8px 0;
+    }
+
+    .app-employee-avatar {
+        font-size: 14px;
+        width: 32px;
+        height: 32px;
+    
+        @media (min-width: 600px) {
+            font-size: 18px;
+            width: 40px;
+            height: 40px;
+        }
+    }
 }
+
 
 .calendar__employees app-employee-calendar {
     min-width: 150px;
@@ -50,4 +67,22 @@
 
 .cal-week-view {
     border-top: none;
+}
+
+.calendar__times {
+    @media (max-width: 599px) {
+        .cal-cell-row {
+            width: 100%;
+        }
+        .ng-star-inserted { 
+            width: 50px;
+        }
+        .cal-month-view .cal-day-cell {
+             width: 50px;
+             min-width: 0px;
+        }
+        .cal-current-time-marker.ng-star-inserted {
+            margin-left: -50px;
+        }
+    }
 }

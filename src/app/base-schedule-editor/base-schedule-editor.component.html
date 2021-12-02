@@ -1,44 +1,45 @@
-<mat-card class="app-editor-card">
-    <mat-card-title class="app-editor-card-title">Schedule</mat-card-title>
-    <div fxLayout="column">
-        <div *ngFor="let day of value?.days"
-            fxLayout="row" 
-            fxLayoutGap="20px"  
-            fxLayoutAlign=" center">
-            <mat-slide-toggle [(ngModel)]="day.active"
-                color="accent"
-                name="active"
-                (change)="onChanged()">
-            </mat-slide-toggle>
-            <span class="mat-subheading-2 capitalize" fxFlex>{{ day.day }}</span> 
-
-            <mat-form-field class="no-padding-bottom inline-input" fxFlex="25" fxFlex.xs="20">    
-                <mat-select [(ngModel)]="day.start"
-                    name="startTimes"
-                    #startTimes="ngModel"
-                    (selectionChange)="onChanged()" 
-                    [disabled]="isSelectDisabled(day)"
-                    [required]="day.active"
-                    [min]="endTime"
-                    [errorStateMatcher]="errorStateMatcher">
-                    <mat-option *ngFor="let time of times" [value]="time">
-                        {{ getFormattedTime(time) }}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
-            <mat-form-field class="no-padding-bottom inline-input" fxFlex="25" fxFlex.xs="20">    
-                <mat-select [disabled]="isSelectDisabled(day)" 
-                    (selectionChange)="onChanged()"
-                    name="endTimes"
-                    #endTimes="ngModel"
-                    [(ngModel)]="day.end"
-                    [required]="day.active"
-                    [errorStateMatcher]="errorStateMatcher">
-                    <mat-option *ngFor="let time of times" [value]="time">
-                        {{ getFormattedTime(time) }}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
-        </div>
+<mat-card-title class="app-editor-card-title">Schedule</mat-card-title>
+<div fxLayout="column">
+    <div *ngFor="let day of value?.days"
+        fxLayout="row" 
+        fxLayoutGap="20px"  
+        fxLayoutGap.xs="10px"
+        fxLayoutAlign="space-between center">
+        
+        <mat-slide-toggle [(ngModel)]="day.active"
+            color="accent"
+            name="active"
+            (change)="onChanged()">
+        </mat-slide-toggle>
+        <span class="mat-subheading-2 capitalize" *ngIf="!(isHandset$ | async)">{{ day.day }}</span> 
+        <span class="mat-subheading-2 capitalize" *ngIf="(isHandset$ | async)">{{ getFormattedDay(day.day) }}</span> 
+        <span fxFlex></span>
+        <mat-form-field class="no-padding-bottom inline-input" fxFlex="25" fxFlex.xs="30">    
+            <mat-select [(ngModel)]="day.start"
+                name="startTimes"
+                #startTimes="ngModel"
+                (selectionChange)="onChanged()" 
+                [disabled]="isSelectDisabled(day)"
+                [required]="day.active"
+                [min]="endTime"
+                [errorStateMatcher]="errorStateMatcher">
+                <mat-option *ngFor="let time of times" [value]="time">
+                    {{ getFormattedTime(time) }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field class="no-padding-bottom inline-input" fxFlex="25" fxFlex.xs="30">    
+            <mat-select [disabled]="isSelectDisabled(day)" 
+                (selectionChange)="onChanged()"
+                name="endTimes"
+                #endTimes="ngModel"
+                [(ngModel)]="day.end"
+                [required]="day.active"
+                [errorStateMatcher]="errorStateMatcher">
+                <mat-option *ngFor="let time of times" [value]="time">
+                    {{ getFormattedTime(time) }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
     </div>
-</mat-card>
+</div>

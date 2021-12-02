@@ -48,11 +48,12 @@ export class EmployeeCalendarComponent implements OnInit, OnDestroy {
     this._mapBookingsToCalendarEvents(this.employee.bookings)
 
     this.refreshPage = interval(60000).subscribe(() => {
-      // this.refreshSubject.next()
+      this._mapBookingsToCalendarEvents(this.employee.bookings)
+
       this.events.forEach(event => {
         event.cssClass = this._determineEventClass(event);
       })
-      
+      console.log('[employee-calendar] Refreshing view')
       this.refresh();
     });
   }
@@ -68,6 +69,7 @@ export class EmployeeCalendarComponent implements OnInit, OnDestroy {
 
     const onBookingCancel = (booking: Booking) => 
     {
+      this.employee.removeBooking(booking);
       const index = this.events.findIndex(event => event.id === booking.id)
       this.events.splice(index, 1);
       this.refresh();

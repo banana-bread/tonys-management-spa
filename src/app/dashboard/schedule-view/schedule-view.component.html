@@ -1,11 +1,11 @@
 <div fxLayout="column" fxFlex>
     <div class="filter__container" fxLayout="row" fxLayoutAlign="center center">
         <div fxLayout="row">
-            <div class="filter__button filter__button--prev" (click)="onPrevChosen()">
-                <mat-icon class="">chevron_left</mat-icon>
+            <div class="filter__button filter__button--prev" (click)="onPrevChosen()" matRipple>
+                <mat-icon>chevron_left</mat-icon>
             </div>
 
-            <div class="filter__button filter__button--today" (click)="onTodayChosen()">
+            <div class="filter__button filter__button--today" (click)="onTodayChosen()" matRipple>
                 Today
             </div>
 
@@ -22,8 +22,8 @@
                 {{ formattedDate() }}
             </div>
 
-            <div class="filter__button filter__button--next" (click)="onNextChosen()">
-                <mat-icon class="">chevron_right</mat-icon>
+            <div class="filter__button filter__button--next" (click)="onNextChosen()" matRipple>
+                <mat-icon>chevron_right</mat-icon>
             </div>
         </div>
     </div>

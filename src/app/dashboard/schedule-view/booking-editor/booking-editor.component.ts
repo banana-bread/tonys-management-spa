@@ -3,7 +3,6 @@ import { MatDialog, MatDialogConfig, MatDialogRef, MAT_DIALOG_DATA } from '@angu
 import { CalendarEvent } from 'angular-calendar';
 import { Employee } from 'src/app/models/employee/employee.model';
 import { ServiceDefinition } from 'src/app/models/service-definition/service-definition.model';
-import { ServiceDefinitionService } from 'src/app/models/service-definition/service-definition.service';
 import * as moment from 'moment'
 import { secondsSinceStartOfDay } from 'src/app/helpers/moment.helper';
 import { NgForm, NgModel } from '@angular/forms';
@@ -52,7 +51,6 @@ export class BookingEditorComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) protected data: DialogData,
     public dialogRef: MatDialogRef<BookingEditorComponent>,
-    private serviceDefService: ServiceDefinitionService,
     private employeeBookingService: EmployeeBookingService,
     private bookingService: BookingService,
     private notification: SnackbarNotificationService,
@@ -70,7 +68,6 @@ export class BookingEditorComponent implements OnInit {
     if (!! this.data.booking)
     {
       this.booking = this.data.booking;
-      this._mapServicesToBooking()
       this.services = this.booking.services;
     }
     else
@@ -84,15 +81,6 @@ export class BookingEditorComponent implements OnInit {
   displayServices(): string
   {
     return this.services.map(service => service.name).join(', ');
-  }
-
-  private _mapServicesToBooking()
-  {
-    this.services = this.services.filter(
-      serviceDef => this.booking.services.find(
-        service => service.service_definition_id === serviceDef.id
-      )
-    )
   }
 
   formatTime(seconds: number): Date
@@ -131,7 +119,7 @@ export class BookingEditorComponent implements OnInit {
 
   onServicesChanged()
   {
-    const totalDuration: number = this.selectedServices.reduce((acc, i) => acc + i.duration, 0);
+    const totalDuration = this.selectedServices.reduce((acc, i) => acc + i.duration, 0);
     this.endTime = this.startTime + totalDuration;
 
     const overlapsBooking: boolean = 
@@ -164,7 +152,7 @@ export class BookingEditorComponent implements OnInit {
     try
     {
       const booking = await this.employeeBookingService.create(this.event, this.selectedServices, this.employee.id);
-      // this._mapServicesToBooking();
+
       this.event.id = booking.id;
       this.dialogRef.close({event: this.event, booking: booking});
       this.notification.success('Booking created!');
@@ -222,7 +210,7 @@ export class BookingEditorService {
   async open(data: DialogData): Promise<any>
   {
     const dialogConfig: MatDialogConfig = {
-      disableClose: true,
+      disableClose: false,
       hasBackdrop: true,
       autoFocus: false,
       width: '100%',

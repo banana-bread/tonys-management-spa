@@ -1,9 +1,12 @@
 import { ChangeDetectorRef, QueryList, ViewChildren } from '@angular/core';
-import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild, forwardRef } from '@angular/core';
-import { NG_VALUE_ACCESSOR, ControlValueAccessor, NgForm, NgModel } from '@angular/forms';
+import { AfterViewInit, Component, EventEmitter, OnInit, Output, forwardRef } from '@angular/core';
+import { NG_VALUE_ACCESSOR, ControlValueAccessor, NgModel } from '@angular/forms';
 import { SyncErrorStateMatcher } from '../helpers/sync-error-state.matcher';
 import { BaseSchedule, BaseScheduleDay } from '../helpers/base-schedule.helper';
 import * as moment from 'moment';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { Observable } from 'rxjs';
+import { map, shareReplay } from 'rxjs/operators';
 
 // TODO: Make sure end time is greater than start time
 @Component({
@@ -25,9 +28,15 @@ export class BaseScheduleEditorComponent implements OnInit, AfterViewInit, Contr
   onChange: (schedule: BaseSchedule) => void;
   onTouched: () => void;
 
+  isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
+  .pipe(
+    map(result => result.matches),
+    shareReplay()
+  );
+
   times: string[] = [];
 
-  constructor(private changeDetection: ChangeDetectorRef) { }
+  constructor(private breakpointObserver: BreakpointObserver) { }
 
   writeValue(obj: BaseSchedule): void 
   {
@@ -65,6 +74,21 @@ export class BaseScheduleEditorComponent implements OnInit, AfterViewInit, Contr
     const minutes = hourMinuteArray[1];
 
     return moment().startOf('day').add(hours, 'hours').add(minutes, 'minutes').format('LT')
+  }
+
+  getFormattedDay(day: string)
+  {
+    const days = {
+      monday: 'Mon',
+      tuesday: 'Tues',
+      wednesday: 'Wed',
+      thursday: 'Thurs',
+      friday: 'Fri',
+      saturday: 'Sat',
+      sunday: 'Sun',
+    }
+
+    return days[day];
   }
 
   ngAfterViewInit()

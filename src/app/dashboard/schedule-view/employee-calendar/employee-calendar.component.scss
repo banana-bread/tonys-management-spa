@@ -12,6 +12,12 @@ app-employee-calendar {
 
     .cal-hour-segment {
         cursor: pointer;
+        font-size: 11px;
+        font-weight: normal; 
+
+        @media (min-width: 600px) {
+            font-size: 12px;
+        }
     }
 
     .hour-segment--disabled.cal-hour-segment:hover {
@@ -19,5 +25,11 @@ app-employee-calendar {
         cursor: auto;
     }
 
+    .cal-after-hour-start {
+        border-bottom-style: solid;
+    } 
 
+    .cal-week-view .cal-hour:not(:last-child) .cal-hour-segment, .cal-week-view .cal-hour:last-child :not(:last-child) .cal-hour-segment {
+        border-bottom: thin solid #e1e1e1;
+    }
 }

@@ -1,6 +1,7 @@
-import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import * as moment from 'moment';
+import { interval, Subscription } from 'rxjs';
 import { Booking } from 'src/app/models/booking/booking.model';
 import { Company } from 'src/app/models/company/company.model';
 import { CompanyService } from 'src/app/models/company/company.service';
@@ -16,7 +17,7 @@ import { EmployeeCalendarComponent } from './employee-calendar/employee-calendar
   styleUrls: ['./schedule-view.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class ScheduleViewComponent implements OnInit {
+export class ScheduleViewComponent implements OnInit, OnDestroy {
 
   @ViewChild(EmployeeCalendarComponent) calendarComponent: EmployeeCalendarComponent;
 
@@ -25,6 +26,7 @@ export class ScheduleViewComponent implements OnInit {
   filteredEmployees: Employee[] = [];
   selectedDate: number = moment().unix();
   selectedPickerDate: Date;
+  private _refreshBookingsSubscription: Subscription;
 
   constructor(
     private route: ActivatedRoute,
@@ -42,11 +44,16 @@ export class ScheduleViewComponent implements OnInit {
 
     this._setDateParam( this._determineDate() );
 
-    // this._setFilteredEmployees();
-
     await this._setBookings();
 
+    this._startRefreshBookingsSubscription();
+
     this.loading = false;
+  }
+
+  ngOnDestroy(): void 
+  {
+    this._refreshBookingsSubscription.unsubscribe();
   }
 
   formattedDate(): string
@@ -124,12 +131,20 @@ export class ScheduleViewComponent implements OnInit {
       .sort((a, b) => a.ordinal_position - b.ordinal_position)
 
     // Apply bookings to employees that have them
-    employees
-      .filter(employee => !!response[employee.id])
-      .forEach(employee => {
-        employee.bookings = response[employee.id].map((data: any) => new Booking(data))
+    employees.forEach(employee => {
+        employee.bookings = response[employee.id]
+          ? response[employee.id].map((data: any) => new Booking(data))
+          : [];
       });
 
     this.filteredEmployees = employees;
+  }
+
+  private async _startRefreshBookingsSubscription()
+  {
+    // Every 5 minutes
+    this._refreshBookingsSubscription = interval((60000 * 5)).subscribe(() => {
+      this._setBookings();
+    });
   }
 }

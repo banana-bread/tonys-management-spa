@@ -56,6 +56,9 @@ import { MatDateFormats, MatNativeDateModule, MAT_DATE_FORMATS, MAT_NATIVE_DATE_
 import { NgxMaskModule } from 'ngx-mask';
 import { AccountEditorComponent } from './dashboard/account-view/account-editor/account-editor.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatRippleModule } from '@angular/material/core';
+
 
 
 export function momentAdapterFactory() {
@@ -141,9 +144,10 @@ const APP_DATE_FORMATS: MatDateFormats = {
 
     MatDatepickerModule,
     MatNativeDateModule,
+    MatMenuModule,
+    MatRippleModule,
 
     TonysSharedModule.forRoot('http://localhost:89'),
-    // TonysSharedModule.forRoot({ apiUrl: 'http://localhost:89' }),
     CalendarModule.forRoot({ provide: DateAdapter, useFactory: momentAdapterFactory }),
     NgxMaskModule.forRoot(),
   ],

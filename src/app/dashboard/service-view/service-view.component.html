@@ -1,5 +1,5 @@
 <mat-progress-bar class="app-loading-bar" *ngIf="saving" mode="indeterminate"></mat-progress-bar>
-<div class="app-view-padding" fxLayout="row" fxLayoutAlign="center">
+<div class="app-view-padding" fxLayout="row" fxLayoutAlign="center center">
     <div class="drag-list" fxFlex fxLayoutAlign=" center" fxLayout="column" *ngIf="!loading" fxLayoutGap="15px"
     cdkDropList
     (cdkDropListDropped)="onItemDropped($event)">

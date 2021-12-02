@@ -63,6 +63,16 @@ export class Employee extends BaseModel implements Schedulable {
         return 'Employee'
     }
 
+    removeBooking(booking: Booking)
+    {
+        const index = this.bookings.indexOf(booking);
+
+        if (index >= 0)
+        {
+            this.bookings.splice(index, 1);
+        }
+    }
+
     // isWorkingNow(): boolean
     // {
     //     const today: BaseScheduleDay = this.base_schedule.today();

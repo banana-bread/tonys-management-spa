@@ -30,12 +30,14 @@
         fxLayoutGap="40px"
         *ngIf="!loading">
 
-        <app-base-schedule-editor
-            [schedule]="employee.base_schedule"
-            [(ngModel)]="employee.base_schedule"
-            (ngModelChange)="onBaseScheduleChanged()"
-            (errorChange)="onBaseScheduleErrorChange($event)">
-        </app-base-schedule-editor>
+        <mat-card class="app-editor-card">
+            <app-base-schedule-editor
+                [schedule]="employee.base_schedule"
+                [(ngModel)]="employee.base_schedule"
+                (ngModelChange)="onBaseScheduleChanged()"
+                (errorChange)="onBaseScheduleErrorChange($event)">
+            </app-base-schedule-editor>
+        </mat-card>
 
         <mat-card class="app-editor-card">
             <form #profileForm="ngForm">

@@ -42,7 +42,8 @@
             <div fxLayout="row" fxLayoutAlign=" center" fxLayoutGap="8px">
                 <span class="material-icons-outlined">schedule</span>
                 <span>{{ event.start | date:'EEEE, MMMM d' }}, {{ formatTime(startTime) | date:'h:mm a' }} - </span>
-                <span *ngIf="!! services.length">{{ formatTime(endTime) | date:'h:mm a' }}</span>
+                <span *ngIf="!!this.booking">{{ formatTime(endTime) | date:'h:mm a' }}</span>
+                <span *ngIf="!this.booking && this.selectedServices.length">{{ formatTime(endTime) | date:'h:mm a' }}</span>
             </div>
             <div fxLayout="row" fxLayoutAlign=" center" fxLayoutGap="8px" *ngIf="booking?.id">
                 <span class="material-icons-outlined">build</span>

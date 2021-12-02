@@ -30,12 +30,14 @@
         fxLayoutGap="40px"
         *ngIf="!loading">
 
-        <app-base-schedule-editor
-            [schedule]="employee.base_schedule"
-            [(ngModel)]="employee.base_schedule"
-            (ngModelChange)="onBaseScheduleChanged()"
-            (errorChange)="onBaseScheduleErrorChange($event)">
-        </app-base-schedule-editor>
+        <mat-card class="app-editor-card">
+            <app-base-schedule-editor
+                [schedule]="employee.base_schedule"
+                [(ngModel)]="employee.base_schedule"
+                (ngModelChange)="onBaseScheduleChanged()"
+                (errorChange)="onBaseScheduleErrorChange($event)">
+            </app-base-schedule-editor>
+        </mat-card>
 
         <mat-card class="app-editor-card">
             <form #profileForm="ngForm">
@@ -111,6 +113,34 @@
                     </mat-slide-toggle>
                     <span class="mat-subheading-2 capitalize" fxFlex>Owner</span> 
                 </div>
+            </div>
+        </mat-card>
+
+
+        <mat-card class="app-editor-card">
+            <mat-card-title class="app-editor-card-title">Password</mat-card-title>
+            <mat-card-subtitle>Update your password</mat-card-subtitle>
+            <div fxLayout="column" fxLayoutGap="16px">
+                <mat-form-field fxFlex hideRequiredMarker>
+                    <mat-label>Old password</mat-label>
+                    <input type="password"
+                        [(ngModel)]="this.oldPassword"
+                        (ngModelChange)="onProfileChanged()"
+                        name="employeeOldPassword"
+                        #employeeoldPassword="ngModel"
+                        [disabled]="saving"
+                        matInput>
+                </mat-form-field>
+                <mat-form-field fxFlex hideRequiredMarker>
+                    <mat-label>New password</mat-label>
+                    <input type="password"
+                        [(ngModel)]="this.newPassword"
+                        (ngModelChange)="onProfileChanged()"
+                        name="employeeNewPassword"
+                        #employeeNewPassword="ngModel"
+                        [disabled]="saving"
+                        matInput>
+                </mat-form-field>
             </div>
         </mat-card>
     </div>
