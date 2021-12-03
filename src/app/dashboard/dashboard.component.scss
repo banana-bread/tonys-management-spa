@@ -67,7 +67,7 @@ div.mobile-toolbar {
   }
 
   mat-icon {
-    transform: scale(1.1);
+    // transform: scale(1.1);
   }
 }
 
@@ -78,6 +78,11 @@ div.mobile-toolbar__link {
   align-items: center;
   height: 100%;
   padding: 0 8px;
+
+  span {
+    margin-top: -4px;
+    font-size: 12px;
+  }
 }
 
 .mobile-view-offset {

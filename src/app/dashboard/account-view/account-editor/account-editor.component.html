@@ -11,15 +11,16 @@
         <span class="app-editor-title" *ngIf="!loading">Edit  Account</span>
         <span fxFlex></span>
         <button type="button" 
-            *ngIf="original"
-            class="delete-button" 
-            mat-raised-button 
+            *ngIf="false"
+            mat-flat-button 
+            color="warn"
             [disabled]="saving || loading || !original || original.owner"
             (click)="onDelete()"> 
-            Delete
+        Delete
+        <!-- *ngIf="original" -->
         </button>
-        <button (click)="onSave()" mat-raised-button color="accent" [disabled]="saving || loading || !this.hasUpdates()">
-            {{ !!original ? 'Save' : 'Submit' }}
+        <button (click)="onSave()" mat-flat-button color="accent" [disabled]="saving || loading || !this.hasUpdates()">
+            Save
         </button>
     </mat-toolbar>
     <mat-progress-bar class="app-loading-bar" *ngIf="saving" mode="indeterminate"></mat-progress-bar>

@@ -35,6 +35,11 @@ export class AuthedUserService {
         return id;
     }
 
+    canDeleteStaff(): boolean
+    {
+        return this._employee?.isOwner();
+    }
+
     canViewAllEmployees(): boolean
     {
         return this._employee?.isAdmin();

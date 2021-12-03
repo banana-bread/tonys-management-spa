@@ -53,7 +53,7 @@ export class ScheduleViewComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void 
   {
-    this._refreshBookingsSubscription.unsubscribe();
+    this._refreshBookingsSubscription?.unsubscribe();
   }
 
   formattedDate(): string

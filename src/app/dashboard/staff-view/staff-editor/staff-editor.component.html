@@ -12,13 +12,13 @@
         <span fxFlex></span>
         <button type="button" 
             *ngIf="original"
-            class="delete-button" 
-            mat-raised-button 
-            [disabled]="saving || loading || !original || original.owner"
+            color="warn"
+            mat-flat-button 
+            [disabled]="saving || loading || !original || original.owner || !authedUserService.canDeleteStaff()"
             (click)="onDelete()"> 
             Delete
         </button>
-        <button (click)="onSave()" mat-raised-button color="accent" [disabled]="saving || loading || !this.hasUpdates()">
+        <button (click)="onSave()" mat-flat-button color="accent" [disabled]="saving || loading || !this.hasUpdates()">
             {{ !!original ? 'Save' : 'Submit' }}
         </button>
     </mat-toolbar>

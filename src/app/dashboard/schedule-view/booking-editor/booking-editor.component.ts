@@ -128,8 +128,11 @@ export class BookingEditorComponent implements OnInit {
                    this.startTime < secondsSinceStartOfDay(booking.started_at)
       );
 
-    const exceedsEndTime: boolean = this.endTime > this.employee.base_schedule.endOf(this.event.start)
+    const baseScheduleEnd: string = this.employee.base_schedule.endOf(this.event.start);
+    const shiftEndInSeconds = (parseInt(baseScheduleEnd.split(':')[0]) * 3600) + (parseInt(baseScheduleEnd.split(':')[1]) * 60);
+    const exceedsEndTime: boolean = this.endTime > shiftEndInSeconds;
 
+    
     if (overlapsBooking || exceedsEndTime)
     {
       this.startTimeField.control.setErrors({ overlap: true });

@@ -1,5 +1,8 @@
 <form #form="ngForm" (ngSubmit)="onSave()">
-<h1 mat-dialog-title>{{ this.booking?.id ? '' : 'New' }} Booking</h1>
+<div class="title-row" fxLayout="row" fxLayoutAlign="space-between center">
+    <h1 mat-dialog-title>{{ this.booking?.id ? '' : 'New' }} Booking</h1>
+    <button class="icon-button" type="button" mat-icon-button mat-dialog-close><mat-icon>close</mat-icon></button>
+</div>
 <div mat-dialog-content>
     <div fxLayout="column" *ngIf="!loading">
         <div fxFlex fxLayout="column" *ngIf="!booking?.id">
@@ -58,13 +61,8 @@
     </div>
 </div>
 <div mat-dialog-actions align="end">
-    <button class="icon-button" type="button" mat-icon-button [disabled]="loading" *ngIf="booking?.id" (click)="onCancelBooking()"><mat-icon>delete</mat-icon></button>
-    
-    <span fxFlex></span>
-
     <mat-progress-spinner mode="indeterminate" diameter="36" *ngIf="saving"></mat-progress-spinner>
-    <button type="button" mat-flat-button mat-dialog-close>Cancel</button>
+    <button type="button" mat-flat-button color="warn" [disabled]="loading" *ngIf="booking?.id" (click)="onCancelBooking()">Cancel</button>
     <button type="submit" mat-flat-button color="accent" [disabled]="saving || loading || booking?.id">Save</button>
-    <!-- <button type="button" mat-raised-button mat-dialog-close [disabled]="saving || loading" *ngIf="booking?.id">Ok</button> -->
 </div>
 </form>
