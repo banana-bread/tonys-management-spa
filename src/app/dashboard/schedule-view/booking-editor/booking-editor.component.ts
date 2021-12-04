@@ -8,7 +8,7 @@ import { secondsSinceStartOfDay } from 'src/app/helpers/moment.helper';
 import { NgForm, NgModel } from '@angular/forms';
 import { EmployeeBookingService } from 'src/app/models/employee_booking.service';
 import { Booking } from 'src/app/models/booking/booking.model';
-import { SnackbarNotificationService } from '@tonys/shared';
+import { SnackbarNotificationService } from '@tonys-barbers/shared';
 import { SyncErrorStateMatcher } from 'src/app/helpers/sync-error-state.matcher';
 import { BookingService } from 'src/app/models/booking/booking.service';
 import { ConfirmDialogService } from 'src/app/confirm-dialog/confirm-dialog.service';

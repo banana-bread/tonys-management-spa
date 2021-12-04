@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
-import { SnackbarNotificationService } from '@tonys/shared';
+import { SnackbarNotificationService } from '@tonys-barbers/shared';
 import { Company } from 'src/app/models/company/company.model';
 import { CompanyService } from 'src/app/models/company/company.service';
 import { AppStateService } from 'src/app/services/app-state.service';

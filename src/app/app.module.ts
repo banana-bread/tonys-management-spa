@@ -12,7 +12,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
-import { TonysSharedModule } from '@tonys/shared';
+import { TonysSharedModule } from '@tonys-barbers/shared';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialogModule } from '@angular/material/dialog';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -20,7 +20,7 @@ import { ServiceViewComponent } from './dashboard/service-view/service-view.comp
 import { StaffViewComponent } from './dashboard/staff-view/staff-view.component';
 import { ShopViewComponent } from './dashboard/shop-view/shop-view.component';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { AuthInterceptor } from '@tonys/shared';
+import { AuthInterceptor } from '@tonys-barbers/shared';
 import { MatDividerModule } from '@angular/material/divider';
 import { ServiceEditorComponent } from './dashboard/service-view/service-editor/service-editor.component';
 import { MatCardModule } from '@angular/material/card';

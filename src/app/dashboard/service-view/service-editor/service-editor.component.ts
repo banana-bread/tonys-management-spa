@@ -2,7 +2,7 @@ import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router'; 
-import { SnackbarNotificationService } from '@tonys/shared';
+import { SnackbarNotificationService } from '@tonys-barbers/shared';
 import { ConfirmDialogService } from 'src/app/confirm-dialog/confirm-dialog.service';
 import { ServiceDefinition } from 'src/app/models/service-definition/service-definition.model';
 import { ServiceDefinitionService } from 'src/app/models/service-definition/service-definition.service';

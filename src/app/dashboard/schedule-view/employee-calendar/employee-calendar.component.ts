@@ -9,7 +9,7 @@ import { BookingService } from 'src/app/models/booking/booking.service';
 import { Moment } from 'src/types';
 import { toEnglishDay } from 'src/app/helpers/moment.helper';
 import { AuthedUserService } from 'src/app/services/authed-user.service';
-import { SnackbarNotificationService } from '@tonys/shared';
+import { SnackbarNotificationService } from '@tonys-barbers/shared';
 import { interval, Subject, Subscription } from 'rxjs';
 import { Company } from 'src/app/models/company/company.model';
 @Component({

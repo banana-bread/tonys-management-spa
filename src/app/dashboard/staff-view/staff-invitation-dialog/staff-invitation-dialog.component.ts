@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren, ViewEncapsulation } from '@angular/core';
 import { NgForm, NgModel } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
-import { SnackbarNotificationService } from '@tonys/shared';
+import { SnackbarNotificationService } from '@tonys-barbers/shared';
 import { EmployeeService } from 'src/app/models/employee/employee.service';
 import { AppStateService } from 'src/app/services/app-state.service';
 

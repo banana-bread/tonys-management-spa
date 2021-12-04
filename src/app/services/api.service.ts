@@ -1,5 +1,5 @@
 import { Injectable, ModuleWithComponentFactories } from '@angular/core';
-import { HttpAdapter } from '@tonys/shared';
+import { HttpAdapter } from '@tonys-barbers/shared';
 import { CalendarEvent } from 'angular-calendar';
 import * as moment from 'moment';
 import { Employee } from '../models/employee/employee.model';

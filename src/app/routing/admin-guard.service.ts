@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router, CanActivate, ActivatedRouteSnapshot } from '@angular/router';
-import { SnackbarNotificationService } from '@tonys/shared';
+import { SnackbarNotificationService } from '@tonys-barbers/shared';
 import { AppStateService } from '../services/app-state.service';
 import { AuthedUserService } from '../services/authed-user.service';
 import { filter } from 'rxjs/operators';

@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { ActivatedRoute, Router } from '@angular/router';
-import { SnackbarNotificationService } from '@tonys/shared';
+import { SnackbarNotificationService } from '@tonys-barbers/shared';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { ConfirmDialogService } from 'src/app/confirm-dialog/confirm-dialog.service';
 import { Company } from 'src/app/models/company/company.model';

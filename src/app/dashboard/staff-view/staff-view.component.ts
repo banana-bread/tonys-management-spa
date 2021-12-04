@@ -1,7 +1,7 @@
 import { moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { SnackbarNotificationService } from '@tonys/shared';
+import { SnackbarNotificationService } from '@tonys-barbers/shared';
 import { ConfirmDialogService } from 'src/app/confirm-dialog/confirm-dialog.service';
 import { CompanyService } from 'src/app/models/company/company.service';
 import { Employee } from 'src/app/models/employee/employee.model';
