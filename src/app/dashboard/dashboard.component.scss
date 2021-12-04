@@ -82,6 +82,23 @@ div.mobile-toolbar__link {
   span {
     margin-top: -4px;
     font-size: 12px;
+    font-weight: normal;
+    color: lighten($app-color-black, 30);
+  }
+
+  mat-icon {
+    color: lighten($app-color-black, 30);
+  }
+}
+
+.active-mobile-router-link {
+  mat-icon {
+    color: $app-color-black !important;
+  }
+
+  span {
+    color: $app-color-black !important;
+    font-weight: bold;
   }
 }
 
