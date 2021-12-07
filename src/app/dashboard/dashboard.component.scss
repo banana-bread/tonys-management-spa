@@ -65,10 +65,6 @@ div.mobile-toolbar {
     background-color: #fff; 
     padding: 0 24px; 
   }
-
-  mat-icon {
-    // transform: scale(1.1);
-  }
 }
 
 div.mobile-toolbar__link {
@@ -88,6 +84,10 @@ div.mobile-toolbar__link {
 
   mat-icon {
     color: lighten($app-color-black, 30);
+  }
+
+  button:focus {
+    outline:0;
   }
 }
 
