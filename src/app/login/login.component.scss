@@ -2,11 +2,20 @@ mat-card {
     width: 100%;
     max-width: 400px;
 }
-h1 {
+
+h1.brand-logo {
     font-size: 50px;
     @media (min-width: 600px) {
         font-size: 75px;
         margin-bottom: 60px;
+    }
+}
+
+h2.mat-display-1 {
+    margin-bottom: 24px;
+
+    @media (max-width: 599px) {
+        font-size: 32px;
     }
 }
 
@@ -26,5 +35,5 @@ mat-card {
 
 .outer-container {
     padding: 16px;
-    padding-top: 100px;
+    padding-top: 150px;
 }
