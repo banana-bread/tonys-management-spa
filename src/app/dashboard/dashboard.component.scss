@@ -86,13 +86,8 @@ div.mobile-toolbar__link {
     color: lighten($app-color-black, 30);
   }
 
-  button.mat-button-focus-overlay {
-    background-color: transparent !important;
-  }
-
-  button:focus {
-    outline: none !important;
-
+  .active-mobile-router-link:focus {
+    outline: 0 !important;
   }
 }
 

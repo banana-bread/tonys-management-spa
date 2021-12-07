@@ -33,10 +33,11 @@ export class AuthService {
 
   async logout(): Promise<void>
   {
-    await this.api.logout();
-
+    
     this.jwt.removeToken();
     this.state.removeCompany();
+    
+    this.api.logout();
   }
 
 

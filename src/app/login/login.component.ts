@@ -45,9 +45,9 @@ export class LoginComponent implements OnInit {
       this.router.navigate([`/${this.state.company_id}/calendar`, ]);
       this.notifications.success('Signed in')
     }
-    catch
+    catch (e)
     {
-      this.notifications.error('Error Signing in')
+      this.notifications.error(e.error.message)
     }
     finally
     {
