@@ -72,7 +72,9 @@ export class BookingEditorComponent implements OnInit {
     }
     else
     {
-      this.services = this.data.services
+      this.services = this.data.services.filter(
+        service => service.employee_ids.some(id => id === this.employee.id)
+      )
     }
 
     this.loading = false;

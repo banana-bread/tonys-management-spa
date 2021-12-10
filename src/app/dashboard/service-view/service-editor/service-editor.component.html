@@ -57,12 +57,33 @@
                         <mat-label>Duration</mat-label>
                         <mat-select [(ngModel)]="service.duration"
                             name="serviceDuration"
+                            #durationField="ngModel"
                             [disabled]="saving">
                             <mat-option *ngFor="let duration of durationOptions" [value]="duration">
                                 {{ duration | appDuration }}
                             </mat-option>
                         </mat-select>
-                        <mat-error *ngIf="serviceName.hasError('required')">Name is required</mat-error>
+                        <mat-error *ngIf="durationField.hasError('required')">Duration is required</mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field fxFlex hideRequiredMarker>
+                        <mat-label>Employees</mat-label>
+                        <mat-select name="employeesField"
+                            #employeesField="ngModel"
+                            [(ngModel)]="selectedEmployees"
+                            (ngModelChange)="onSelectedEmployeeChange()"
+                            multiple
+                            required>
+                            <mat-select-trigger>
+                                {{ this.displaySelectedEmployees() }}
+                              </mat-select-trigger>
+                            <mat-option (click)="toggleSelectAll()" value="all">All</mat-option>
+                            <mat-option *ngFor="let employee of this.employees" [value]="employee">
+                                {{ employee.full_name }}
+                            </mat-option>
+                            <mat-error *ngIf="employeesField.hasError('required')">You must assign at least 1 employee.</mat-error>
+                        </mat-select>
+
                     </mat-form-field>
                 </div>
             </mat-card>

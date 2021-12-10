@@ -1,9 +1,10 @@
-import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router'; 
 import { SnackbarNotificationService } from '@tonys-barbers/shared';
 import { ConfirmDialogService } from 'src/app/confirm-dialog/confirm-dialog.service';
+import { Employee } from 'src/app/models/employee/employee.model';
+import { EmployeeService } from 'src/app/models/employee/employee.service';
 import { ServiceDefinition } from 'src/app/models/service-definition/service-definition.model';
 import { ServiceDefinitionService } from 'src/app/models/service-definition/service-definition.service';
 import { AppStateService } from 'src/app/services/app-state.service';
@@ -35,6 +36,10 @@ export class ServiceEditorComponent implements OnInit {
   original = new ServiceDefinition();
   service = new ServiceDefinition();
   durationOptions: number[] = this.generateDurationOptions();
+
+  employees: Employee[] = [];
+  selectedEmployees: any[] = []; 
+
   serviceId: string = this.route.snapshot.paramMap.get('id');
 
   constructor(
@@ -46,36 +51,37 @@ export class ServiceEditorComponent implements OnInit {
     private notifications: SnackbarNotificationService,
     private confirmDialog: ConfirmDialogService,
     private unsavedChangesRouter: UnsavedChangesRouterService,
+    private employeeService: EmployeeService,
   ) { }
 
   async ngOnInit(): Promise<void> 
   {
-    if (this.serviceId === 'new') return;
+    this.loading = true;
 
-    if (!! this.serviceEditorService.service)
-    {
-      this.original = this.serviceEditorService.service;
-      this.service = this.original.copy();
-    } 
-    else
-    {
-      this.loading = true;
+    this.employees = await this.employeeService.getAll();
 
-      try
-      {  
-        this.original = await this.serviceDefinitionService.get(this.serviceId);
-        this.service = this.original.copy();
-      }
-      catch
-      { 
-        this.onClose();
-        this.notifications.error('Error loading service')
-      }
-      finally
-      {
-        this.loading = false;
-      }
+    if (this.serviceId === 'new') 
+    {
+      this.loading = false;
+      return;
     }
+
+    this.original = (!! this.serviceEditorService.service)
+      ? this.serviceEditorService.service
+      : await this.serviceDefinitionService.get(this.serviceId);
+    
+    this.service = this.original.copy();
+
+    this.selectedEmployees = this.employees.filter(
+      e => this.service.employee_ids.some(eid => e.id === eid)
+    ) 
+
+    if (this.service.employee_ids.length === this.employees.length)
+    {
+      this.selectedEmployees.push('all');
+    }
+
+    this.loading = false;
   }
 
   async onSave()
@@ -84,9 +90,14 @@ export class ServiceEditorComponent implements OnInit {
     
     this.saving = true;
 
+    this.service.employee_ids = 
+      this.selectedEmployees.filter(e => e !== 'all')
+        .map(e => e.id);
+
     try
     {
       await this.serviceDefinitionService.save(this.service);
+      this.router.navigate([`/${this.state.company_id}/services`])
       this.notifications.success('Service saved')
     }
     catch
@@ -95,7 +106,6 @@ export class ServiceEditorComponent implements OnInit {
     }
     finally
     {
-      this.onClose();
       this.saving = false;
     }
   }
@@ -150,5 +160,28 @@ export class ServiceEditorComponent implements OnInit {
     }
 
     return result;
+  }
+
+  onSelectedEmployeeChange()
+  {
+    if ( this.selectedEmployees.length !== (this.employees.length + 1) &&
+         this.selectedEmployees.some(e => e === 'all') )
+    {
+      this.selectedEmployees = this.selectedEmployees.filter(e => e !== 'all');
+    }
+  }
+
+  displaySelectedEmployees()
+  {
+    return this.selectedEmployees.some(e => e === 'all')
+      ? 'All'
+      : this.selectedEmployees.map(e => e.full_name).join(', ')
+  }
+
+  toggleSelectAll()
+  {
+    this.selectedEmployees = this.employees.length === this.selectedEmployees.length
+      ? []
+      : [...this.employees.map(employee => employee), 'all']   
   }
 }
