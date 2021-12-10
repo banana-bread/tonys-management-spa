@@ -8,6 +8,8 @@ export class ServiceDefinition extends BaseModel {
     duration?: number = 0;
     ordinal_position?: number = 0;
 
+    employee_ids?: string[] = [];
+
     relations = {};
     dates = {}
 
