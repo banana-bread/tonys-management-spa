@@ -3,7 +3,11 @@
     <div class="drag-list" fxFlex fxLayoutAlign=" center" fxLayout="column" *ngIf="!loading" fxLayoutGap="15px"
     cdkDropList
     (cdkDropListDropped)="onItemDropped($event)">
-        <div class="drag-item card-drag-item" cdkDrag *ngFor="let service of services" >
+        <div class="drag-item card-drag-item" 
+            cdkDrag 
+            cdkDragStartDelay="200"
+            (cdkDragStarted)="vibrate($event)"
+            *ngFor="let service of services" >
             <mat-card class="app-selectable-card app-medium-card app-color-black" 
                 (click)="onEdit(service)">
                 <div fxFlex fxLayout="column">

@@ -82,9 +82,12 @@ button.app-fab-new {
 // LAYOUT
 .app-view-padding {
   padding: 32px;
+  padding-bottom: 150px;
 
   @media (min-width: 600px) {
-    padding: 32px 0;  
+    padding-top: 32px;
+    padding-left: 0;  
+    padding-right: 0;
   }
 }
 
