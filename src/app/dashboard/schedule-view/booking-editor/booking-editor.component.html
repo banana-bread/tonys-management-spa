@@ -37,19 +37,30 @@
                 <mat-error *ngIf="servicesField.hasError('required')">At least one service is required.</mat-error>
             </mat-form-field>
         </div>
-        <div fxLayout="column" fxLayoutGap="8px">
-            <div fxLayout="row" fxLayoutAlign=" center" fxLayoutGap="8px">
-                <span class="material-icons-outlined">perm_identity</span>
-                <span>{{ employee.first_name }}</span>
+        <div fxLayout="column" fxLayoutGap="12px">
+            <div fxLayout="row" fxLayoutAlign=" center" fxLayoutGap="8px"
+                *ngIf="this.booking">
+                <mat-icon fontSet="material-icons-round">person</mat-icon>
+                <span>{{ booking.client.full_name }}</span>
+            </div>
+            <div fxLayout="row" fxLayoutAlign=" center" fxLayoutGap="8px"
+                *ngIf="this.booking">
+                <mat-icon fontSet="material-icons-round">phone</mat-icon>
+                <span>{{ booking.client.phone | mask: '(000) 000-0000' }}</span>
+            </div>
+            <div fxLayout="row" fxLayoutAlign=" center" fxLayoutGap="8px"
+                *ngIf="this.booking">
+                <mat-icon fontSet="material-icons-round">mail</mat-icon>
+                <span>{{ booking.client.email }}</span>
             </div>
             <div fxLayout="row" fxLayoutAlign=" center" fxLayoutGap="8px">
-                <span class="material-icons-outlined">schedule</span>
+                <mat-icon fontSet="material-icons-round">schedule</mat-icon>
                 <span>{{ event.start | date:'EEEE, MMMM d' }}, {{ formatTime(startTime) | date:'h:mm a' }} - </span>
                 <span *ngIf="!!this.booking">{{ formatTime(endTime) | date:'h:mm a' }}</span>
                 <span *ngIf="!this.booking && this.selectedServices.length">{{ formatTime(endTime) | date:'h:mm a' }}</span>
             </div>
             <div fxLayout="row" fxLayoutAlign=" center" fxLayoutGap="8px" *ngIf="booking?.id">
-                <span class="material-icons-outlined">build</span>
+                <mat-icon fontSet="material-icons-round">build</mat-icon>
                 <span>
                     {{ this.displayServices() }}
                 </span>
