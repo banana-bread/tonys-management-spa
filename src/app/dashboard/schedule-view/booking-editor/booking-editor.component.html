@@ -41,15 +41,16 @@
             <div fxLayout="row" fxLayoutAlign=" center" fxLayoutGap="8px"
                 *ngIf="this.booking">
                 <mat-icon fontSet="material-icons-round">person</mat-icon>
-                <span>{{ booking.client.full_name }}</span>
+                <span *ngIf="booking.client.id">{{ booking.client.full_name }}</span>
+                <span *ngIf="!booking.client.id">Walk-in</span>
             </div>
             <div fxLayout="row" fxLayoutAlign=" center" fxLayoutGap="8px"
-                *ngIf="this.booking">
+                *ngIf="this.booking && this.booking.client.id">
                 <mat-icon fontSet="material-icons-round">phone</mat-icon>
                 <span>{{ booking.client.phone | mask: '(000) 000-0000' }}</span>
             </div>
             <div fxLayout="row" fxLayoutAlign=" center" fxLayoutGap="8px"
-                *ngIf="this.booking">
+                *ngIf="this.booking && this.booking.client.id">
                 <mat-icon fontSet="material-icons-round">mail</mat-icon>
                 <span>{{ booking.client.email }}</span>
             </div>
