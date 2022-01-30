@@ -12,7 +12,7 @@ import { SnackbarNotificationService } from '@tonys-barbers/shared';
 import { SyncErrorStateMatcher } from 'src/app/helpers/sync-error-state.matcher';
 import { BookingService } from 'src/app/models/booking/booking.service';
 import { ConfirmDialogService } from 'src/app/confirm-dialog/confirm-dialog.service';
-import { Service } from 'src/app/models/service/service.model';
+import { formattedTimeStringToSeconds } from 'src/app/helpers/helpers';
 
 type DialogData = {
   services: ServiceDefinition[], 
@@ -93,14 +93,14 @@ export class BookingEditorComponent implements OnInit {
   times(): number[]
   {
     const result: number[] = [];
-    let dayStart = this.employee.base_schedule.startOf(this.event.start);
-    let dayEnd = this.employee.base_schedule.endOf(this.event.start);
+    const dayStart = this.employee.base_schedule.startOf(this.event.start);
+    const dayEnd = this.employee.base_schedule.endOf(this.event.start);
 
-    dayStart = parseInt(dayStart.split(':')[0]) * 3600;
-    dayEnd = parseInt(dayEnd.split(':')[0]) * 3600;
+    const dayStartInSeconds = formattedTimeStringToSeconds(dayStart);
+    const dayEndInSeconds = formattedTimeStringToSeconds(dayEnd);
 
     // TODO: hardcoded to increase start time by 15 minutes from start - end.
-    for (let i = dayStart; i < dayEnd; i += 900)
+    for (let i = dayStartInSeconds; i < dayEndInSeconds; i += 900)
     {
       // TODO: again... hard coded to 15 minutes
       const overlappingBookingExists: boolean = 
