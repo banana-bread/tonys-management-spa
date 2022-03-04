@@ -162,7 +162,6 @@ export class ApiService {
     return this.http
       .path('/bookings/{id}')
       .param('id', id)
-      .withCompany(this.state.company_id)
       .delete();
   }
 
