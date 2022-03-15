@@ -147,7 +147,7 @@ const APP_DATE_FORMATS: MatDateFormats = {
     MatMenuModule,
     MatRippleModule,
 
-    TonysSharedModule.forRoot('http://localhost:89'),
+    TonysSharedModule.forRoot('https://stage.api.simplebarber.ca'),
     CalendarModule.forRoot({ provide: DateAdapter, useFactory: momentAdapterFactory }),
     NgxMaskModule.forRoot(),
   ],
