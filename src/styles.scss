@@ -40,8 +40,10 @@ body {
     height: 100%;
 }
 
-.cdk-overlay-container {
-  // z-index: 100000 !important;
+.save-button-row {
+  margin-top: 16px;
+  display: flex;
+  justify-content: flex-end;
 }
 
 body,

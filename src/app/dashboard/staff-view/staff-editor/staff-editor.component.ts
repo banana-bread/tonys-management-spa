@@ -5,7 +5,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SnackbarNotificationService } from '@tonys-barbers/shared';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { ConfirmDialogService } from 'src/app/confirm-dialog/confirm-dialog.service';
-import { Company } from 'src/app/models/company/company.model';
 import { CompanyService } from 'src/app/models/company/company.service';
 import { Employee } from 'src/app/models/employee/employee.model';
 import { EmployeeService } from 'src/app/models/employee/employee.service';
@@ -15,18 +14,9 @@ import { AuthedUserService } from 'src/app/services/authed-user.service';
 import { UnsavedChangesRouterService } from 'src/app/unsaved-changes/unsaved-changes-router.service';
 import { StaffEditorService } from './staff-editor.service';
 
-/*
- * TODO:
-    - [ ] Save Profile route
-    - [ ] Save Account route
-    - [ ] Figure out what to do for updating admin/owner (true === create new employee admin and vice versa on api.)
-    - [ ] Add tooltups to admin, owner, online bookings for more info.
-    - [ ] Probably move the new employee stuff to a different component.
- */
 @Component({
   selector: 'app-staff-editor',
   templateUrl: './staff-editor.component.html',
-  styleUrls: ['./staff-editor.component.scss']
 })
 export class StaffEditorComponent implements OnInit, OnDestroy {
 
@@ -35,7 +25,9 @@ export class StaffEditorComponent implements OnInit, OnDestroy {
 
   loading = false;
   saving = false;
-  submitted = false;
+
+  hasBaseScheduleUpdates = false;
+  hasProfileUpdates = false;
 
   original: Employee;
   employee: Employee = new Employee();
@@ -49,7 +41,7 @@ export class StaffEditorComponent implements OnInit, OnDestroy {
   urlExpires: string;
   urlSignature: string;
 
-  updates = new Map();
+  accountUpdates = new Map();
   baseScheduleInvalid = false;
 
   authedUserSubscription: Subscription;
@@ -117,21 +109,16 @@ export class StaffEditorComponent implements OnInit, OnDestroy {
   {
     if (! this.original) return;
 
-    this.unsavedChangesRouter.tryNavigate(`/${this.state.company_id}/staff`, () => !this.hasUpdates());
+    const hasUpdates = !!this.accountUpdates.size || this.hasBaseScheduleUpdates || this.hasProfileUpdates;
+
+    this.unsavedChangesRouter.tryNavigate(`/${this.state.company_id}/staff`, () => !hasUpdates);
   }
 
-  onSave()
+  async onSaveBaseSchedule(): Promise<void>
   {
-    this.submitted = true;
-    this.update();
-  }
-
-  // When editing employee
-  protected async update()
-  {
-    if (this.baseScheduleInvalid || this.profileForm.invalid)
+    if (this.baseScheduleInvalid) 
     {
-      this.notifications.warning('Please resolve existing errors')
+      this.notifications.warning('Schedule is invalid')
       return;
     }
 
@@ -139,19 +126,9 @@ export class StaffEditorComponent implements OnInit, OnDestroy {
 
     try
     {
-      await Promise.all([...this.updates.values()].map(callback => callback()))
-
-      // This is sucky!  Do this better.  When we update our account through
-      // this view, then go to account view without refreshing, employee state
-      // is out of sync
-      if (this.authedUser.id === this.employee.id)
-      {
-        this.state.employee = this.employee;
-      }
-
-      this.router.navigate([`/${this.state.company_id}/staff`]);
-      
-      this.notifications.success('Employee updated');
+      await this.employeeService.updateBaseSchedule(this.employee);
+      this.hasBaseScheduleUpdates = false;
+      this.notifications.success('Employee schedule updated');
     }
     catch (e)
     {
@@ -163,9 +140,49 @@ export class StaffEditorComponent implements OnInit, OnDestroy {
     }
   }
 
-  onBaseScheduleChanged()
+  async onSaveProfile(): Promise<void>
   {
-    this.updates.set('base_schedule', () => this.employeeService.updateBaseSchedule(this.employee))
+    if (this.profileForm.invalid) 
+    {
+      this.notifications.warning('Profile is invalid')
+      return;
+    }
+
+    this.saving = true;
+
+    try
+    {
+      await this.employeeService.updateProfile(this.employee);
+      this.hasProfileUpdates = false;
+      this.notifications.success('Emplyee Profile updated');
+    }
+    catch (e)
+    {
+      this.notifications.error(e.error.message);
+    }
+    finally
+    {
+      this.saving = false;
+    }
+  }
+
+  async onSaveAccount(): Promise<void>
+  {
+    this.saving = true;
+    try
+    {
+      await Promise.all([...this.accountUpdates.values()].map(callback => callback()))
+      this.accountUpdates.clear();
+      this.notifications.success('Employee Account updated');
+    }
+    catch (e)
+    {
+      this.notifications.error(e.error.message);
+    }
+    finally
+    {
+      this.saving = false;
+    }
   }
 
   onBaseScheduleErrorChange(isError: boolean)
@@ -173,29 +190,19 @@ export class StaffEditorComponent implements OnInit, OnDestroy {
     this.baseScheduleInvalid = isError;
   }
 
-  onProfileChanged()
-  {
-    this.updates.set('profile_update', () => this.employeeService.updateProfile(this.employee));
-  }
-
   onAdminChanged()
   {
-    this.updates.set('admin_update', () => this.employeeService.updateAdmin(this.employee));
+    this.accountUpdates.set('admin_update', () => this.employeeService.updateAdmin(this.employee));
   }
 
   onOwnerChanged()
   {
-    this.updates.set('owner_update', () => this.employeeService.updateOwner(this.employee));
+    this.accountUpdates.set('owner_update', () => this.employeeService.updateOwner(this.employee));
   }
 
   onActiveChanged()
   {
-    this.updates.set('active', () => this.employeeService.updateActive(this.employee))
-  }
-
-  hasUpdates(): boolean
-  {
-    return !!this.updates.size;
+    this.accountUpdates.set('active', () => this.employeeService.updateActive(this.employee))
   }
 
   async onDelete(): Promise<void>

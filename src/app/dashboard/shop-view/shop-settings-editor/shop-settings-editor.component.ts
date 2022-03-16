@@ -15,6 +15,7 @@ import { UnsavedChangesRouterService } from 'src/app/unsaved-changes/unsaved-cha
 export class ShopSettingsEditorComponent implements OnInit {
 
   @ViewChild('profileForm') profileForm: NgForm;
+  @ViewChild('settingsForm') settingsForm: NgForm;
 
   loading = false;
   saving = false;
@@ -49,12 +50,32 @@ export class ShopSettingsEditorComponent implements OnInit {
     }
   }
 
-  onProfileChanged()
+  async onSaveProfile(): Promise<void> 
   {
-    this.updates.set('profile_update', () => this.companyService.updateProfile(this.company))
+    if (this.profileForm.invalid)
+    {
+      this.notifications.error('Please resolve existing errors')
+      return;
+    }
+
+    this.saving = true;
+    try
+    {
+      await this.companyService.updateProfile(this.company);
+      this.notifications.success('Shop profile updated');
+      this.profileForm.form.markAsPristine();
+    }
+    catch(e)
+    {
+      this.notifications.error(e.error.message)
+    }
+    finally
+    {
+      this.saving = false;
+    }
   }
 
-  onActiveChanged()
+  async onSaveSettings(): Promise<void>
   {
     const payload = this.company.employees.map(
       employee => ({
@@ -63,12 +84,36 @@ export class ShopSettingsEditorComponent implements OnInit {
       })
     )
 
-    this.updates.set('settings_update', () => this.companyService.updateEmployees(payload))
+    this.saving = true;
+    try 
+    {
+      await this.companyService.updateEmployees(payload)
+      this.notifications.success('Shop settings updated');
+      this.settingsForm.form.markAsPristine();
+    }
+    catch (e)
+    {
+      this.notifications.error(e.error.message)
+    }
+    finally
+    {
+      this.saving = false;
+    }
+  }
+
+  hasSettingsUpdates(): boolean
+  {
+    return !this.settingsForm?.pristine;
+  }
+
+  hasProfileUpdates(): boolean
+  {
+    return !this.profileForm?.pristine;
   }
 
   hasUpdates(): boolean
   {
-    return !!this.updates.size;
+    return this.hasSettingsUpdates() || this.hasProfileUpdates();
   }
 
   async onSave(): Promise<void>
@@ -84,8 +129,6 @@ export class ShopSettingsEditorComponent implements OnInit {
     try
     {
       await Promise.all([...this.updates.values()].map(callback => callback()))
-
-      this.router.navigate([`/${this.state.company_id}/calendar`]);
 
       this.notifications.success('Shop settings updated');
     }
