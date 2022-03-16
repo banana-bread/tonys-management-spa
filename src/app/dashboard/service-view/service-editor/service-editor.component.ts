@@ -140,11 +140,16 @@ export class ServiceEditorComponent implements OnInit {
     }
   }
 
+  hasChanges(): boolean
+  {
+    return !this.editorForm.pristine
+  }
+
   onClose()
   {
     this.unsavedChangesRouter.tryNavigate(
       `/${this.state.company_id}/services`, 
-      () => this.editorForm.pristine
+      () => !this.hasChanges()
     );
   }
 

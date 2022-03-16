@@ -1,152 +1,153 @@
 <div class="app-editor-view">
-    <!-- <form #editorForm="ngForm" (ngSubmit)="onSave()"> -->
-        <mat-toolbar class="app-editor-toolbar" fxLayout="row" fxLayoutGap="10px">
-            <button mat-icon-button 
-                type="button"
-                class="close-button" 
-                aria-label="Close edit services button."
-                (click)="onClose()">
-                <mat-icon>close</mat-icon>
-            </button>
-            <span class="app-editor-title" *ngIf="!loading">Shop Settings</span>
-            <span fxFlex></span>
-            <button type="submit" mat-raised-button color="accent" (click)="onSave()" [disabled]="saving || loading || !this.hasUpdates()">
-                Save
-            </button>
-        </mat-toolbar>
-        <mat-progress-bar class="app-loading-bar" *ngIf="saving" mode="indeterminate"></mat-progress-bar>
+    <mat-toolbar class="app-editor-toolbar" fxLayout="row" fxLayoutGap="10px">
+        <button mat-icon-button 
+            type="button"
+            class="close-button" 
+            aria-label="Close edit services button."
+            (click)="onClose()">
+            <mat-icon>close</mat-icon>
+        </button>
+        <span class="app-editor-title" *ngIf="!loading">Shop Settings</span>
+    </mat-toolbar>
+    <mat-progress-bar class="app-loading-bar" *ngIf="saving" mode="indeterminate"></mat-progress-bar>
 
-        <div class="app-view-padding" 
-            fxLayout="column" 
-            fxLayoutGap="40px"
-            fxLayoutAlign=" center" 
-            *ngIf="!loading">
+    <div class="app-view-padding" 
+        fxLayout="column" 
+        fxLayoutGap="40px"
+        fxLayoutAlign=" center" 
+        *ngIf="!loading">
 
-            <mat-card class="app-editor-card">
-                <form #profileForm="ngForm">
-                <mat-card-title class="app-editor-card-title">Profile</mat-card-title>
-                    <div fxLayout="column">
-                        <mat-form-field fxFlex hideRequiredMarker>
-                            <mat-label>Company name</mat-label>
-                            <input type="text" 
-                                [(ngModel)]="company.name"
-                                (ngModelChange)="onProfileChanged()"
-                                name="nameField"
-                                #nameField="ngModel"
-                                required
-                                matInput>
-                            <mat-error *ngIf="nameField.hasError('required')">Company name is required.</mat-error>
-                        </mat-form-field>
+        <mat-card class="app-editor-card">
+            <form #profileForm="ngForm" (ngSubmit)="this.onSaveProfile()">
+            <mat-card-title class="app-editor-card-title">Profile</mat-card-title>
+                <div fxLayout="column">
+                    <mat-form-field fxFlex hideRequiredMarker>
+                        <mat-label>Company name</mat-label>
+                        <input type="text" 
+                            [(ngModel)]="company.name"
+                            name="nameField"
+                            #nameField="ngModel"
+                            required
+                            matInput>
+                        <mat-error *ngIf="nameField.hasError('required')">Company name is required.</mat-error>
+                    </mat-form-field>
 
-                        <mat-form-field fxFlex hideRequiredMarker>
-                            <mat-label>City</mat-label>
-                            <input type="text" 
-                                [(ngModel)]="company.city"
-                                (ngModelChange)="onProfileChanged()"
-                                name="cityField"
-                                #cityField="ngModel"
-                                required
-                                matInput>
-                            <mat-error *ngIf="cityField.hasError('required')">City is required.</mat-error>
-                        </mat-form-field>
+                    <mat-form-field fxFlex hideRequiredMarker>
+                        <mat-label>City</mat-label>
+                        <input type="text" 
+                            [(ngModel)]="company.city"
+                            name="cityField"
+                            #cityField="ngModel"
+                            required
+                            matInput>
+                        <mat-error *ngIf="cityField.hasError('required')">City is required.</mat-error>
+                    </mat-form-field>
 
-                        <mat-form-field fxFlex="50" hideRequiredMarker>
-                            <mat-label>Province</mat-label>
-                            <mat-select [(ngModel)]="this.company.region"
+                    <mat-form-field fxFlex="50" hideRequiredMarker>
+                        <mat-label>Province</mat-label>
+                        <mat-select [(ngModel)]="this.company.region"
+                            name="regionField"
+                            #regionField="ngModel"
+                            required>
+                            <mat-optgroup label="Provinces">
+                                <mat-option value="AB">Alberta</mat-option>
+                                <mat-option value="BC">British Columbia</mat-option>
+                                <mat-option value="MB">Manitoba</mat-option>
+                                <mat-option value="NL">Newfoundland and Labrador</mat-option>
+                                <mat-option value="NB">New Brunswick</mat-option>
+                                <mat-option value="NS">Nova Scotia</mat-option>
+                                <mat-option value="ON">Ontario</mat-option>
+                                <mat-option value="PE">Prince Edward Island</mat-option>
+                                <mat-option value="QC">Quebec</mat-option>
+                                <mat-option value="SK">Saskatchewan</mat-option>
+                            </mat-optgroup>
+                            <mat-optgroup label="Territories">
+                                <mat-option value="NT">Northwest Territories</mat-option>
+                                <mat-option value="NU">Nunavut</mat-option>
+                                <mat-option value="YT">Yukon</mat-option>
+                            </mat-optgroup>
+                        </mat-select>
+                        <mat-error *ngIf="regionField.hasError('required')">Province is required.</mat-error>
+                    </mat-form-field>
+                    
+                    <!-- <mat-form-field fxFlex hideRequiredMarker>
+                        <mat-label>Country</mat-label>
+                        <input type="text" 
+                            [(ngModel)]="company.country"
                             (ngModelChange)="onProfileChanged()"
-                                name="regionField"
-                                #regionField="ngModel"
-                                required>
-                                <mat-optgroup label="Provinces">
-                                    <mat-option value="AB">Alberta</mat-option>
-                                    <mat-option value="BC">British Columbia</mat-option>
-                                    <mat-option value="MB">Manitoba</mat-option>
-                                    <mat-option value="NL">Newfoundland and Labrador</mat-option>
-                                    <mat-option value="NB">New Brunswick</mat-option>
-                                    <mat-option value="NS">Nova Scotia</mat-option>
-                                    <mat-option value="ON">Ontario</mat-option>
-                                    <mat-option value="PE">Prince Edward Island</mat-option>
-                                    <mat-option value="QC">Quebec</mat-option>
-                                    <mat-option value="SK">Saskatchewan</mat-option>
-                                </mat-optgroup>
-                                <mat-optgroup label="Territories">
-                                    <mat-option value="NT">Northwest Territories</mat-option>
-                                    <mat-option value="NU">Nunavut</mat-option>
-                                    <mat-option value="YT">Yukon</mat-option>
-                                </mat-optgroup>
-                            </mat-select>
-                            <mat-error *ngIf="regionField.hasError('required')">Province is required.</mat-error>
-                        </mat-form-field>
-                        
-                        <!-- <mat-form-field fxFlex hideRequiredMarker>
-                            <mat-label>Country</mat-label>
-                            <input type="text" 
-                                [(ngModel)]="company.country"
-                                (ngModelChange)="onProfileChanged()"
-                                name="countryField"
-                                #countryField="ngModel"
-                                required
-                                matInput>
-                            <mat-error *ngIf="countryField.hasError('required')">Country is required.</mat-error>
-                        </mat-form-field> -->
+                            name="countryField"
+                            #countryField="ngModel"
+                            required
+                            matInput>
+                        <mat-error *ngIf="countryField.hasError('required')">Country is required.</mat-error>
+                    </mat-form-field> -->
 
-                        <mat-form-field fxFlex hideRequiredMarker>
-                            <mat-label>Address</mat-label>
-                            <input type="text" 
-                                [(ngModel)]="company.address"
-                                (ngModelChange)="onProfileChanged()"
-                                name="addressField"
-                                #addressField="ngModel"
-                                required
-                                matInput>
-                            <mat-error *ngIf="addressField.hasError('required')">Address is required.</mat-error>
-                        </mat-form-field>
+                    <mat-form-field fxFlex hideRequiredMarker>
+                        <mat-label>Address</mat-label>
+                        <input type="text" 
+                            [(ngModel)]="company.address"
+                            name="addressField"
+                            #addressField="ngModel"
+                            required
+                            matInput>
+                        <mat-error *ngIf="addressField.hasError('required')">Address is required.</mat-error>
+                    </mat-form-field>
 
-                        <mat-form-field fxFlex hideRequiredMarker>
-                            <mat-label>Postal code</mat-label>
-                            <input type="text" 
-                                [(ngModel)]="company.postal_code"
-                                (ngModelChange)="onProfileChanged()"
-                                name="postalCodeField"
-                                mask="A0A 0A0"
-                                #postalCodeField="ngModel"
-                                required
-                                matInput>
-                            <mat-error *ngIf="postalCodeField.hasError('required')">Postal code is required.</mat-error>
-                            <mat-error *ngIf="postalCodeField.hasError('mask')">Postal code is invalid.</mat-error>
-                        </mat-form-field>
+                    <mat-form-field fxFlex hideRequiredMarker>
+                        <mat-label>Postal code</mat-label>
+                        <input type="text" 
+                            [(ngModel)]="company.postal_code"
+                            name="postalCodeField"
+                            mask="A0A 0A0"
+                            #postalCodeField="ngModel"
+                            required
+                            matInput>
+                        <mat-error *ngIf="postalCodeField.hasError('required')">Postal code is required.</mat-error>
+                        <mat-error *ngIf="postalCodeField.hasError('mask')">Postal code is invalid.</mat-error>
+                    </mat-form-field>
 
-                        <mat-form-field fxFlex hideRequiredMarker>
-                            <mat-label>Phone number</mat-label>
-                            <input type="text" 
-                                [(ngModel)]="company.phone"
-                                (ngModelChange)="onProfileChanged()"
-                                name="phoneField"
-                                mask="(000) 000-0000"
-                                #phoneField="ngModel"
-                                required
-                                matInput>
-                            <mat-error *ngIf="phoneField.hasError('required')">Phone number is required.</mat-error>
-                            <mat-error *ngIf="phoneField.hasError('mask')">Phone number is invalid</mat-error>
-                        </mat-form-field>
-                    </div>
-                </form>
-            </mat-card>
+                    <mat-form-field fxFlex hideRequiredMarker>
+                        <mat-label>Phone number</mat-label>
+                        <input type="text" 
+                            [(ngModel)]="company.phone"
+                            name="phoneField"
+                            mask="(000) 000-0000"
+                            #phoneField="ngModel"
+                            required
+                            matInput>
+                        <mat-error *ngIf="phoneField.hasError('required')">Phone number is required.</mat-error>
+                        <mat-error *ngIf="phoneField.hasError('mask')">Phone number is invalid</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="save-button-row">
+                    <button type="submit" mat-raised-button color="accent" [disabled]="saving || loading || !this.hasProfileUpdates()">
+                        Save
+                    </button>
+                </div>
+            </form>
+        </mat-card>
 
-            <mat-card class="app-editor-card">
+        <mat-card class="app-editor-card">
+            <form #settingsForm="ngForm" (ngSubmit)="onSaveSettings()">
                 <mat-card-title class="app-editor-card-title">Settings</mat-card-title>
     
                 <div fxLayout="column" fxLayoutGap="16px">
                     <div fxFlex fxLayout="row" fxLayoutGap="20px">
-                        <mat-slide-toggle [(ngModel)]="company.bookings_enabled"
-                            (change)="onActiveChanged()">
+                        <mat-slide-toggle name="onlineBookingsField"
+                            #onlineBookingsField="ngModel"
+                            [(ngModel)]="company.bookings_enabled">
                         </mat-slide-toggle>
                         <span class="mat-subheading-2 capitalize" fxFlex>Online bookings</span> 
                     </div>
                 </div>
-            </mat-card>
+                <div class="save-button-row">
+                    <button mat-raised-button color="accent" [disabled]="saving || loading || !this.hasSettingsUpdates()">
+                        Save
+                    </button>
+                </div>
+            </form>
+        </mat-card>
 
-        </div>
-    <!-- </form> -->
+    </div>
     <mat-progress-spinner class="app-page-loading" mode="indeterminate" *ngIf="loading"></mat-progress-spinner>
 </div>   

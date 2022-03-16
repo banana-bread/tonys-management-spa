@@ -25,7 +25,9 @@ export class AccountEditorComponent implements OnInit, OnDestroy {
 
   loading = false;
   saving = false;
-  submitted = false;
+  hasBaseScheduleUpdates = false;
+  hasProfileUpdates = false;
+  hasPasswordUpdate = false;
 
   oldPassword: string;
   newPassword: string;
@@ -35,13 +37,12 @@ export class AccountEditorComponent implements OnInit, OnDestroy {
   authedEmployee: Employee = new Employee();
   employeeName: string;
   employeeId: string = this.route.snapshot.paramMap.get('id');
-  // employeeRegistrationUrl = this.route.snapshot.queryParams['signed-url'];
 
   urlCompanyId: string;
   urlExpires: string;
   urlSignature: string;
 
-  updates = new Map();
+  accountUpdates = new Map();
   baseScheduleInvalid = false;
 
   authedUserSubscription: Subscription;
@@ -87,90 +88,29 @@ export class AccountEditorComponent implements OnInit, OnDestroy {
   {
     if (! this.original) return;
 
-    this.unsavedChangesRouter.tryNavigate(`/${this.state.company_id}/calendar`, () => !this.hasUpdates());
+    const hasUpdates = !!this.accountUpdates.size 
+      || this.hasBaseScheduleUpdates 
+      || this.hasProfileUpdates
+      || this.hasPasswordUpdate;
+
+    this.unsavedChangesRouter.tryNavigate(`/${this.state.company_id}/calendar`, () => !hasUpdates);
   }
 
-  async onSave(): Promise<void>
+  async onSaveBaseSchedule(): Promise<void>
   {
-    if (this.baseScheduleInvalid || this.profileForm.invalid)
+    if (this.baseScheduleInvalid) 
     {
-      this.notifications.warning('Please resolve existing errors')
+      this.notifications.warning('Schedule is invalid')
       return;
     }
-
-    this.saving = true;
-  
-      try
-      {
-        await Promise.all([...this.updates.values()].map(callback => callback()))
-  
-        this.router.navigate([`/${this.state.company_id}/calendar`]);
-        
-        this.notifications.success('Employee updated');
-      }
-      catch (e)
-      {
-        this.notifications.error(e.error.message);
-      }
-      finally
-      {
-        this.saving = false;
-      }
-  }
-
-  onBaseScheduleChanged()
-  {
-    this.updates.set('base_schedule', () => this.employeeService.updateBaseSchedule(this.employee))
-  }
-
-  onBaseScheduleErrorChange(isError: boolean)
-  {
-    this.baseScheduleInvalid = isError;
-  }
-
-  onProfileChanged()
-  {
-    this.updates.set('profile_update', () => this.employeeService.updateProfile(this.employee, this.oldPassword, this.newPassword));
-  }
-
-  onAdminChanged()
-  {
-    this.updates.set('admin_update', () => this.employeeService.updateAdmin(this.employee));
-  }
-
-  onOwnerChanged()
-  {
-    this.updates.set('owner_update', () => this.employeeService.updateOwner(this.employee));
-  }
-
-  onActiveChanged()
-  {
-    this.updates.set('active', () => this.employeeService.updateActive(this.employee))
-  }
-
-  hasUpdates(): boolean
-  {
-    return !!this.updates.size;
-  }
-
-  async onDelete(): Promise<void>
-  {
-    if (this.original?.owner) return;
-
-    const shouldDelete = await this.confirmDialog.open({
-      title: 'Confirm deletion',
-      message: 'Are you sure you want to continue?  Deleting an employee is nonreversible.',
-    });
-
-    if (! shouldDelete) return;
 
     this.saving = true;
 
     try
     {
-      await this.employeeService.delete(this.employee);
-      this.notifications.success('Employee deleted.')
-      this.router.navigate([`/${this.state.company_id}/calendar`]);
+      await this.employeeService.updateBaseSchedule(this.employee);
+      this.hasBaseScheduleUpdates = false;
+      this.notifications.success('Schedule updated');
     }
     catch (e)
     {
@@ -180,5 +120,91 @@ export class AccountEditorComponent implements OnInit, OnDestroy {
     {
       this.saving = false;
     }
+  }
+
+  async onSaveProfile(): Promise<void>
+  {
+    if (this.profileForm.invalid) 
+    {
+      this.notifications.warning('Profile is invalid')
+      return;
+    }
+
+    this.saving = true;
+
+    try
+    {
+      await this.employeeService.updateProfile(this.employee);
+      this.hasProfileUpdates = false;
+      this.notifications.success('Profile updated');
+    }
+    catch (e)
+    {
+      this.notifications.error(e.error.message);
+    }
+    finally
+    {
+      this.saving = false;
+    }
+  }
+
+  async onSavePassword(): Promise<void>
+  {
+    this.saving = true;
+    try
+    {
+      await this.employeeService.updateProfile(this.employee, this.oldPassword, this.newPassword);
+      this.hasPasswordUpdate = false;
+      this.notifications.success('Password updated');
+      this.newPassword = '';
+      this.oldPassword = '';
+    }
+    catch (e)
+    {
+      this.notifications.error(e.error.message);
+    }
+    finally
+    {
+      this.saving = false;
+    }
+  }
+
+  async onSaveAccount(): Promise<void>
+  {
+    this.saving = true;
+    try
+    {
+      await Promise.all([...this.accountUpdates.values()].map(callback => callback()))
+      this.accountUpdates.clear();
+      this.notifications.success('Account updated');
+    }
+    catch (e)
+    {
+      this.notifications.error(e.error.message);
+    }
+    finally
+    {
+      this.saving = false;
+    }
+  }
+
+  onBaseScheduleErrorChange(isError: boolean)
+  {
+    this.baseScheduleInvalid = isError;
+  }
+
+  onAdminChanged()
+  {
+    this.accountUpdates.set('admin_update', () => this.employeeService.updateAdmin(this.employee));
+  }
+
+  onOwnerChanged()
+  {
+    this.accountUpdates.set('owner_update', () => this.employeeService.updateOwner(this.employee));
+  }
+
+  onActiveChanged()
+  {
+    this.accountUpdates.set('active', () => this.employeeService.updateActive(this.employee))
   }
 }
