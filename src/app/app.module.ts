@@ -58,7 +58,8 @@ import { AccountEditorComponent } from './dashboard/account-view/account-editor/
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatRippleModule } from '@angular/material/core';
-
+import { StaffBlockedTimeDialogComponent } from './dashboard/staff-view/staff-blocked-time-dialog/staff-blocked-time-dialog.component';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 
 export function momentAdapterFactory() {
@@ -114,6 +115,7 @@ const APP_DATE_FORMATS: MatDateFormats = {
     EmployeeCalendarListComponent,
     BookingEditorComponent,
     AccountEditorComponent,
+    StaffBlockedTimeDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -141,7 +143,7 @@ const APP_DATE_FORMATS: MatDateFormats = {
     MatChipsModule,
     MatSlideToggleModule,
     DragDropModule,
-
+    MatCheckboxModule,
     MatDatepickerModule,
     MatNativeDateModule,
     MatMenuModule,

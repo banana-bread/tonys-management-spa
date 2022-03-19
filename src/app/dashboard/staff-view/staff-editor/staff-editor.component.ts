@@ -12,6 +12,7 @@ import { ApiService } from 'src/app/services/api.service';
 import { AppStateService } from 'src/app/services/app-state.service';
 import { AuthedUserService } from 'src/app/services/authed-user.service';
 import { UnsavedChangesRouterService } from 'src/app/unsaved-changes/unsaved-changes-router.service';
+import { StaffBlockedTimeDialogService } from '../staff-blocked-time-dialog/staff-blocked-time-dialog.component';
 import { StaffEditorService } from './staff-editor.service';
 
 @Component({
@@ -59,6 +60,7 @@ export class StaffEditorComponent implements OnInit, OnDestroy {
     private companyService: CompanyService,
     private unsavedChangesRouter: UnsavedChangesRouterService,
     public authedUserService: AuthedUserService,
+    private blockedTimeEditor: StaffBlockedTimeDialogService,
   ) { }
 
   async ngOnInit(): Promise<void> 
@@ -183,6 +185,11 @@ export class StaffEditorComponent implements OnInit, OnDestroy {
     {
       this.saving = false;
     }
+  }
+
+  async onBookTimeOff(): Promise<void>
+  {
+    this.blockedTimeEditor.open()
   }
 
   onBaseScheduleErrorChange(isError: boolean)

@@ -27,6 +27,18 @@
         fxLayoutGap="40px"
         *ngIf="!loading">
 
+
+
+
+        <button mat-flat-button color="accent" [disabled]="saving || loading"
+            (click)="onBookTimeOff()">
+            Book time off
+        </button>
+            
+            
+
+
+
         <mat-card class="app-editor-card">
             <app-base-schedule-editor
                 [schedule]="employee.base_schedule"
