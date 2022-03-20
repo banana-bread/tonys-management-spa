@@ -148,6 +148,16 @@ export class ApiService {
       .delete();
   }
 
+  createEmployeeBlockedTime(id: string, data: any)
+  {
+    return this.http
+      .path('/employees/{id}/blocked-time')
+      .param('id', id)
+      .data(data)
+      .withCompany(this.state.company_id)
+      .post();
+  }
+
   getBooking(id: string)
   {
     return this.http  

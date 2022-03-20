@@ -76,4 +76,9 @@ export class EmployeeService {
       ? await this.api.createEmployeeOwner(employee.id)
       : await this.api.deleteEmployeeOwner(employee.id);  
   }
+
+  async createBlockedTime(employee: Employee, data: any)
+  {
+    await this.api.createEmployeeBlockedTime(employee.id, data);
+  }
 }

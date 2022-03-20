@@ -189,7 +189,7 @@ export class StaffEditorComponent implements OnInit, OnDestroy {
 
   async onBookTimeOff(): Promise<void>
   {
-    this.blockedTimeEditor.open()
+    this.blockedTimeEditor.open(this.employee)
   }
 
   onBaseScheduleErrorChange(isError: boolean)
