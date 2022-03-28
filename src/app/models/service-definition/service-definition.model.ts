@@ -4,6 +4,7 @@ export class ServiceDefinition extends BaseModel {
 
     id?: string = '';
     name?: string = '';
+    description?: string = null;
     price?: number = 0;
     duration?: number = 0;
     ordinal_position?: number = 0;

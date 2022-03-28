@@ -37,6 +37,16 @@
                     </mat-form-field>
 
                     <mat-form-field fxFlex hideRequiredMarker>
+                        <mat-label>Description</mat-label>
+                        <textarea name="serviceDescription"
+                            [(ngModel)]="service.description"
+                            #serviceDescription="ngModel"
+                            [disabled]="saving"
+                            matInput>
+                        </textarea>
+                    </mat-form-field>
+
+                    <mat-form-field fxFlex hideRequiredMarker>
                         <mat-label>Price</mat-label>
                         <input type="text"
                             class="price-field"
