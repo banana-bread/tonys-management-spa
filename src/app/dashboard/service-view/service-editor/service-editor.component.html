@@ -1,6 +1,6 @@
 <!-- <div class="app-editor-view" [@slideInOut]> -->
 <div class="app-editor-view">
-    <form #editorForm="ngForm" (ngSubmit)="onSave()">
+    <form #editorForm="ngForm">
         <mat-toolbar class="app-editor-toolbar" fxLayout="row" fxLayoutGap="10px">
             <button mat-icon-button 
                 type="button"
@@ -13,9 +13,6 @@
             <span fxFlex></span>
             <button type="button" (click)="onDelete()" color="warn" mat-flat-button [disabled]="saving || loading || !original.id">
                 Delete
-            </button>
-            <button type="submit" mat-flat-button color="accent" [disabled]="saving || loading">
-                Save
             </button>
         </mat-toolbar>
         <mat-progress-bar class="app-loading-bar" *ngIf="saving" mode="indeterminate"></mat-progress-bar>
@@ -37,6 +34,16 @@
                             [disabled]="saving"
                             matInput>
                         <mat-error *ngIf="serviceName.hasError('required')">Name is required</mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field fxFlex hideRequiredMarker>
+                        <mat-label>Description</mat-label>
+                        <textarea name="serviceDescription"
+                            [(ngModel)]="service.description"
+                            #serviceDescription="ngModel"
+                            [disabled]="saving"
+                            matInput>
+                        </textarea>
                     </mat-form-field>
 
                     <mat-form-field fxFlex hideRequiredMarker>
@@ -84,6 +91,11 @@
                         </mat-select>
                         <mat-error *ngIf="employeesField.hasError('required')">You must assign at least 1 employee.</mat-error>
                     </mat-form-field>
+                </div>
+                <div class="save-button-row">
+                    <button (click)="onSave()" mat-flat-button color="accent" [disabled]="saving || loading || !hasChanges()">
+                        Save
+                    </button>
                 </div>
             </mat-card>
         </div>
