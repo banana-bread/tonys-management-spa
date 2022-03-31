@@ -13,6 +13,7 @@ export class Booking extends BaseModel {
     id?: string = null;
     employee_id?: string = null;
     client_id?: string = null;
+    manual_client_name?: string = null;
     started_at?: Date = null;
     ended_at?: Date = null;
     cancelled_at?: Date = null;

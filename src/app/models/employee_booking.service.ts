@@ -18,9 +18,9 @@ export class EmployeeBookingService {
         return response.data.employee_bookings;
     }
 
-    async create(event: CalendarEvent<any>, services: ServiceDefinition[], employee_id: string): Promise<Booking>
+    async create(event: CalendarEvent<any>, services: ServiceDefinition[], employee_id: string, manual_client_name: string): Promise<Booking>
     {
-        const response = await this.api.createEmployeeBooking({event, services}, employee_id);
+        const response = await this.api.createEmployeeBooking({event, services, manual_client_name}, employee_id);
 
         return new Booking(response.data.booking);
     }
