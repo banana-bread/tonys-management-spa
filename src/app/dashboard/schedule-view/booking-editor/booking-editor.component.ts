@@ -38,6 +38,7 @@ export class BookingEditorComponent implements OnInit {
   employee: Employee = this.data.employee;
   event: CalendarEvent<any> = this.data.event;
   onCancel = this.data.onBookingCancel;
+  manualClientName: string;
   startTime: number;
   endTime: number;
   services: any = [];
@@ -152,11 +153,11 @@ export class BookingEditorComponent implements OnInit {
     this.saving = true; 
     this.event.start = moment(this.event.start).startOf('day').add(this.startTime, 'seconds').toDate();
     this.event.end = moment(this.event.start).startOf('day').add(this.endTime, 'seconds').toDate();
-    this.event.title = `${moment(this.event.start).format('h:mm')} - ${moment(this.event.end).format('h:mm')} (${this.selectedServices.map(service => service.name).join(', ')})  <br>Walk-in`
+    this.event.title = `${moment(this.event.start).format('h:mm')} - ${moment(this.event.end).format('h:mm')} (${this.selectedServices.map(service => service.name).join(', ')})  <br>${this.manualClientName || 'Walk-in'}`
     
     try
     {
-      const booking = await this.employeeBookingService.create(this.event, this.selectedServices, this.employee.id);
+      const booking = await this.employeeBookingService.create(this.event, this.selectedServices, this.employee.id, this.manualClientName);
 
       this.event.id = booking.id;
       this.dialogRef.close({event: this.event, booking: booking});

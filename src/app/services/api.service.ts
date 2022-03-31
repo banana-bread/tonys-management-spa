@@ -89,7 +89,7 @@ export class ApiService {
       .get();
   }
 
-  createEmployeeBooking(data: {event: CalendarEvent<any>, services: ServiceDefinition[]}, employee_id: string): Promise<any>
+  createEmployeeBooking(data: {event: CalendarEvent<any>, services: ServiceDefinition[], manual_client_name: string}, employee_id: string): Promise<any>
   {
     return this.http
       .path('/employees/{id}/bookings/')
