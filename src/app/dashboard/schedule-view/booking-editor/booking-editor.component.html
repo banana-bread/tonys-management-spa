@@ -21,6 +21,15 @@
                 <mat-error *ngIf="startTimeField.hasError('required')">Start time is required.</mat-error>
                 <mat-error *ngIf="startTimeField.hasError('overlap')">Start time unavailable for the selected services.</mat-error>
             </mat-form-field>
+            <mat-form-field fxFlex>
+                <mat-label>Client Name</mat-label>
+                <input type="text"
+                    name="manualClientNameField"
+                    #manualClientNameField="ngModel"
+                    [(ngModel)]="manualClientName"
+                    [disabled]="saving"
+                    matInput>
+            </mat-form-field>
             <mat-form-field fxFlex>  
                 <mat-label>Service</mat-label>
                 <mat-select name="servicesField" 
@@ -42,7 +51,7 @@
                 *ngIf="this.booking">
                 <mat-icon fontSet="material-icons-round">person</mat-icon>
                 <span *ngIf="booking.client.id">{{ booking.client.full_name }}</span>
-                <span *ngIf="!booking.client.id">Walk-in</span>
+                <span *ngIf="!booking.client.id">{{ booking.manual_client_name }}</span>
             </div>
             <div fxLayout="row" fxLayoutAlign=" center" fxLayoutGap="8px"
                 *ngIf="this.booking && this.booking.client.id">
