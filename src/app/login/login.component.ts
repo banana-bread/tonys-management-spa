@@ -4,6 +4,7 @@ import { NgForm } from '@angular/forms';
 import { SnackbarNotificationService } from '@tonys-barbers/shared';
 import { Router } from '@angular/router';
 import { AppStateService } from '../services/app-state.service';
+import { ForgotPasswordService } from '../forgot-password-dialog/forgot-password.component';
 
 @Component({
   selector: 'app-login',
@@ -26,6 +27,7 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private notifications: SnackbarNotificationService,
     private state: AppStateService,
+    private forgotPasswordService: ForgotPasswordService,
   ) { }
 
   ngOnInit(): void {}
@@ -53,6 +55,11 @@ export class LoginComponent implements OnInit {
     {
       this.loading = false;
     }
+  }
+
+  onForgotPassword()
+  {
+    this.forgotPasswordService.open();
   }
 
 }
