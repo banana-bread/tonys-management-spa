@@ -18,6 +18,24 @@ export class ApiService {
     private state: AppStateService,
   ) { }
 
+  sendForgotPasswordLink(data: {email: string}): Promise<any>
+  {
+    return this.http
+      .path('/users/forgot-password')
+      .data(data)
+      .post();
+  }
+
+  resetPassword(data: {email: string, password: string}, signature: string, expires: string): Promise<any>
+  {
+    return this.http
+      .path('/users/reset-password')
+      .data(data)
+      .query('signature', signature)
+      .query('expires', expires)
+      .post();
+  }
+
   getCompany(id: string): Promise<any>
   {
     return this.http  
