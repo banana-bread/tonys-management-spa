@@ -110,7 +110,9 @@ export class StaffEditorComponent implements OnInit, OnDestroy {
   onClose()
   {
     const hasUpdates = !!this.accountUpdates.size || this.hasBaseScheduleUpdates || this.hasProfileUpdates;
-    this.unsavedChangesRouter.tryNavigate('back', () => !hasUpdates);
+    const backUrl = this.route.snapshot.queryParams.returnUrl ?? `/${this.state.company_id}/staff`;
+    
+    this.unsavedChangesRouter.tryNavigate(backUrl, () => !hasUpdates);
   }
 
   async onSaveBaseSchedule(): Promise<void>

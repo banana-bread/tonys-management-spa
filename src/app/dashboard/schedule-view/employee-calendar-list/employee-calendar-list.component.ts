@@ -24,6 +24,9 @@ export class EmployeeCalendarListComponent {
 
   onEmployeeSelected(employee: Employee) 
   {
-    this.router.navigate([`${this.state.company_id}/staff/${employee.id}`])
+    this.router.navigate(
+      [`${this.state.company_id}/staff/${employee.id}`],
+      { queryParams: { returnUrl: `${this.state.company_id}/calendar` } }
+    )
   }
 }
