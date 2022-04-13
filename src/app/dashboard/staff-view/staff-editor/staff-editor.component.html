@@ -6,9 +6,9 @@
             class="close-button" 
             aria-label="Close edit employee button."
             (click)="onClose()">
-            <mat-icon>close</mat-icon>
+            <mat-icon>arrow_back</mat-icon>
         </button>
-        <span class="app-editor-title" *ngIf="!loading">{{ !!original ? 'Edit' : 'New' }} Staff</span>
+        <span class="app-editor-title" *ngIf="!loading">{{ this.employee.full_name }}</span>
         <span fxFlex></span>
         <button type="button" 
             *ngIf="original"

@@ -13,6 +13,7 @@ import { AppStateService } from 'src/app/services/app-state.service';
 import { AuthedUserService } from 'src/app/services/authed-user.service';
 import { UnsavedChangesRouterService } from 'src/app/unsaved-changes/unsaved-changes-router.service';
 import { StaffEditorService } from './staff-editor.service';
+import { Location } from '@angular/common'
 
 @Component({
   selector: 'app-staff-editor',
@@ -58,6 +59,7 @@ export class StaffEditorComponent implements OnInit, OnDestroy {
     private employeeService: EmployeeService,
     private companyService: CompanyService,
     private unsavedChangesRouter: UnsavedChangesRouterService,
+    private location: Location,
     public authedUserService: AuthedUserService,
   ) { }
 
@@ -107,11 +109,8 @@ export class StaffEditorComponent implements OnInit, OnDestroy {
 
   onClose()
   {
-    if (! this.original) return;
-
     const hasUpdates = !!this.accountUpdates.size || this.hasBaseScheduleUpdates || this.hasProfileUpdates;
-
-    this.unsavedChangesRouter.tryNavigate(`/${this.state.company_id}/staff`, () => !hasUpdates);
+    this.unsavedChangesRouter.tryNavigate('back', () => !hasUpdates);
   }
 
   async onSaveBaseSchedule(): Promise<void>
@@ -222,7 +221,8 @@ export class StaffEditorComponent implements OnInit, OnDestroy {
     {
       await this.employeeService.delete(this.employee);
       this.notifications.success('Employee deleted.')
-      this.router.navigate([`/${this.state.company_id}/staff`]);
+      this.location.back();
+      // this.router.navigate([`/${this.state.company_id}/staff`]);
     }
     catch (e)
     {

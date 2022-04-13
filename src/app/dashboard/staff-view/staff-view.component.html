@@ -5,8 +5,8 @@
         (cdkDropListDropped)="onItemDropped($event)">
         <div class="drag-item card-drag-item" 
             cdkDrag 
-            cdkDragStartDelay="200"
-            (cdkDragStarted)="vibrate($event)"
+            cdkDragStartDelay="100"
+            (touchstart)="onStaffTouched($event)"
             *ngFor="let employee of employees"> 
             <mat-card class="app-selectable-card app-medium-card app-color-black" 
                 (click)="onEdit(employee)">

@@ -1,6 +1,6 @@
+import { Location } from '@angular/common';
 import { Injectable } from '@angular/core';
-import { NavigationStart, Router } from '@angular/router';
-import { filter } from 'rxjs/operators';
+import { Router } from '@angular/router';
 import { UnsavedChangesDialogService } from './unsaved-changes-dialog.component'
 
 @Injectable({
@@ -8,10 +8,9 @@ import { UnsavedChangesDialogService } from './unsaved-changes-dialog.component'
 })
 export class UnsavedChangesRouterService {
 
-  private _guard: () => boolean;
-
   constructor(
     private router: Router,
+    private location: Location,
     private unsavedChangesDialog: UnsavedChangesDialogService
   ) {}
 
@@ -23,6 +22,11 @@ export class UnsavedChangesRouterService {
   async tryNavigate(route: string, callback: () => boolean): Promise<void>
   {
     if (callback() == false && !await this.unsavedChangesDialog.open()) return;
+
+    if (route === 'back') 
+    {
+      this.location.back();
+    }
 
     this.router.navigate([route]);
   }

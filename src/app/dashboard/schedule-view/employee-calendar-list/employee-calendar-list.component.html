@@ -15,7 +15,8 @@
         <!-- WHEN FILTERED EMPLOYEES EXIST -->
         <ng-container *ngIf="!! employees.length">
             <div fxLayout="column" fxFlex *ngFor="let employee of employees">
-                <div class="employee-avatar-container" fxLayout="column" fxLayoutGap="4px" fxLayoutAlign=" center">    
+                <div class="employee-avatar-container" fxLayout="column" fxLayoutGap="4px" fxLayoutAlign=" center"
+                    (click)="onEmployeeSelected(employee)">    
                     <div class="app-employee-avatar">
                         <span>{{ employee.initials }}</span>
                     </div>
