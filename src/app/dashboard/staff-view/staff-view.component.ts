@@ -90,6 +90,11 @@ export class StaffViewComponent implements OnInit {
     this.notification.success('Employee order updated')
   }
 
+  onStaffTouched()
+  {
+    setTimeout(() => navigator.vibrate(50), 100)
+  }
+
   async onToggleActive(employee: Employee): Promise<void>
   {
    try
