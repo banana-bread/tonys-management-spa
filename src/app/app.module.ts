@@ -58,6 +58,8 @@ import { AccountEditorComponent } from './dashboard/account-view/account-editor/
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatRippleModule } from '@angular/material/core';
+import { ForgotPasswordComponent } from './forgot-password-dialog/forgot-password.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
 
 
@@ -94,6 +96,8 @@ const APP_DATE_FORMATS: MatDateFormats = {
 @NgModule({
   declarations: [
     AppComponent,
+    ForgotPasswordComponent,
+    ResetPasswordComponent,
     DashboardComponent,
     ServiceViewComponent,
     StaffViewComponent,

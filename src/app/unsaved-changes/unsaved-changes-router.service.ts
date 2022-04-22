@@ -1,14 +1,11 @@
 import { Injectable } from '@angular/core';
-import { NavigationStart, Router } from '@angular/router';
-import { filter } from 'rxjs/operators';
+import { Router } from '@angular/router';
 import { UnsavedChangesDialogService } from './unsaved-changes-dialog.component'
 
 @Injectable({
   providedIn: 'root'
 })
 export class UnsavedChangesRouterService {
-
-  private _guard: () => boolean;
 
   constructor(
     private router: Router,

@@ -10,6 +10,7 @@ import { StaffEditorComponent } from '../dashboard/staff-view/staff-editor/staff
 import { StaffViewComponent } from '../dashboard/staff-view/staff-view.component';
 import { LoginComponent } from '../login/login.component';
 import { PageNotFoundComponent } from '../page-not-found/page-not-found.component';
+import { ResetPasswordComponent } from '../reset-password/reset-password.component';
 import { AdminGuardService as AdminGuard } from './admin-guard.service';
 import { AuthGuardService as AuthGuard } from './auth-guard.service';
 import { LoginPageGuard } from './login-page-guard.service';
@@ -17,6 +18,7 @@ import { LoginPageGuard } from './login-page-guard.service';
 const routes: Routes = [
   { path: '',   redirectTo: '/login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent, canActivate: [LoginPageGuard] },
+  { path: 'password/reset', component: ResetPasswordComponent, },
   { 
     path: ':companyId', component: DashboardComponent, canActivate: [AuthGuard], 
     children: [
@@ -40,4 +42,3 @@ const routes: Routes = [
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
-
