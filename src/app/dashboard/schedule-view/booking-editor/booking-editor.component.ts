@@ -24,7 +24,6 @@ type DialogData = {
 
 // TODO: maybe add this to the moment prototype
 
-
 @Component({
   selector: 'app-booking-editor-dialog',
   templateUrl: './booking-editor.component.html',
@@ -69,6 +68,7 @@ export class BookingEditorComponent implements OnInit {
     if (!! this.data.booking)
     {
       this.booking = this.data.booking;
+      console.log(this.booking)
       this.services = this.booking.services;
     }
     else

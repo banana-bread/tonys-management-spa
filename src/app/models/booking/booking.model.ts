@@ -1,5 +1,7 @@
+import { NotExpr } from "@angular/compiler";
 import { BaseModel } from "../base.model";
 import { Client } from "../client/client.model";
+import { Note } from "../note/note.model";
 import { Service } from "../service/service.model";
 
 export class Booking extends BaseModel {
@@ -22,11 +24,13 @@ export class Booking extends BaseModel {
     cancelled_by? = null;
     services: Service[] = [];
     client: Client = new Client();
+    note: Note = null;
 
     relations = {
         services: Service,
         bookings: Booking,
         client: Client,
+        note: Note,
     };
     
     dates = {
