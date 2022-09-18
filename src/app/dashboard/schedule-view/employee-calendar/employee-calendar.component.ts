@@ -167,10 +167,10 @@ export class EmployeeCalendarComponent implements OnInit, OnDestroy {
   private _createEventTitleFromBooking(booking: Booking): string
   {
     let title = `${moment(booking.started_at).format('h:mm')} - ${moment(booking.ended_at).format('h:mm')} &nbsp;&nbsp;(${booking.services.map(service => service.name).join(', ')})<br>`;
-
     const client = booking.client.first_name || booking.manual_client_name;
-
-    return title + client;
+    const bookingNote = booking.note ? '&nbsp;&nbsp;&#9998;' : '';
+    
+    return title + client + bookingNote
   }
 
   private _createEventFromSelection(segment: WeekViewHourSegment): any
