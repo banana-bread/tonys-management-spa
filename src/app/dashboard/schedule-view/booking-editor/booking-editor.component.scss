@@ -6,6 +6,15 @@ div.title-row {
     }
 }
 
+span.mat-caption {
+  font-weight: bold;
+  font-size: 14px;
+}
+
 mat-icon {
     color: #424242;
+}
+
+form {
+  height: calc(100% - 60px);
 }

@@ -95,6 +95,10 @@ button.app-fab-new {
 
 // EDITORS
 
+button[color="primary"] {
+  color: white;
+}
+
 mat-toolbar.app-editor-toolbar {
   background-color: #fff;
   border-bottom: solid 1px #f3f3f3;
