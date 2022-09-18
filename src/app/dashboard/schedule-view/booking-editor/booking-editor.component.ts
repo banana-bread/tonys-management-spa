@@ -13,6 +13,8 @@ import { SyncErrorStateMatcher } from 'src/app/helpers/sync-error-state.matcher'
 import { BookingService } from 'src/app/models/booking/booking.service';
 import { ConfirmDialogService } from 'src/app/confirm-dialog/confirm-dialog.service';
 import { formattedTimeStringToSeconds } from 'src/app/helpers/helpers';
+import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/layout';
+import { Observable } from 'rxjs';
 
 type DialogData = {
   services: ServiceDefinition[], 
@@ -63,7 +65,6 @@ export class BookingEditorComponent implements OnInit {
 
     this.startTime = secondsSinceStartOfDay(moment(this.event.start));
     this.endTime = secondsSinceStartOfDay(moment(this.event.end));
-
 
     if (!! this.data.booking)
     {
@@ -211,7 +212,14 @@ export class BookingEditorComponent implements OnInit {
 })
 export class BookingEditorService {
 
-  constructor(private dialog: MatDialog) {}
+  isOnMobile: Observable<BreakpointState> = this.breakpointObserver.observe(
+    Breakpoints.XSmall
+  );
+
+  constructor(
+    private dialog: MatDialog,
+    private readonly breakpointObserver: BreakpointObserver,
+  ) {}
 
   async open(data: DialogData): Promise<any>
   {
@@ -220,13 +228,23 @@ export class BookingEditorService {
       hasBackdrop: true,
       autoFocus: false,
       width: '100%',
-      maxWidth: 400,
-      minWidth: 300,
+      maxWidth: '100vw',
       data
     }
 
-    return this.dialog.open(BookingEditorComponent, dialogConfig)
-      .afterClosed()
-      .toPromise();
+    const dialog = this.dialog.open(BookingEditorComponent, dialogConfig)
+    const smallDialogSubscription = this.isOnMobile.subscribe(size => {
+      if (size.matches) {
+        dialog.updateSize('100vw', '100vh');
+      } else {
+        dialog.updateSize('550px', '');
+      }
+    });
+
+    dialog.afterClosed().subscribe(() => {
+      smallDialogSubscription.unsubscribe()
+    })
+
+    return dialog.afterClosed().toPromise()
   }
 }

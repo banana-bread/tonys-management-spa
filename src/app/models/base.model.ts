@@ -8,6 +8,7 @@ import { isObject, isArray } from '../helpers/helpers';
 export abstract class BaseModel {
     
     // TODO: typehint
+    abstract id?: any;
     abstract relations: any;
     abstract dates: any;
 
@@ -19,6 +20,11 @@ export abstract class BaseModel {
         this._mapDates(data);
         // TODO: improve
         this._mapBaseSchedule();
+    }
+
+    exists(): boolean
+    {
+      return !!this?.id
     }
 
     private _mapDates(attributes: any)
