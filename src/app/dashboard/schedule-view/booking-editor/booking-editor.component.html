@@ -49,36 +49,36 @@
         </div>
         <div *ngIf="this.booking?.exists()" fxLayout="column" fxLayoutGap="12px">
             <div fxLayout="column">
-                <span class="mat-caption">Client</span>
-                <span *ngIf="booking.client.id">{{ booking.client.full_name }}</span>
-                <span *ngIf="!booking.client.id">{{ booking.manual_client_name }}</span>
+                <h4 class="mat-h4">Client</h4>
+                <span class="booking-info" *ngIf="booking.client.id">{{ booking.client.full_name }}</span>
+                <span class="booking-info" *ngIf="!booking.client.id">{{ booking.manual_client_name }}</span>
             </div>
             <div fxLayout="column">
-              <span class="mat-caption">Scheduled For</span>
+              <h4 class="mat-h4">Scheduled For</h4>
               <div fxLayout="row">
-                <span>{{ event.start | date:'EEEE, MMMM d' }}, {{ formatTime(startTime) | date:'h:mm a' }} - </span>
-                <span>{{ formatTime(endTime) | date:'h:mm a' }}</span>
+                <span class="booking-info">{{ event.start | date:'EEEE, MMMM d' }}, {{ formatTime(startTime) | date:'h:mm a' }} - </span>
+                <span class="booking-info">{{ formatTime(endTime) | date:'h:mm a' }}</span>
               </div>
             </div>
             <div fxLayout="column" *ngIf="this.booking.client?.exists()">
-                <span class="mat-caption">Phone Number</span>
-                <span>{{ booking.client.phone | mask: '(000) 000-0000' }}</span>
+                <h4 class="mat-h4">Phone Number</h4>
+                <span class="booking-info">{{ booking.client.phone | mask: '(000) 000-0000' }}</span>
             </div>
             <div fxLayout="column" *ngIf="this.booking.client?.exists()">
-              <span class="mat-caption">Email</span>
-                <span>{{ booking.client.email }}</span>
+              <h4 class="mat-h4">Email</h4>
+                <span class="booking-info">{{ booking.client.email }}</span>
             </div>
             <div fxLayout="column">
-                <span class="mat-caption">
+                <h4 class="mat-h4">
                   {{ this.services.length > 1 ? 'Services' : 'Service'}}
-                </span>
-                <span>
+                </h4>
+                <span class="booking-info">
                     {{ this.displayServices() }}
                 </span>
             </div>
             <div fxLayout="column" *ngIf="booking.note?.exists()">
-                <span class="mat-caption">Client Note</span>
-                <span>{{ booking.note.body }}</span>
+                <h4 class="mat-h4">Client Note</h4>
+                <span class="booking-info">{{ booking.note.body }}</span>
             </div>
         </div>
     </div>
@@ -92,8 +92,8 @@
 <div mat-dialog-actions align="end">
     <mat-progress-spinner mode="indeterminate" diameter="36" *ngIf="saving"></mat-progress-spinner>
     <button type="button" mat-flat-button color="warn" [disabled]="loading" *ngIf="booking?.id" (click)="onCancelBooking()">Cancel booking</button>
-    <button type="submit" mat-flat-button color="accent" *ngIf="!booking?.exists()" [disabled]="saving || loading">Save</button>
     <button mat-dialog-close mat-flat-button color="primary">Close</button>
+    <button type="submit" mat-flat-button color="accent" *ngIf="!booking?.exists()" [disabled]="saving || loading">Save</button>
 </div>
 
 </form>
