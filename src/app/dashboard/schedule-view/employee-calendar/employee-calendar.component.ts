@@ -168,7 +168,7 @@ export class EmployeeCalendarComponent implements OnInit, OnDestroy {
   {
     let title = `${moment(booking.started_at).format('h:mm')} - ${moment(booking.ended_at).format('h:mm')} &nbsp;&nbsp;(${booking.services.map(service => service.name).join(', ')})<br>`;
     const client = booking.client.first_name || booking.manual_client_name;
-    const bookingNote = booking.note ? '&nbsp;&nbsp;&#9998;' : '';
+    const bookingNote = booking.note.exists() ? '&nbsp;&nbsp;&#9998;' : '';
     
     return title + client + bookingNote
   }
