@@ -1,7 +1,6 @@
 import { Injectable, ModuleWithComponentFactories } from '@angular/core';
 import { HttpAdapter } from '@tonys-barbers/shared';
-import { CalendarEvent } from 'angular-calendar';
-import * as moment from 'moment';
+import { Booking } from '../models/booking/booking.model';
 import { Employee } from '../models/employee/employee.model';
 import { ServiceDefinition } from '../models/service-definition/service-definition.model';
 import { AppStateService } from './app-state.service';
@@ -107,11 +106,11 @@ export class ApiService {
       .get();
   }
 
-  createEmployeeBooking(data: {event: CalendarEvent<any>, services: ServiceDefinition[], manual_client_name: string}, employee_id: string): Promise<any>
+  createBooking(data: Booking): Promise<any>
   {
     return this.http
       .path('/employees/{id}/bookings/')
-      .param('id', employee_id) 
+      .param('id', data.employee_id) 
       .data(data)
       .withCompany(this.state.company_id)
       .post();
