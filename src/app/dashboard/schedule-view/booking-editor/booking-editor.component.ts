@@ -6,8 +6,7 @@ import { ServiceDefinition } from 'src/app/models/service-definition/service-def
 import * as moment from 'moment'
 import { secondsSinceStartOfDay } from 'src/app/helpers/moment.helper';
 import { NgForm, NgModel } from '@angular/forms';
-import { EmployeeBookingService } from 'src/app/models/employee_booking.service';
-import { Booking } from 'src/app/models/booking/booking.model';
+import { Booking, BookingType } from 'src/app/models/booking/booking.model';
 import { SnackbarNotificationService } from '@tonys-barbers/shared';
 import { SyncErrorStateMatcher } from 'src/app/helpers/sync-error-state.matcher';
 import { BookingService } from 'src/app/models/booking/booking.service';
@@ -24,8 +23,6 @@ type DialogData = {
   onBookingCancel?: (booking: Booking) => void
 };
 
-// TODO: maybe add this to the moment prototype
-
 @Component({
   selector: 'app-booking-editor-dialog',
   templateUrl: './booking-editor.component.html',
@@ -36,16 +33,15 @@ export class BookingEditorComponent implements OnInit {
   @ViewChild('form') form: NgForm;
   @ViewChild('startTimeField') startTimeField: NgModel;
 
-  employee: Employee = this.data.employee;
-  event: CalendarEvent<any> = this.data.event;
-  onCancel = this.data.onBookingCancel;
-  manualClientName: string;
-  startTime: number;
-  endTime: number;
-  services: any = [];
-  selectedServices: any = [];
-  errorStateMatcher = new SyncErrorStateMatcher();
-  booking: Booking;
+  event: CalendarEvent<any> = this.data.event
+  onCancel = this.data.onBookingCancel
+  manualClientName: string
+  startTime: number
+  endTime: number
+  serviceDefinitions: ServiceDefinition[] = []
+  errorStateMatcher = new SyncErrorStateMatcher()
+  booking = new Booking({ type: BookingType.APPOINTMENT})
+  isAllDay = false
 
   loading = false;
   saving = false;
@@ -53,7 +49,6 @@ export class BookingEditorComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) protected data: DialogData,
     public dialogRef: MatDialogRef<BookingEditorComponent>,
-    private employeeBookingService: EmployeeBookingService,
     private bookingService: BookingService,
     private notification: SnackbarNotificationService,
     private confirmDialog: ConfirmDialogService,
@@ -62,29 +57,53 @@ export class BookingEditorComponent implements OnInit {
   async ngOnInit(): Promise<void> 
   {
     this.loading = true;
+    this.booking.employee = this.data.employee
+    this.booking.employee_id = this.booking.employee.id
 
-    this.startTime = secondsSinceStartOfDay(moment(this.event.start));
-    this.endTime = secondsSinceStartOfDay(moment(this.event.end));
+
+    this.startTime = secondsSinceStartOfDay(moment(this.event.start))
 
     if (!! this.data.booking)
     {
-      this.booking = this.data.booking;
-      console.log(this.booking)
-      this.services = this.booking.services;
+      this.booking = this.data.booking
+      this.endTime = secondsSinceStartOfDay(moment(this.booking.ended_at))
     }
     else
     {
-      this.services = this.data.services.filter(
-        service => service.employee_ids.some(id => id === this.employee.id)
+      this.serviceDefinitions = this.data.services.filter(
+        service => service.employee_ids.some(id => id === this.booking.employee.id)
       )
     }
 
     this.loading = false;
   }
 
+  isAppointmentType(): boolean
+  {
+    return this.booking.type === BookingType.APPOINTMENT
+  }
+
+  hasBookingsForDay(): boolean
+  {
+    return !!this.booking.employee.bookings.length
+  }
+
+  getTitle()
+  {
+    let title = !this.booking.exists()
+      ? 'New '
+      : ''
+
+    title += this.booking.isAppointment()
+      ? 'Booking'
+      : 'Time Off'
+
+    return title
+  }
+
   displayServices(): string
   {
-    return this.services.map(service => service.name).join(', ');
+    return this.booking.services.map(service => service.name).join(', ');
   }
 
   formatTime(seconds: number): Date
@@ -92,11 +111,11 @@ export class BookingEditorComponent implements OnInit {
     return moment(this.event.start).startOf('day').add(seconds, 'seconds').toDate();
   }
 
-  times(): number[]
+  startTimes(): number[]
   {
     const result: number[] = [];
-    const dayStart = this.employee.base_schedule.startOf(this.event.start);
-    const dayEnd = this.employee.base_schedule.endOf(this.event.start);
+    const dayStart = this.booking.employee.base_schedule.startOf(this.event.start);
+    const dayEnd = this.booking.employee.base_schedule.endOf(this.event.start);
 
     const dayStartInSeconds = formattedTimeStringToSeconds(dayStart);
     const dayEndInSeconds = formattedTimeStringToSeconds(dayEnd);
@@ -106,7 +125,7 @@ export class BookingEditorComponent implements OnInit {
     {
       // TODO: again... hard coded to 15 minutes
       const overlappingBookingExists: boolean = 
-        !!this.employee.bookings.find(
+        !!this.booking.employee.bookings.find(
           booking => secondsSinceStartOfDay(booking.started_at) == i || 
           ( secondsSinceStartOfDay(booking.started_at) + 900 == i &&
           secondsSinceStartOfDay(booking.ended_at) > (i + 1) )
@@ -121,18 +140,150 @@ export class BookingEditorComponent implements OnInit {
     return result;
   }
 
+  endTimes(): number[]
+  {
+    const nextBookingAfterCurrent = this.booking.employee.bookings.find(
+      booking => secondsSinceStartOfDay(booking.started_at) > this.startTime
+    )
+
+    const rangeStart = this.startTime + 900
+    let rangeEnd = !!nextBookingAfterCurrent 
+      ? secondsSinceStartOfDay(nextBookingAfterCurrent.started_at)
+      : formattedTimeStringToSeconds(this.booking.employee.base_schedule.endOf(this.event.start))
+    rangeEnd += 900
+
+    const result: number[] = []
+
+    for (let i = rangeStart; i < rangeEnd; i += 900)
+    {
+      result.push(i)
+    }
+
+    return result
+  }
+
+  calculateEndTime()
+  {
+    return (this.booking.type === BookingType.TIME_OFF)
+      ? this.endTime
+      : this.startTime + this.getAllServicesDuration()
+  }
+
+  getAllServicesDuration(): number
+  {
+   return this.booking.services.reduce((acc, i) => acc + i.duration, 0)
+  }
+
   onServicesChanged()
   {
-    const totalDuration = this.selectedServices.reduce((acc, i) => acc + i.duration, 0);
-    this.endTime = this.startTime + totalDuration;
+    this.endTime = this.calculateEndTime()
 
     const overlapsBooking: boolean = 
-      !!this.employee.bookings.find(
+      !!this.booking.employee.bookings.find(
         booking => this.endTime > secondsSinceStartOfDay(booking.started_at) && 
                    this.startTime < secondsSinceStartOfDay(booking.started_at)
       );
 
-    const baseScheduleEnd: string = this.employee.base_schedule.endOf(this.event.start);
+    const baseScheduleEnd: string = this.booking.employee.base_schedule.endOf(this.event.start);
+    const shiftEndInSeconds = (parseInt(baseScheduleEnd.split(':')[0]) * 3600) + (parseInt(baseScheduleEnd.split(':')[1]) * 60);
+    const exceedsEndTime: boolean = this.endTime > shiftEndInSeconds;
+
+    
+    if (overlapsBooking || exceedsEndTime && !!this.endTime)
+    {
+      this.startTimeField.control.setErrors({ overlap: true });
+    }
+    else
+    {
+      this.startTimeField.control.setErrors(null);
+    }
+  }
+
+  onBookingTypeChanged()
+  {
+    this.booking.services = []
+    this.booking.note.body = null
+  }
+
+  async onSave(): Promise<any>
+  {
+    if (this.form.invalid) return
+
+    this.saving = true; 
+
+    this.event.start = moment(this.event.start).startOf('day').add(this.startTime, 'seconds').toDate();
+    this.event.end = moment(this.event.start).startOf('day').add(this.endTime, 'seconds').toDate();
+    this.event.title = `${moment(this.event.start).format('h:mm')} - ${moment(this.event.end).format('h:mm')} (${this.booking.services.map(service => service.name).join(', ')})  <br>${ this.booking.manual_client_name || 'Walk-in'}`
+
+    this.booking.started_at = this.event.start
+    this.booking.ended_at = this.event.end
+
+    try
+    {
+      // return
+      const booking = await this.booking.save()
+      
+      this.event.id = booking.id
+      this.event.meta.type = booking.type
+      this.dialogRef.close({event: this.event, booking: booking})
+      this.notification.success('Booking created!')
+    }
+    catch (e)
+    {
+      this.dialogRef.close();
+      this.notification.error(e?.error?.message);
+    }
+    finally
+    {
+      this.saving = false;
+    }
+  }
+
+  async onCancelBooking()
+  {
+    const bookingTypeLabel = this.booking.isAppointment() 
+      ? 'booking' 
+      : 'time off'
+    const bookingTypeLabelCapitalized = bookingTypeLabel.charAt(0).toUpperCase() + bookingTypeLabel.slice(1)
+
+    const shouldCancel = await this.confirmDialog.open({
+      title: 'Confirm cancellation',
+      message: `Are you sure you want to cancel this ${bookingTypeLabel}?`,
+      okLabel: 'Yes',
+      cancelLabel: 'No',
+    });
+
+    if (shouldCancel)
+    {
+      this.saving = true;
+
+      try
+      {
+        await this.bookingService.cancel(this.booking.id);
+        this.notification.success(`${bookingTypeLabelCapitalized} cancelled`)
+        this.dialogRef.close()
+        this.onCancel(this.booking);
+      }
+      catch (e)
+      {
+        this.notification.error(`${bookingTypeLabelCapitalized} could not be cancelled`)
+      }
+      finally
+      {
+        this.saving = false;
+      }
+    }
+  }
+
+  onStartTimeChanged()
+  {
+    const overlapsBooking: boolean = 
+    !!this.booking.employee.bookings.find(
+      booking => this.endTime > secondsSinceStartOfDay(booking.started_at) && 
+                 this.startTime < secondsSinceStartOfDay(booking.started_at)
+    );
+
+    const baseScheduleEnd: string = this.booking.employee.base_schedule.endOf(this.event.start);
     const shiftEndInSeconds = (parseInt(baseScheduleEnd.split(':')[0]) * 3600) + (parseInt(baseScheduleEnd.split(':')[1]) * 60);
     const exceedsEndTime: boolean = this.endTime > shiftEndInSeconds;
 
@@ -147,63 +298,17 @@ export class BookingEditorComponent implements OnInit {
     }
   }
 
-  async onSave(): Promise<any>
+  onIsAllDayChanged()
   {
-    if (this.form.invalid) return;
+    if (!this.isAllDay) return
 
-    this.saving = true; 
-    this.event.start = moment(this.event.start).startOf('day').add(this.startTime, 'seconds').toDate();
-    this.event.end = moment(this.event.start).startOf('day').add(this.endTime, 'seconds').toDate();
-    this.event.title = `${moment(this.event.start).format('h:mm')} - ${moment(this.event.end).format('h:mm')} (${this.selectedServices.map(service => service.name).join(', ')})  <br>${this.manualClientName || 'Walk-in'}`
-    
-    try
-    {
-      const booking = await this.employeeBookingService.create(this.event, this.selectedServices, this.employee.id, this.manualClientName);
-
-      this.event.id = booking.id;
-      this.dialogRef.close({event: this.event, booking: booking});
-      this.notification.success('Booking created!');
-    }
-    catch (e)
-    {
-      this.dialogRef.close();
-      this.notification.error(e.error.message);
-    }
-    finally
-    {
-      this.saving = false;
-    }
+    this.startTime = formattedTimeStringToSeconds(this.booking.employee.base_schedule.startOf(this.event.start))
+    this.endTime = formattedTimeStringToSeconds(this.booking.employee.base_schedule.endOf(this.event.start))  
   }
 
-  async onCancelBooking()
+  onReservableTypeChanged()
   {
-    const shouldCancel = await this.confirmDialog.open({
-      title: 'Confirm cancellation',
-      message: 'Are you sure you want to cancel this booking?',
-      okLabel: 'Yes',
-      cancelLabel: 'No',
-    });
-
-    if (shouldCancel)
-    {
-      this.saving = true;
-
-      try
-      {
-        await this.bookingService.cancel(this.booking.id);
-        this.notification.success('Booking cancelled')
-        this.dialogRef.close()
-        this.onCancel(this.booking);
-      }
-      catch (e)
-      {
-        this.notification.error('Booking could not be cancelled')
-      }
-      finally
-      {
-        this.saving = false;
-      }
-    }
+    this.isAllDay = false
   }
 }
 

@@ -1,54 +1,99 @@
 <form fxLayout="column" #form="ngForm" (ngSubmit)="onSave()">
 <div class="title-row" fxLayout="row" fxLayoutAlign="space-between center">
-    <h1 mat-dialog-title>{{ this.booking?.id ? '' : 'New' }} Booking</h1>
+    <h1 mat-dialog-title>{{ getTitle() }}</h1>
     <button class="icon-button" type="button" mat-icon-button mat-dialog-close><mat-icon>close</mat-icon></button>
 </div>
 
 <div mat-dialog-content>
     <div fxLayout="column" *ngIf="!loading">
-        <div fxFlex fxLayout="column" *ngIf="!booking?.id">
-            <mat-form-field fxFlex>
-                <mat-label>Start Time</mat-label>
-                <mat-select name="startTime"
-                    #startTimeField="ngModel"
-                    [(ngModel)]="startTime"
+        <div fxFlex fxLayout="column" *ngIf="!booking.exists()">
+            <mat-form-field fxFlex hideRequiredMarker>
+                <mat-label>Type</mat-label>
+                <mat-select name="bookingType"
+                    #bookingType="ngModel"
+                    [(ngModel)]="booking.type"
+                    (ngModelChange)="onBookingTypeChanged()"
                     [disabled]="saving" 
-                    [errorStateMatcher]="errorStateMatcher"
                     required>
-                    <mat-option *ngFor="let time of times()" [value]="time">
-                        {{ time | appTimeOfDay:event.start}}
-                    </mat-option>
+                    <mat-option value="appointment">Booking</mat-option>
+                    <mat-option value="time-off">Time Off</mat-option>
                 </mat-select>
-                <mat-error *ngIf="startTimeField.hasError('required')">Start time is required.</mat-error>
-                <mat-error *ngIf="startTimeField.hasError('overlap')">Start time unavailable for the selected services.</mat-error>
             </mat-form-field>
-            <mat-form-field fxFlex>
+            <mat-checkbox *ngIf="!booking.isAppointment() && !hasBookingsForDay()"
+              name="isAllDayField"
+              [disabled]="saving"
+              [(ngModel)]="isAllDay"
+              (ngModelChange)="onIsAllDayChanged()">
+              All Day
+            </mat-checkbox>
+            <div fxFlex fxLayout="row" fxLayoutGap="20px">
+              <mat-form-field fxFlex hideRequiredMarker>
+                  <mat-label>Start Time</mat-label>
+                  <mat-select name="startTime"
+                      #startTimeField="ngModel"
+                      [(ngModel)]="startTime"
+                      (ngModelChange)="onStartTimeChanged()"
+                      [disabled]="saving || isAllDay" 
+                      [errorStateMatcher]="errorStateMatcher"
+                      required>
+                      <mat-option *ngFor="let time of startTimes()" [value]="time">
+                          {{ time | appTimeOfDay:event.start}}
+                      </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="startTimeField.hasError('required')">Start time is required.</mat-error>
+                  <mat-error *ngIf="startTimeField.hasError('overlap')">Start time unavailable for the selected services.</mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex *ngIf="!booking.isAppointment()" hideRequiredMarker>
+                  <mat-label>End Time</mat-label>
+                  <mat-select name="endTime"
+                      #endTimeField="ngModel"
+                      [(ngModel)]="endTime"
+                      [disabled]="saving || isAllDay" 
+                      required>
+                      <mat-option *ngFor="let time of endTimes()" [value]="time">
+                          {{ time | appTimeOfDay:event.start}}
+                      </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="endTimeField.hasError('required')">End time is required.</mat-error>
+              </mat-form-field>
+            </div>
+            <mat-form-field fxFlex *ngIf="booking.isAppointment()" hideRequiredMarker>  
+              <mat-label>Service</mat-label>
+              <mat-select name="servicesField" 
+                  #servicesField="ngModel"
+                  [(ngModel)]="booking.services"
+                  (ngModelChange)="onServicesChanged()"
+                  [disabled]="saving"
+                  multiple 
+                  required>
+                  <mat-option *ngFor="let service of serviceDefinitions" [value]="service">
+                      {{ service.name }}
+                  </mat-option>
+              </mat-select>
+              <mat-error *ngIf="servicesField.hasError('required')">At least one service is required.</mat-error>
+            </mat-form-field>
+            <mat-form-field fxFlex *ngIf="booking.isAppointment()">
                 <mat-label>Client Name</mat-label>
                 <input type="text"
                     name="manualClientNameField"
                     #manualClientNameField="ngModel"
-                    [(ngModel)]="manualClientName"
+                    [(ngModel)]="booking.manual_client_name"
                     [disabled]="saving"
                     matInput>
             </mat-form-field>
-            <mat-form-field fxFlex>  
-                <mat-label>Service</mat-label>
-                <mat-select name="servicesField" 
-                    #servicesField="ngModel"
-                    [(ngModel)]="selectedServices"
-                    (ngModelChange)="onServicesChanged()"
+            <mat-form-field fxFlex *ngIf="!booking.isAppointment()">
+                <mat-label>Reason</mat-label>
+                <input type="text"
+                    name="timeOffReasonField"
+                    #timeOffReasonField="ngModel"
+                    [(ngModel)]="this.booking.note.body"
                     [disabled]="saving"
-                    multiple 
-                    required>
-                    <mat-option *ngFor="let service of services" [value]="service">
-                        {{ service.name }}
-                    </mat-option>
-                </mat-select>
-                <mat-error *ngIf="servicesField.hasError('required')">At least one service is required.</mat-error>
+                    matInput>
             </mat-form-field>
         </div>
-        <div *ngIf="this.booking?.exists()" fxLayout="column" fxLayoutGap="12px">
-            <div fxLayout="column">
+
+        <div *ngIf="this.booking.exists()" fxLayout="column" fxLayoutGap="12px">
+            <div fxLayout="column" *ngIf="this.booking.isAppointment()">
                 <h4 class="mat-h4">Client</h4>
                 <span class="booking-info" *ngIf="booking.client.id">{{ booking.client.full_name }}</span>
                 <span class="booking-info" *ngIf="!booking.client.id">{{ booking.manual_client_name }}</span>
@@ -68,16 +113,16 @@
               <h4 class="mat-h4">Email</h4>
                 <span class="booking-info">{{ booking.client.email }}</span>
             </div>
-            <div fxLayout="column">
+            <div fxLayout="column" *ngIf="this.booking.isAppointment()">
                 <h4 class="mat-h4">
-                  {{ this.services.length > 1 ? 'Services' : 'Service'}}
+                  {{ this.booking.services.length > 1 ? 'Services' : 'Service'}}
                 </h4>
                 <span class="booking-info">
                     {{ this.displayServices() }}
                 </span>
             </div>
             <div fxLayout="column" *ngIf="booking.note?.exists()">
-                <h4 class="mat-h4">Client Note</h4>
+                <h4 class="mat-h4">{{ booking.isAppointment() ? 'Client Note' : 'Reason' }}</h4>
                 <span class="booking-info">{{ booking.note.body }}</span>
             </div>
         </div>
@@ -91,7 +136,7 @@
 
 <div mat-dialog-actions align="end">
     <mat-progress-spinner mode="indeterminate" diameter="36" *ngIf="saving"></mat-progress-spinner>
-    <button type="button" mat-flat-button color="warn" [disabled]="loading" *ngIf="booking?.id" (click)="onCancelBooking()">Cancel booking</button>
+    <button type="button" mat-flat-button color="warn" [disabled]="loading" *ngIf="booking?.id" (click)="onCancelBooking()">Cancel {{ this.booking.isAppointment() ? 'booking' : 'time off' }}</button>
     <button mat-dialog-close mat-flat-button color="primary">Close</button>
     <button type="submit" mat-flat-button color="accent" *ngIf="!booking?.exists()" [disabled]="saving || loading">Save</button>
 </div>

@@ -2,6 +2,7 @@ import * as moment from 'moment';
 import { cloneDeep } from 'lodash';
 import { BaseSchedule } from '../helpers/base-schedule.helper';
 import { isObject, isArray } from '../helpers/helpers';
+import { ApiService } from '../services/api.service';
 
 // TODO: not a big fan of having to define dates {} prop in concrete models.
 //       Think we should use a decorator.
@@ -11,10 +12,11 @@ export abstract class BaseModel {
     abstract id?: any;
     abstract relations: any;
     abstract dates: any;
+    static api: ApiService;
+
 
     map(data: any) 
     {
-
         this._mapProperties(data);
         this._mapRelations(data);
         this._mapDates(data);
@@ -22,9 +24,30 @@ export abstract class BaseModel {
         this._mapBaseSchedule();
     }
 
+    /**
+     * remove unnecessary attributes from model before saving to api
+     * 
+     */
+    // strip()
+    // {
+    //   for (const key in this.relations)
+    //   {
+    //     const relation = this[key]
+
+    //     if (!relation) continue
+
+    //     isArray(relation) 
+    //       ? relation.forEach(rel => rel.strip()) 
+    //       : relation.strip()
+    //   }
+
+    //   delete this.dates
+    //   delete this.relations
+    // }
+
     exists(): boolean
     {
-      return !!this?.id
+      return !!this.id
     }
 
     private _mapDates(attributes: any)

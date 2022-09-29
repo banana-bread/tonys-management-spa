@@ -246,16 +246,30 @@ div.cal-event {
   color: red;
 }
 
-.calendar-booking-event div.cal-event {
+.calendar-appointment-event div.cal-event {
   background: $app-color-accent;
   border-color: $app-color-white;
   color: $app-color-white;
   font-size: 13px;
 }
 
-.calendar-booking-event--passed div.cal-event {
+.calendar-appointment-event--passed div.cal-event {
   // background: $app-color-accent;
   background: $app-color-accent-light;
+  border-color: $app-color-white;
+  color: $app-color-light-gray;
+  font-size: 13px;
+}
+
+.calendar-time-off-event div.cal-event {
+  background: #E67C73;
+  border-color: $app-color-white;
+  color: $app-color-white;
+  font-size: 13px;
+}
+
+.calendar-time-off-event--passed div.cal-event {
+  background: #F8D8D5;
   border-color: $app-color-white;
   color: $app-color-light-gray;
   font-size: 13px;

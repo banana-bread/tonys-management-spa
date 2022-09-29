@@ -6,7 +6,6 @@ import { Booking } from 'src/app/models/booking/booking.model';
 import { Company } from 'src/app/models/company/company.model';
 import { CompanyService } from 'src/app/models/company/company.service';
 import { Employee } from 'src/app/models/employee/employee.model';
-import { EmployeeBookingService } from 'src/app/models/employee_booking.service';
 import { AppStateService } from 'src/app/services/app-state.service';
 import { Moment } from 'src/types';
 import { EmployeeCalendarComponent } from './employee-calendar/employee-calendar.component';
@@ -33,7 +32,6 @@ export class ScheduleViewComponent implements OnInit, OnDestroy {
     private router: Router,
     private state: AppStateService,
     private companyService: CompanyService,
-    private employeeBookingService: EmployeeBookingService,
   ) {}
 
   async ngOnInit(): Promise<void>
@@ -123,7 +121,8 @@ export class ScheduleViewComponent implements OnInit, OnDestroy {
 
   private async _setBookings(): Promise<void>
   {
-    const response: any = await this.employeeBookingService.get(this.selectedDate.toString());
+    // const response: any = await this.employeeBookingService.get(this.selectedDate.toString());
+    const response: any = await Booking.findByDate(this.selectedDate.toString())
 
     // Filter companies employees by if they are scheduled to work, or have bookings
     const employees = this.company.employees

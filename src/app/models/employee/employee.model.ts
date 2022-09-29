@@ -1,5 +1,4 @@
 import * as moment from "moment";
-import { BaseScheduleDay } from "src/app/helpers/base-schedule.helper";
 import { Moment } from "src/types";
 import { BaseModel } from "../base.model";
 import { Booking } from "../booking/booking.model";
@@ -62,7 +61,7 @@ export class Employee extends BaseModel implements Schedulable {
 
         return 'Employee'
     }
-
+    
     removeBooking(booking: Booking)
     {
         const index = this.bookings.indexOf(booking);
