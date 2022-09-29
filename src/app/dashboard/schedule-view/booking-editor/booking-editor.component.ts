@@ -220,13 +220,12 @@ export class BookingEditorComponent implements OnInit {
 
     try
     {
-      // return
       const booking = await this.booking.save()
       
       this.event.id = booking.id
       this.event.meta.type = booking.type
       this.dialogRef.close({event: this.event, booking: booking})
-      this.notification.success('Booking created!')
+      this.notification.success(`${booking.isAppointment() ? 'Booking' : 'Time off'} created!`)
     }
     catch (e)
     {
