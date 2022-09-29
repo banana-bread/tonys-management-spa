@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { Injector, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -60,7 +60,9 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatRippleModule } from '@angular/material/core';
 import { ForgotPasswordComponent } from './forgot-password-dialog/forgot-password.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
-
+import { MatCheckboxModule } from '@angular/material/checkbox'; 
+import { BaseModel } from './models/base.model';
+import { ApiService } from './services/api.service';
 
 
 export function momentAdapterFactory() {
@@ -150,6 +152,7 @@ const APP_DATE_FORMATS: MatDateFormats = {
     MatNativeDateModule,
     MatMenuModule,
     MatRippleModule,
+    MatCheckboxModule,
 
     TonysSharedModule.forRoot('http://localhost:89'),
     CalendarModule.forRoot({ provide: DateAdapter, useFactory: momentAdapterFactory }),
@@ -164,4 +167,10 @@ const APP_DATE_FORMATS: MatDateFormats = {
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule 
+{ 
+  constructor(private injector: Injector) 
+  {
+    BaseModel.api = this.injector.get(ApiService)
+  }
+}
