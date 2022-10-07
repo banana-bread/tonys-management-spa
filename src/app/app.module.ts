@@ -63,6 +63,7 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
 import { MatCheckboxModule } from '@angular/material/checkbox'; 
 import { BaseModel } from './models/base.model';
 import { ApiService } from './services/api.service';
+import { MatRadioModule } from '@angular/material/radio'
 
 
 export function momentAdapterFactory() {
@@ -153,6 +154,7 @@ const APP_DATE_FORMATS: MatDateFormats = {
     MatMenuModule,
     MatRippleModule,
     MatCheckboxModule,
+    MatRadioModule,
 
     TonysSharedModule.forRoot('http://localhost:89'),
     CalendarModule.forRoot({ provide: DateAdapter, useFactory: momentAdapterFactory }),
