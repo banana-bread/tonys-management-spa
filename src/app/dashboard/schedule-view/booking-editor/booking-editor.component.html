@@ -26,37 +26,33 @@
               (ngModelChange)="onIsAllDayChanged()">
               All Day
             </mat-checkbox>
-            <div fxFlex fxLayout="row" fxLayoutGap="20px">
-              <mat-form-field fxFlex hideRequiredMarker>
-                  <mat-label>Start Time</mat-label>
-                  <mat-select name="startTime"
-                      #startTimeField="ngModel"
-                      [(ngModel)]="startTime"
-                      (ngModelChange)="onStartTimeChanged()"
-                      [disabled]="saving || isAllDay" 
-                      [errorStateMatcher]="errorStateMatcher"
-                      required>
-                      <mat-option *ngFor="let time of startTimes()" [value]="time">
-                          {{ time | appTimeOfDay:event.start}}
-                      </mat-option>
-                  </mat-select>
-                  <mat-error *ngIf="startTimeField.hasError('required')">Start time is required.</mat-error>
-                  <mat-error *ngIf="startTimeField.hasError('overlap')">Start time unavailable for the selected services.</mat-error>
-              </mat-form-field>
-              <mat-form-field fxFlex *ngIf="!booking.isAppointment()" hideRequiredMarker>
-                  <mat-label>End Time</mat-label>
-                  <mat-select name="endTime"
-                      #endTimeField="ngModel"
-                      [(ngModel)]="endTime"
-                      [disabled]="saving || isAllDay" 
-                      required>
-                      <mat-option *ngFor="let time of endTimes()" [value]="time">
-                          {{ time | appTimeOfDay:event.start}}
-                      </mat-option>
-                  </mat-select>
-                  <mat-error *ngIf="endTimeField.hasError('required')">End time is required.</mat-error>
-              </mat-form-field>
-            </div>
+            <mat-form-field fxFlex hideRequiredMarker>
+                <mat-label>Start Time</mat-label>
+                <mat-select name="startTime"
+                    #startTimeField="ngModel"
+                    [(ngModel)]="startTime"
+                    (ngModelChange)="onStartTimeChanged()"
+                    [disabled]="saving || isAllDay" 
+                    [errorStateMatcher]="errorStateMatcher"
+                    required>
+                    <mat-option *ngFor="let time of startTimes()" [value]="time">
+                        {{ time | appTimeOfDay:event.start}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field fxFlex *ngIf="!booking.isAppointment()" hideRequiredMarker>
+                <mat-label>End Time</mat-label>
+                <mat-select name="endTime"
+                    #endTimeField="ngModel"
+                    [(ngModel)]="endTime"
+                    [disabled]="saving || isAllDay" 
+                    required>
+                    <mat-option *ngFor="let time of endTimes()" [value]="time">
+                        {{ time | appTimeOfDay:event.start}}
+                    </mat-option>
+                </mat-select>
+                <mat-error *ngIf="endTimeField.hasError('required')">End time is required.</mat-error>
+            </mat-form-field>
             <mat-form-field fxFlex *ngIf="booking.isAppointment()" hideRequiredMarker>  
               <mat-label>Service</mat-label>
               <mat-select name="servicesField" 
