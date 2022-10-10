@@ -70,9 +70,10 @@ export class BookingEditorComponent implements OnInit {
     }
     else
     {
-      this.serviceDefinitions = this.data.services.filter(
-        service => service.employee_ids.some(id => id === this.booking.employee.id)
-      )
+      this.serviceDefinitions = this.data.services
+      // this.serviceDefinitions = this.data.services.filter(
+        // service => service.employee_ids.some(id => id === this.booking.employee.id)
+      // )
     }
 
     this.loading = false;
