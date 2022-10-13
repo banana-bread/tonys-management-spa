@@ -2,5 +2,5 @@
 <div mat-dialog-content>{{ message }}</div>
 <div mat-dialog-actions align="end">
     <button mat-flat-button [mat-dialog-close]="false">{{ cancelLabel }}</button>
-    <button mat-flat-button color="accent" [mat-dialog-close]="true">{{ okLabel }}</button>
+    <button mat-flat-button [color]="okColor" [mat-dialog-close]="true">{{ okLabel }}</button>
 </div>

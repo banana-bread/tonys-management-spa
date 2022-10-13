@@ -9,15 +9,6 @@
             <mat-icon>arrow_back</mat-icon>
         </button>
         <span class="app-editor-title" *ngIf="!loading">{{ this.employee.full_name }}</span>
-        <span fxFlex></span>
-        <button type="button" 
-            *ngIf="original"
-            color="warn"
-            mat-flat-button 
-            [disabled]="saving || loading || !original || original.owner || !authedUserService.canDeleteStaff()"
-            (click)="onDelete()"> 
-            Delete
-        </button>
     </mat-toolbar>
     <mat-progress-bar class="app-loading-bar" *ngIf="saving" mode="indeterminate"></mat-progress-bar>
 
@@ -127,6 +118,22 @@
             <div class="save-button-row">
                 <button (click)="onSaveAccount()" mat-flat-button color="accent" [disabled]="saving || loading || !this.accountUpdates.size">
                     Save
+                </button>
+            </div>
+        </mat-card>
+
+        <mat-card class="app-editor-card">
+            <mat-card-title class="app-editor-card-title">Delete account</mat-card-title>
+            
+            <div fxLayout="column">
+              <div fxFlex fxLayout="row">
+                  <span class="mat-subheading-1 capitalize" fxFlex>Delete this account and its bookings. <strong>There is no turning back.</strong></span> 
+              </div>
+          </div>
+            <div class="save-button-row">
+                <button (click)="onDeleteAccount()" mat-flat-button color="warn" 
+                  [disabled]="saving || loading || !original || original.owner || !authedUserService.canDeleteStaff()">
+                    Delete
                 </button>
             </div>
         </mat-card>

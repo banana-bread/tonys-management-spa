@@ -30,9 +30,9 @@ export class StaffEditorComponent implements OnInit, OnDestroy {
   hasBaseScheduleUpdates = false;
   hasProfileUpdates = false;
 
-  original: Employee;
-  employee: Employee = new Employee();
-  authedEmployee: Employee = new Employee();
+  original = new Employee()
+  employee = new Employee()
+  authedEmployee = new Employee()
   employeeName: string;
   employeeId: string = this.route.snapshot.paramMap.get('id');
   employeeRegistrationUrl = this.route.snapshot.queryParams['signed-url'];
@@ -69,7 +69,11 @@ export class StaffEditorComponent implements OnInit, OnDestroy {
       if (! res.id) return;
 
       this.authedUser = res;
-    });
+    })
+
+    const isNewEmployee = !this.staffEditorService.staff && !this.employeeId
+
+    if (isNewEmployee) return
 
     if (!! this.staffEditorService.staff)
     {
@@ -206,13 +210,15 @@ export class StaffEditorComponent implements OnInit, OnDestroy {
     this.accountUpdates.set('active', () => this.employeeService.updateActive(this.employee))
   }
 
-  async onDelete(): Promise<void>
+  async onDeleteAccount(): Promise<void>
   {
     if (this.original?.owner) return;
 
     const shouldDelete = await this.confirmDialog.open({
       title: 'Confirm deletion',
-      message: 'Are you sure you want to continue?  Deleting an employee is nonreversible.',
+      message: 'Last chance. Are you sure you want to delete this account?',
+      okLabel: 'Delete',
+      okColor: 'warn',
     });
 
     if (! shouldDelete) return;

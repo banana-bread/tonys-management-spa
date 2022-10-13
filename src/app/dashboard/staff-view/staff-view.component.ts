@@ -53,10 +53,10 @@ export class StaffViewComponent implements OnInit {
     }
   }
 
-  onEdit(employee: Employee)
+  onEdit(employee = new Employee())
   {
     this.staffEditorService.staff = employee; 
-    this.router.navigate([employee.id], {relativeTo: this.route});
+    this.router.navigate([employee.id || 'new'], {relativeTo: this.route});
   }
 
   onNew()
